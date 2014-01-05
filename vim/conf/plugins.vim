@@ -19,6 +19,7 @@ Bundle "vim-scripts/Align"
 Bundle "rking/ag.vim"
 Bundle "groenewege/vim-less"
 " Bundle "shawncplus/php.vim"
+Bundle "shawncplus/phpcomplete.vim"
 
 
 " snippets
@@ -76,7 +77,7 @@ let g:airline_right_sep = '◀'
 
 
 " ------------------------------------------------------------------------------
-Bundle "unifieddialog/vim-rspec-focus"
+Bundle "example-user/vim-rspec-focus"
 
 nnoremap <leader>f :AddFocusTag<CR>
 nnoremap <leader>uf :RemoveAllFocusTags<CR>
