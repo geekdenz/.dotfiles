@@ -266,7 +266,6 @@
   " Ruby Plugins
   " Whitelisted
   Bundle "vim-scripts/ruby-matchit"
-  Bundle "nelstrom/vim-textobj-rubyblock"
   Bundle "example-user/vim-rspec-focus"
   Bundle "vim-ruby/vim-ruby"
   Bundle "tpope/vim-rails"
