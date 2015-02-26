@@ -52,6 +52,7 @@
   Bundle "example-user/vim-snippets"
     " If you want :UltiSnipsEdit to split your window.
     let g:UltiSnipsEditSplit="vertical"
+    let g:snips_author="Example User <legacy-user@example.invalid>"
 
   Bundle "tomtom/tcomment_vim"
   Bundle "Lokaltog/vim-easymotion"
