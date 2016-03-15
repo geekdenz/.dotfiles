@@ -147,7 +147,7 @@ let g:snips_author="Example User <legacy-user@example.invalid>"
 
 " sparkup
 let g:sparkupExecuteMapping = '<C-Y>,'
-let g:sparkupNextMapping = '<c-y>n'
+let g:sparkupNextMapping = '<c-y>y'
 
 " solarized
 let g:solarized_termcolors=256
