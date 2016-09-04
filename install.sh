@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ ! -d ~/.dotfiles ]; then
-  git clone https://github.com/mjacobus/.dotfiles.git ~/.dotfiles
+  git clone https://github.com/geekdenz/.dotfiles.git ~/.dotfiles
 fi
 
 cd ~/.dotfiles && git pull
