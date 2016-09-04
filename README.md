@@ -3,6 +3,30 @@
 Instalation
 -------------
 
+ZSH:
+
+```bash
+sudo apt-get install zsh
+```
+
+Oh My ZSH:
+
+```bash
+sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+```
+
+```bash
+git clone https://github.com/geekdenz/.dotfiles.git ~/.dotfiles
+#  or
+# git clone git@github.com:geekdenz/.dotfiles.git ~/.dotfiles
+cd ~/.dotfiles
+./install.sh
+```
+
+
+The below did not work for me
+-----------------------------
+
 If you are not me (skips personal config):
 
 ```bash
