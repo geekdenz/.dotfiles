@@ -25,4 +25,4 @@ make
 sudo make install
 
 sudo mv /usr/local/bin/ctags /usr/local/bin/ctags-patched
-sudo ln -s /usr/local/bin/ctags-patched /us/local/bin/ctags
+sudo ln -s /usr/local/bin/ctags-patched /usr/local/bin/ctags
