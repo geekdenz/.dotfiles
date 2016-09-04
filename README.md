@@ -7,6 +7,8 @@ If you are not me (skips personal config):
 
 ```bash
 bash <(https://raw.githubusercontent.com/example-user/.dotfiles/master/install.sh)
+# Linux:
+curl https://raw.githubusercontent.com/example-user/.dotfiles/master/install.sh | bash
 ```
 
 If you are me:
@@ -15,6 +17,8 @@ First of all, good for you! We are awesome!
 
 ```bash
 bash <(https://raw.githubusercontent.com/example-user/.dotfiles/master/install_example-user.sh)
+# Linux:
+curl https://raw.githubusercontent.com/example-user/.dotfiles/master/install_example-user.sh | bash
 ```
 
 Here you will find (among other configs):
