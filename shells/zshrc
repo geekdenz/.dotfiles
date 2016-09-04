@@ -99,5 +99,11 @@ which ggsettings > /dev/null 2>&1 && set org.gnome.desktop.interface enable-anim
 which rbenv > /dev/null 2>&1 && eval "$(rbenv init - --no-rehash zsh)"
 
 # geekdenz:
+
 bindkey '^U' backward-kill-line
 bindkey '^Y' yank
+
+# nvm
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh"  ] && . "$NVM_DIR/nvm.sh" # This loads nvm
+
