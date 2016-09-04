@@ -6,9 +6,9 @@ Instalation
 If you are not me (skips personal config):
 
 ```bash
-bash <(https://raw.githubusercontent.com/mjacobus/.dotfiles/master/install.sh)
+bash <(https://raw.githubusercontent.com/geekdenz/.dotfiles/master/install.sh)
 # Linux:
-curl https://raw.githubusercontent.com/mjacobus/.dotfiles/master/install.sh | bash
+curl https://raw.githubusercontent.com/geekdenz/.dotfiles/master/install.sh | bash
 ```
 
 If you are me:
@@ -16,9 +16,9 @@ If you are me:
 First of all, good for you! We are awesome!
 
 ```bash
-bash <(https://raw.githubusercontent.com/mjacobus/.dotfiles/master/install_mjacobus.sh)
+bash <(https://raw.githubusercontent.com/geekdenz/.dotfiles/master/install_geekdenz.sh)
 # Linux:
-curl https://raw.githubusercontent.com/mjacobus/.dotfiles/master/install_geekdenz.sh | bash
+curl https://raw.githubusercontent.com/geekdenz/.dotfiles/master/install_geekdenz.sh | bash
 ```
 
 Here you will find (among other configs):
