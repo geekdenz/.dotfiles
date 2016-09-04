@@ -23,6 +23,23 @@ cd ~/.dotfiles
 ./install.sh
 ```
 
+Note that there are custom installers for some things:
+
+```bash
+~/.dotfiles/installers/
+.
+└── ubuntu
+    └── 16.4
+        ├── config.sh
+        ├── ctags-patched.sh
+        ├── docker.sh
+        ├── java.sh
+        ├── nvim-master.sh
+        ├── nvim.sh
+        ├── nvm.sh
+        ├── php7.sh
+        └── vagrant.sh
+```
 
 The below did not work for me
 -----------------------------
