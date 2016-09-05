@@ -24,6 +24,8 @@ cd ~/.dotfiles
 ./install.sh
 ```
 
+Note that you need to logout of your current session for everything to work.
+
 Note that there are custom installers for some things:
 
 ```bash
