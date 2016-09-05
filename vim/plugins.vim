@@ -60,6 +60,7 @@ Bundle "pangloss/vim-javascript"
 " Bundle "altercation/vim-colors-solarized"
 Bundle "endel/vim-github-colorscheme"
 Bundle "jonathanfilip/vim-lucius"
+Bundle "leafgarland/typescript-vim"
 
 " Bundle "othree/javascript-libraries-syntax.vim"
 " Bundle "vim-scripts/JavaScript-Indent"
