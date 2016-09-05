@@ -79,3 +79,6 @@ fi
 
 #Set up fasd.
 #eval "$(fasd --init auto)"
+
+export NVM_DIR="/home/denz/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
