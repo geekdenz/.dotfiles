@@ -52,7 +52,7 @@ DISABLE_AUTO_TITLE="true"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git git-fast git-extras debian bundler composer gitfast rails urltools web-search vi-mode docker docker-composer wd node jsontools gitignore)
+plugins=(git git-fast git-extras debian bundler composer gitfast rails urltools web-search vi-mode docker docker-composer wd node jsontools gitignore gradle)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -102,6 +102,8 @@ which rbenv > /dev/null 2>&1 && eval "$(rbenv init - --no-rehash zsh)"
 
 bindkey '^U' backward-kill-line
 bindkey '^Y' yank
+bindkey ^H vi-backward-word
+bindkey ^L vi-forward-word
 
 # nvm
 export NVM_DIR="$HOME/.nvm"
