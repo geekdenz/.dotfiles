@@ -13,6 +13,7 @@ Oh My ZSH:
 
 ```bash
 sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+rm ~/.zsh* # ONLY IF YOU WANT THE DEFAULT FILE FROM THIS REPOSITORY
 ```
 
 ```bash
@@ -22,6 +23,8 @@ git clone https://github.com/geekdenz/.dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
 ./install.sh
 ```
+
+Note that you need to logout of your current session for everything to work.
 
 Note that there are custom installers for some things:
 
@@ -39,6 +42,11 @@ Note that there are custom installers for some things:
         ├── nvm.sh
         ├── php7.sh
         └── vagrant.sh
+```
+
+I usually run these:
+```bash
+~/.dotfiles/installers/ubuntu/16.4/nvm.sh
 ```
 
 The below did not work for me
