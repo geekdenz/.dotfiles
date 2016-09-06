@@ -63,6 +63,7 @@ Bundle "jonathanfilip/vim-lucius"
 Bundle "leafgarland/typescript-vim"
 Bundle "Shougo/vimproc.vim"
 Bundle "Quramy/tsuquyomi"
+Bundle "artur-shaik/vim-javacomplete2"
 
 " Bundle "othree/javascript-libraries-syntax.vim"
 " Bundle "vim-scripts/JavaScript-Indent"
