@@ -61,6 +61,8 @@ Bundle "pangloss/vim-javascript"
 Bundle "endel/vim-github-colorscheme"
 Bundle "jonathanfilip/vim-lucius"
 Bundle "leafgarland/typescript-vim"
+Bundle "Shougo/vimproc.vim"
+Bundle "Quramy/tsuquyomi"
 
 " Bundle "othree/javascript-libraries-syntax.vim"
 " Bundle "vim-scripts/JavaScript-Indent"
