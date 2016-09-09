@@ -145,3 +145,7 @@ augroup END
 if filereadable(expand("~/.vimrc.local"))
   source ~/.vimrc.local
 endif
+
+" geekdenz added:
+source ~/.dotfiles/vim/vimrc_geekdenz
+" /geekdenz added

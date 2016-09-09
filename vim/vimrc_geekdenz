@@ -1,0 +1,10 @@
+nnoremap <C-Y> 5<C-Y>
+nnoremap <C-E> 5<C-E>
+set tabstop=4
+set shiftwidth=4
+set softtabstop=2
+set noexpandtab
+
+"set textwidth=80
+set exrc
+set secure
