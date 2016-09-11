@@ -109,3 +109,7 @@ bindkey ^L vi-forward-word
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh"  ] && . "$NVM_DIR/nvm.sh" # This loads nvm
 
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="/home/denz/.sdkman"
+[[ -s "/home/denz/.sdkman/bin/sdkman-init.sh" ]] && source "/home/denz/.sdkman/bin/sdkman-init.sh"

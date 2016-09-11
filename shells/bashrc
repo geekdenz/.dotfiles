@@ -80,5 +80,8 @@ fi
 #Set up fasd.
 #eval "$(fasd --init auto)"
 
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="/home/denz/.sdkman"
+[[ -s "/home/denz/.sdkman/bin/sdkman-init.sh" ]] && source "/home/denz/.sdkman/bin/sdkman-init.sh"
 export NVM_DIR="/home/denz/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
