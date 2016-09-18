@@ -81,6 +81,7 @@ nnoremap <Leader>vima :vsplit ~/.vim/abbreviations.vim<CR>
 nnoremap <Leader>vimf :vsplit ~/.vim/functions.vim<CR>
 nnoremap <Leader>vimm :vsplit ~/.vim/mappings.vim<CR>
 nnoremap <Leader>vimp :vsplit ~/.vim/plugins.vim<CR>
+nnoremap <leader>sv :source $MYVIMRC<cr>
 
 " vundle
 nnoremap <Leader>bi :BundleInstall<cr>
@@ -142,6 +143,7 @@ nnoremap <leader>gd :Gdiff<cr>
 nnoremap <leader>dgt :diffget //2 \| :diffupdate<cr>
 " get branch version: diff get branch
 nnoremap <leader>dgb :diffget //3 \| :diffupdate<cr>
+nnoremap <leader>gcom :G checkout master<cr>
 
 " quotes
 nnoremap <leader>qw ciw''<esc>P
