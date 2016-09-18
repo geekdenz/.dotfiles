@@ -63,3 +63,7 @@
 [user]
 	email = legacy-user@example.invalid
 	name = Example User
+[merge]
+	tool = vimdiff
+#[http]
+# proxy = http://192.0.2.252:8080
