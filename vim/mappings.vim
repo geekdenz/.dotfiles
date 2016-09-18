@@ -13,6 +13,8 @@ inoremap jj <esc>
 inoremap jJ <esc>
 inoremap Jj <esc>
 inoremap JJ <esc>
+nnoremap <tab> gt
+nnoremap <s-tab> gT
 
 " navigation
 noremap <leader>j 10j
