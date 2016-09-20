@@ -69,6 +69,9 @@ Bundle "mbbill/vim-seattle"
 
 " Bundle "othree/javascript-libraries-syntax.vim"
 " Bundle "vim-scripts/JavaScript-Indent"
+" Bundle "powerline/powerline" " future version of below"
+Bundle 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
+Bundle 'phalkunz/vim-ss'
 
 " ending vundle
 call vundle#end()            " required

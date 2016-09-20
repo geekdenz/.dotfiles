@@ -29,10 +29,12 @@ alias gc!='git commit --amend'
 alias gc='git commit'
 alias gca!='git commit -a --amend'
 alias gca='git commit -a'
+alias gcav='git commit -av'
 alias gcob='git checkout -b'
 alias gdc='gd --cached'
 alias gdc='git diff --cached'
 alias gp='git push origin'
+alias gpm='git push origin master'
 alias gl='git log'
 is_installed current_branch && alias gp='git push origin `current_branch`'
 is_installed current_branch && alias gpr='git pull --rebase origin `current_branch`'
@@ -45,6 +47,20 @@ alias gs='git status -s'
 alias cpd='cap production deploy'
 alias csd='cap staging deploy'
 
+# zsh
+alias -s php=vim #opens php files in vim
+alias -s rb=vim
+alias -s ts=vim
+alias -s js=vim
+alias -s c=vim
+alias -s cpp=vim
+alias -s java=vim
+alias -s gradle=vim
+# $ foo.rb 
+# vim => foo.rb
+alias -g gp='| grep -i' #creates a global alias for grep
+# $ ps ax gp ruby
+# (all ruby process will be displayed)
 
 # php
 alias phpunit='./vendor/bin/phpunit'
