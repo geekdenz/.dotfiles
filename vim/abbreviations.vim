@@ -41,3 +41,4 @@ iab        jeová                Jeová
 iab        jeova                Jeová
 iab        jesus                Jesus
 iab        evolućao             evolução
+iab        cl                   console.log(
