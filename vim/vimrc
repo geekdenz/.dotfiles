@@ -124,7 +124,8 @@ autocmd BufRead,BufNewFile *.txt setlocal spell spelllang=en_us,pt_br
 "===============================================================================
 " Appearence:
 "===============================================================================
-color lucius
+" color lucius
+color seattle
 " highlight ajustment
 highligh MatchParen cterm=bold ctermbg=none ctermfg=green
 
