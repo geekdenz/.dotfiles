@@ -320,10 +320,11 @@ noremap ds) F(xf)x
 noremap cs) F(xf)xi
 
 " surround with characters
-noremap sw' bi'<esc>ea'<esc>
-noremap sw" bi"<esc>ea"<esc>
-noremap sw{ bi{<esc>ea}<esc>
-noremap sw( bi(<esc>ea)<esc>
+noremap <Leader>sw' bi'<esc>ea'<esc>
+noremap <Leader>sw" bi"<esc>ea"<esc>
+noremap <Leader>sw{ bi{<esc>ea}<esc>
+noremap <Leader>sw( bi(<esc>ea)<esc>
+" inoremap console.log()<tab)console.log()
 
 nmap cu ct_
 nmap cU cf_
