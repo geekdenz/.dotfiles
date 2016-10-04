@@ -1,4 +1,4 @@
-let mapleader = " "
+let mapleader = "\\"
 
 source ~/.vim/plugins.vim
 source ~/.vim/functions.vim
@@ -35,7 +35,7 @@ set mouse=""
 set nobackup
 set noincsearch
 set noswapfile
-set nowrap
+set wrap
 set number numberwidth=2
 set pastetoggle=<F3>
 set ruler rulerformat=%=%l/%L
