@@ -47,8 +47,8 @@ vnoremap <leader>ag y:Ag! '<C-R>"'
 nnoremap <leader>lag :Ag<up><cr>
 
 " saves from normal mode
-nnoremap <leader>s :w<cr>
-nnoremap <leader>S :w<cr>
+nnoremap <c-s> :w<cr>
+nnoremap <c-S> :w<cr>
 
 " saves and exits insert mode
 inoremap ,s <ESC>:w<cr>
@@ -84,6 +84,25 @@ nnoremap <Leader>vimf :vsplit ~/.vim/functions.vim<CR>
 nnoremap <Leader>vimm :vsplit ~/.vim/mappings.vim<CR>
 nnoremap <Leader>vimp :vsplit ~/.vim/plugins.vim<CR>
 nnoremap <leader>sv :source $MYVIMRC<cr>
+
+" Easy Motion (easymotion)
+" <Leader>f{char} to move to {char}
+map  <Leader>f <Plug>(easymotion-bd-f)
+nmap <Leader>f <Plug>(easymotion-overwin-f)
+
+" s{char}{char} to move to {char}{char}
+nmap s <Plug>(easymotion-overwin-f2)
+
+" Move to line
+map <Leader>L <Plug>(easymotion-bd-jk)
+nmap <Leader>L <Plug>(easymotion-overwin-line)
+
+" Move to word
+map  <Leader>w <Plug>(easymotion-bd-w)
+nmap <Leader>w <Plug>(easymotion-overwin-w)
+
+" /easymotion
+
 
 " vundle
 nnoremap <Leader>bi :BundleInstall<cr>
@@ -197,35 +216,35 @@ autocmd FileType php nnoremap <leader>dcs :call PhpFixCs('.')<cr>
 autocmd FileType php inoremap <buffer> <C-.> .
 autocmd FileType php inoremap <buffer> ... ../
 autocmd FileType php inoremap <buffer> .. ->
-autocmd FileType php inoremap <buffer> .a ->a
-autocmd FileType php inoremap <buffer> .b ->b
-autocmd FileType php inoremap <buffer> .c ->c
-autocmd FileType php inoremap <buffer> .d ->d
-autocmd FileType php inoremap <buffer> .e ->e
-autocmd FileType php inoremap <buffer> .f ->f
-autocmd FileType php inoremap <buffer> .g ->g
-autocmd FileType php inoremap <buffer> .h ->h
-autocmd FileType php inoremap <buffer> .i ->i
-autocmd FileType php inoremap <buffer> .j ->j
-autocmd FileType php inoremap <buffer> .k ->k
-autocmd FileType php inoremap <buffer> .l ->l
-autocmd FileType php inoremap <buffer> .m ->m
-autocmd FileType php inoremap <buffer> .n ->n
-autocmd FileType php inoremap <buffer> .o ->o
-autocmd FileType php inoremap <buffer> .p ->p
-autocmd FileType php inoremap <buffer> .q ->q
-autocmd FileType php inoremap <buffer> .r ->r
-autocmd FileType php inoremap <buffer> .s ->s
-autocmd FileType php inoremap <buffer> .t ->t
-autocmd FileType php inoremap <buffer> .u ->u
-autocmd FileType php inoremap <buffer> .v ->v
-autocmd FileType php inoremap <buffer> .x ->x
-autocmd FileType php inoremap <buffer> .v ->v
-autocmd FileType php inoremap <buffer> .y ->y
-autocmd FileType php inoremap <buffer> .w ->w
-autocmd FileType php inoremap <buffer> .z ->z
-autocmd FileType php inoremap <buffer> ._ ->_
-autocmd FileType php inoremap <buffer> ;; <esc>$a;
+"autocmd FileType php inoremap <buffer> .a ->a
+"autocmd FileType php inoremap <buffer> .b ->b
+"autocmd FileType php inoremap <buffer> .c ->c
+"autocmd FileType php inoremap <buffer> .d ->d
+"autocmd FileType php inoremap <buffer> .e ->e
+"autocmd FileType php inoremap <buffer> .f ->f
+"autocmd FileType php inoremap <buffer> .g ->g
+"autocmd FileType php inoremap <buffer> .h ->h
+"autocmd FileType php inoremap <buffer> .i ->i
+"autocmd FileType php inoremap <buffer> .j ->j
+"autocmd FileType php inoremap <buffer> .k ->k
+"autocmd FileType php inoremap <buffer> .l ->l
+"autocmd FileType php inoremap <buffer> .m ->m
+"autocmd FileType php inoremap <buffer> .n ->n
+"autocmd FileType php inoremap <buffer> .o ->o
+"autocmd FileType php inoremap <buffer> .p ->p
+"autocmd FileType php inoremap <buffer> .q ->q
+"autocmd FileType php inoremap <buffer> .r ->r
+"autocmd FileType php inoremap <buffer> .s ->s
+"autocmd FileType php inoremap <buffer> .t ->t
+"autocmd FileType php inoremap <buffer> .u ->u
+"autocmd FileType php inoremap <buffer> .v ->v
+"autocmd FileType php inoremap <buffer> .x ->x
+"autocmd FileType php inoremap <buffer> .v ->v
+"autocmd FileType php inoremap <buffer> .y ->y
+"autocmd FileType php inoremap <buffer> .w ->w
+"autocmd FileType php inoremap <buffer> .z ->z
+"autocmd FileType php inoremap <buffer> ._ ->_
+"autocmd FileType php inoremap <buffer> ;; <esc>$a;
 
 "===============================================================================
 " Ruby
@@ -254,3 +273,101 @@ autocmd FileType c nnoremap <buffer> <leader>x <esc>:call CompileAndRunCurrentCF
 "===============================================================================
 
 autocmd FileType sh nnoremap <buffer> <leader>x <esc>:! clear && ./%<cr>
+" Unmap the arrow keys
+no <down> ddp
+no <left> <Nop>
+no <right> <Nop>
+no <up> ddkP
+ino <down> <Nop>
+ino <left> <Nop>
+ino <right> <Nop>
+ino <up> <Nop>
+vno <down> <Nop>
+vno <left> <Nop>
+vno <right> <Nop>
+vno <up> <Nop>
+
+"============== Custom Mappings ===============
+" general mapping
+nmap <C-Tab> :tabnext<CR>
+nmap <C-S-Tab> :tabprevious<CR>
+map <C-S-Tab> :tabprevious<CR>
+map <C-Tab> :tabnext<CR>
+imap <C-S-Tab> <ESC>:tabprevious<CR>
+imap <C-Tab> <ESC>:tabnext<CR>
+noremap <F7> :set expandtab!<CR>
+nmap <Leader>h :tabnew %:h<CR>
+
+"turn off search highlighting
+"nmap <C-n> :noh<CR>
+
+"custom comma motion mapping
+nmap di, f,dT,
+nmap ci, f,cT,
+nmap da, f,ld2F,i,<ESC>l "delete argument 
+nmap ca, f,ld2F,i,<ESC>a "delete arg and insert
+
+" delete surrounding characters
+noremap ds{ F{xf}x
+noremap cs{ F{xf}xi
+noremap ds" F"x,x
+noremap cs" F"x,xi
+noremap ds' F'x,x
+noremap cs' F'x,xi
+noremap ds( F(xf)x
+noremap cs( F(xf)xi
+noremap ds) F(xf)x
+noremap cs) F(xf)xi
+
+" surround with characters
+noremap <Leader>sw' ea'bi'
+noremap <Leader>sw" ea"bi"
+noremap <Leader>sw{ ea{bi}
+noremap <Leader>sw( ea(bi)
+" inoremap console.log()<tab)console.log()
+
+nmap cu ct_
+nmap cU cf_
+
+" upper or lowercase the current word
+nmap g^ gUiW
+nmap gv guiW
+
+" diff
+nmap ]c ]czz
+nmap [c [czz
+
+" default to very magic
+no / /\v
+
+" gO to create a new line below cursor in normal mode
+nmap g<C-O> o<ESC>k
+" g<Ctrl+o> to create a new line above cursor (Ctrl to prevent collision with 'go' command)
+nmap gO O<ESC>j
+
+"I really hate that things don't auto-center
+nmap G Gzz
+nmap n nzz
+nmap N Nzz
+nmap } }zz
+nmap { {zz
+
+"open tag in new tab
+map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
+
+"quick pairs
+imap <leader>' ''<ESC>i
+imap <leader>" ""<ESC>i
+imap <leader>( ()<ESC>i
+imap <leader>[ []<ESC>i
+
+" replace string contents with recently copied text
+nmap <Leader>r" "_di"P
+nmap <Leader>c" "_di"Pa
+nmap <Leader>r' '_di'P
+nmap <Leader>c' '_di'Pa
+
+autocmd FileType twig imap <leader>a[ [{[  ]}]<ESC>Bhi
+
+nmap ]h <Plug>GitGutterNextHunk
+nmap [h <Plug>GitGutterPrevHunk
