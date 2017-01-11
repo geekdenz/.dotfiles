@@ -63,3 +63,7 @@
 [user]
 	email = th.heuer@gmail.com
 	name = Tim-Hinnerk Heuer
+[merge]
+	tool = vimdiff
+#[http]
+# proxy = http://202.27.242.252:8080

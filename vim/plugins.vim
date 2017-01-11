@@ -53,6 +53,10 @@ Bundle "tpope/vim-speeddating"
 " Bundle "Valloric/YouCompleteMe"
 Bundle "janko-m/vim-test"
 Bundle "pangloss/vim-javascript"
+Bundle "leafgarland/typescript-vim"
+Bundle "Shougo/vimproc.vim"
+Bundle "Quramy/tsuquyomi"
+Bundle "artur-shaik/vim-javacomplete2"
 
 " Colors
 " Bundle "chriskempson/base16-vim"
@@ -60,16 +64,14 @@ Bundle "pangloss/vim-javascript"
 " Bundle "altercation/vim-colors-solarized"
 Bundle "endel/vim-github-colorscheme"
 Bundle "jonathanfilip/vim-lucius"
-Bundle "leafgarland/typescript-vim"
-Bundle "Shougo/vimproc.vim"
-Bundle "Quramy/tsuquyomi"
-Bundle "artur-shaik/vim-javacomplete2"
+Bundle "mbbill/vim-seattle"
+
 
 " Bundle "othree/javascript-libraries-syntax.vim"
 " Bundle "vim-scripts/JavaScript-Indent"
 " Bundle "powerline/powerline" " future version of below"
 Bundle 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
-Bundle 'phalkunz/vim-ss'
+Bundle 'geekdenz/vim-ss'
 
 " ending vundle
 call vundle#end()            " required

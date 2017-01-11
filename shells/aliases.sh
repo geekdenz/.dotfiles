@@ -42,6 +42,8 @@ alias gpr='git pull --rebase origin'
 alias gprm='git pull --rebase origin master'
 alias gpu='git pull'
 alias gs='git status -s'
+alias gpusham='git push && pushd docroot/app-page && git push && popd && pushd docroot/single-page && git push && popd'
+#alias gpush='git checkout build && git merge master && git push origin build && git checkout master'
 
 # capistrano
 alias cpd='cap production deploy'
