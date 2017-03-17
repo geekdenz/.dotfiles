@@ -304,6 +304,8 @@ nmap <Leader>h :tabnew %:h<CR>
 "custom comma motion mapping
 nmap di, f,dT,
 nmap ci, f,cT,
+nmap ci< f<cT>
+nmap ci> f<cT>
 nmap da, f,ld2F,i,<ESC>l "delete argument 
 nmap ca, f,ld2F,i,<ESC>a "delete arg and insert
 
