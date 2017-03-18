@@ -23,7 +23,7 @@ set directory=/tmp/
 set display=lastline
 set expandtab tabstop=2 softtabstop=2 shiftwidth=2
 set foldlevel=1
-set foldmethod=syntax
+set foldmethod=manual
 set guicursor=a:blinkon0
 set hidden
 set hlsearch
