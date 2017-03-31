@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 pushd vim/bundle
 ls -1 | while read f
 do
