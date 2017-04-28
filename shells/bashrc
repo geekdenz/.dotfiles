@@ -85,3 +85,6 @@ export SDKMAN_DIR="/home/example/.sdkman"
 [[ -s "/home/example/.sdkman/bin/sdkman-init.sh" ]] && source "/home/example/.sdkman/bin/sdkman-init.sh"
 export NVM_DIR="/home/example/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+
+# added by Miniconda3 4.3.11 installer
+export PATH="/home/example/miniconda3/bin:$PATH"
