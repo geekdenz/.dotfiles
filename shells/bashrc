@@ -85,3 +85,6 @@ export SDKMAN_DIR="/home/denz/.sdkman"
 [[ -s "/home/denz/.sdkman/bin/sdkman-init.sh" ]] && source "/home/denz/.sdkman/bin/sdkman-init.sh"
 export NVM_DIR="/home/denz/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+
+# added by Miniconda2 4.3.21 installer
+export PATH="/Users/heuert/miniconda2/bin:$PATH"
