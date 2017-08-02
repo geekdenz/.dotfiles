@@ -72,6 +72,7 @@ Bundle "mbbill/vim-seattle"
 " Bundle "powerline/powerline" " future version of below"
 Bundle 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
 Bundle 'example-user/vim-ss'
+Bundle 'mustache/vim-mustache-handlebars'
 
 " ending vundle
 call vundle#end()            " required
