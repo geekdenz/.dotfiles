@@ -147,3 +147,10 @@ fi
 if [ -f /Users/heuert/google-cloud-sdk/completion.zsh.inc ]; then
   source '/Users/heuert/google-cloud-sdk/completion.zsh.inc'
 fi
+
+###-tns-completion-start-###
+if [ -f ~/.tnsrc ]; then 
+    source ~/.tnsrc
+fi
+###-tns-completion-end-###
+export PATH=~/apache-maven/bin:$PATH

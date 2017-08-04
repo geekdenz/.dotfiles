@@ -88,3 +88,9 @@ export NVM_DIR="/home/denz/.nvm"
 
 # added by Miniconda3 4.3.11 installer
 export PATH="/home/denz/miniconda3/bin:$PATH"
+
+###-tns-completion-start-###
+if [ -f /home/denz/.tnsrc ]; then 
+    source /home/denz/.tnsrc 
+fi
+###-tns-completion-end-###
