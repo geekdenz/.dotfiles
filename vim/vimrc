@@ -108,10 +108,15 @@ autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "norm
 autocmd BufRead,BufNewFile {Gemfile,Rakefile,Vagrantfile,Thorfile,config.ru} set ft=ruby
 
 " hb is handlebars
-autocmd BufNewFile,BufRead *.hb set ai filetype=handlebars
+autocmd BufNewFile,BufRead *.hb set ai filetype=mustache
 
 " hbs is handlebars
-autocmd BufNewFile,BufRead *.hbs set ai filetype=handlebars
+autocmd BufNewFile,BufRead *.hbs set ai filetype=mustache
+" Handlebars
+"autocmd BufRead *.hbs :set syntax=mustache
+"autocmd BufRead,BufNewFile *.hbs set filetype=mustache
+"au BufReadPost *.html set syntax=mustache
+
 
 " JSON is JS
 autocmd BufNewFile,BufRead *.json set ai filetype=javascript
