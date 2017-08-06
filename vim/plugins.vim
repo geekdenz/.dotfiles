@@ -73,6 +73,7 @@ Bundle "mbbill/vim-seattle"
 Bundle 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
 Bundle 'dhalter/jedi-vim'
 Bundle 'geekdenz/vim-ss'
+Bundle 'mustache/vim-mustache-handlebars'
 
 " ending vundle
 call vundle#end()            " required
