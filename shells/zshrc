@@ -154,3 +154,9 @@ if [ -f ~/.tnsrc ]; then
 fi
 ###-tns-completion-end-###
 export PATH=~/apache-maven/bin:$PATH
+
+###-tns-completion-start-###
+if [ -f /home/denz/.tnsrc ]; then 
+    source /home/denz/.tnsrc 
+fi
+###-tns-completion-end-###
