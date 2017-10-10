@@ -373,3 +373,5 @@ autocmd FileType twig imap <leader>a[ [{[  ]}]<ESC>Bhi
 
 nmap ]h <Plug>GitGutterNextHunk
 nmap [h <Plug>GitGutterPrevHunk
+
+autocmd FileType java setlocal omnifunc=javacomplete#Complete
