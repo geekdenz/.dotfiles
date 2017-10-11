@@ -74,6 +74,7 @@ Bundle 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
 Bundle 'dhalter/jedi-vim'
 Bundle 'example-user/vim-ss'
 Bundle 'mustache/vim-mustache-handlebars'
+Bundle 'tfnico/vim-gradle'
 
 " ending vundle
 call vundle#end()            " required
