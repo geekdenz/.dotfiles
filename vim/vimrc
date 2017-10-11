@@ -155,4 +155,5 @@ endif
 " example-user added:
 source ~/.dotfiles/vim/vimrc_example-user
 :nnoremap <F5> :source ~/.dotfiles/vim/bundle/vim-ss/indent/ss.vim<CR>
+:compiler gradle
 " /example-user added
