@@ -75,6 +75,8 @@ Bundle 'dhalter/jedi-vim'
 Bundle 'geekdenz/vim-ss'
 Bundle 'mustache/vim-mustache-handlebars'
 Bundle 'tfnico/vim-gradle'
+Bundle 'wellle/tmux-complete.vim'
+Bundle 'wellle/targets.vim'
 
 " ending vundle
 call vundle#end()            " required
