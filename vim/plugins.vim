@@ -77,6 +77,7 @@ Bundle 'mustache/vim-mustache-handlebars'
 Bundle 'tfnico/vim-gradle'
 Bundle 'wellle/tmux-complete.vim'
 Bundle 'wellle/targets.vim'
+Bundle 'mattn/emmet-vim'
 
 " ending vundle
 call vundle#end()            " required
