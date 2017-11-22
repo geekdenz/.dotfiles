@@ -154,6 +154,7 @@ if [ -f ~/.tnsrc ]; then
 fi
 ###-tns-completion-end-###
 export PATH=~/apache-maven/bin:$PATH
+export PATH=~/.dotfiles/vim/bundle/phpctags/bin:$PATH
 
 ###-tns-completion-start-###
 if [ -f /home/denz/.tnsrc ]; then 
