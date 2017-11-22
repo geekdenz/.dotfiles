@@ -43,6 +43,7 @@ Bundle "shawncplus/phpcomplete.vim"
 Bundle "StanAngeloff/php.vim"
 Bundle 'captbaritone/better-indent-support-for-php-with-html'
 Bundle "arnaud-lb/vim-php-namespace"
+Bundle "vim-php/phpctags"
 Bundle "vim-scripts/ruby-matchit"
 Bundle "vim-ruby/vim-ruby"
 Bundle "tpope/vim-rails"
