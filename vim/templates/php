@@ -1,0 +1,15 @@
+<?php
+
+
+/**
+ * Copyright attributed to author, funder(s) and licenses provided in License
+ * files.
+ *
+ * @author: Tim-Hinnerk Heuer <tim@heuer.nz>
+ */
+
+function f() {
+
+# cursor: 13 del
+
+// vim: expandtab
