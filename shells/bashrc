@@ -88,3 +88,6 @@ export NVM_DIR="/home/denz/.nvm"
 
 # added by Miniconda3 4.3.11 installer
 export PATH="/home/denz/miniconda3/bin:$PATH"
+
+# added by Miniconda3 installer
+export PATH="/Users/heuert/miniconda3/bin:$PATH"
