@@ -43,6 +43,7 @@ Bundle "shawncplus/phpcomplete.vim"
 Bundle "StanAngeloff/php.vim"
 Bundle 'captbaritone/better-indent-support-for-php-with-html'
 Bundle "arnaud-lb/vim-php-namespace"
+Bundle "vim-php/phpctags"
 Bundle "vim-scripts/ruby-matchit"
 Bundle "vim-ruby/vim-ruby"
 Bundle "tpope/vim-rails"
@@ -71,8 +72,14 @@ Bundle "mbbill/vim-seattle"
 " Bundle "vim-scripts/JavaScript-Indent"
 " Bundle "powerline/powerline" " future version of below"
 Bundle 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
+" Bundle 'dhalter/jedi-vim'
 Bundle 'geekdenz/vim-ss'
 Bundle 'mustache/vim-mustache-handlebars'
+Bundle 'tfnico/vim-gradle'
+Bundle 'wellle/tmux-complete.vim'
+Bundle 'wellle/targets.vim'
+Bundle 'mattn/emmet-vim'
+Bundle 'ap/vim-templates'
 
 " ending vundle
 call vundle#end()            " required

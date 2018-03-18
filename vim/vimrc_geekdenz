@@ -8,3 +8,4 @@ set noexpandtab
 "set textwidth=80
 set exrc
 set secure
+au FileType python          setlocal omnifunc=python3complete#Complete

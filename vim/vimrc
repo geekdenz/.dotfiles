@@ -156,4 +156,9 @@ endif
 source ~/.dotfiles/vim/vimrc_geekdenz
 :nnoremap <F5> :source ~/.dotfiles/vim/bundle/vim-ss/indent/ss.vim<CR>
 let g:typescript_compiler_binary = 'tsc'
+set modeline
+set modelines=10
+:compiler gradle
+command -nargs=1 Tnew tabnew | set ft=<args>
+command -nargs=1 Tenew tabnew | set ft=<args> et
 " /geekdenz added
