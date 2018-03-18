@@ -91,3 +91,8 @@ export PATH="/home/example/miniconda3/bin:$PATH"
 
 # added by Miniconda3 installer
 export PATH="/Users/heuert/miniconda3/bin:$PATH"
+###-tns-completion-start-###
+if [ -f /home/example/.tnsrc ]; then 
+    source /home/example/.tnsrc 
+fi
+###-tns-completion-end-###
