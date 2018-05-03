@@ -80,6 +80,7 @@ Bundle 'wellle/tmux-complete.vim'
 Bundle 'wellle/targets.vim'
 Bundle 'mattn/emmet-vim'
 Bundle 'ap/vim-templates'
+" Bundle 'bryphe/vim-electrify' " don't work!
 
 " ending vundle
 call vundle#end()            " required
