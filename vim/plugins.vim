@@ -24,8 +24,8 @@ Bundle "takac/vim-hardtime"
 Bundle "airblade/vim-gitgutter"
 Bundle "tpope/vim-fugitive"
 Bundle "rking/ag.vim"
-Bundle "sirver/ultisnips"
-Bundle "mjacobus/vim-snippets"
+" Bundle "sirver/ultisnips"
+" Bundle "mjacobus/vim-snippets"
 Bundle "tomtom/tcomment_vim"
 Bundle "Lokaltog/vim-easymotion"
 " fixed "jiangmiao/auto-pairs"
@@ -38,7 +38,7 @@ Bundle "godlygeek/tabular"
 Bundle "scrooloose/syntastic"
 Bundle "weierophinney/argumentrewrap"
 Bundle "docteurklein/php-getter-setter.vim"
-Bundle "joonty/vdebug"
+" Bundle "joonty/vdebug"
 Bundle "shawncplus/phpcomplete.vim"
 Bundle "StanAngeloff/php.vim"
 Bundle 'captbaritone/better-indent-support-for-php-with-html'
@@ -158,7 +158,7 @@ vnoremap ar :Tabularize /=><CR>
 
 " Ultisnips
 " If you want :UltiSnipsEdit to split your window.
-let g:UltiSnipsEditSplit="vertical"
+" let g:UltiSnipsEditSplit="vertical"
 let g:snips_author="Marcelo Jacobus <marcelo.jacobus@gmail.com>"
 
 " sparkup

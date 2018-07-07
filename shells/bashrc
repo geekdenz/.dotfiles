@@ -96,3 +96,7 @@ if [ -f /home/denz/.tnsrc ]; then
     source /home/denz/.tnsrc 
 fi
 ###-tns-completion-end-###
+/bin/zsh
+
+# added by Miniconda3 installer
+export PATH="/home/users/heuert/miniconda3/bin:$PATH"

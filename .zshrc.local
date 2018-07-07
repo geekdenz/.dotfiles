@@ -1,0 +1,2 @@
+export PATH="/home/users/heuert/miniconda3/bin:/usr/local/bin:$PATH"
+
