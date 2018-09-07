@@ -94,3 +94,7 @@ if [ -f /home/denz/.tnsrc ]; then
     source /home/denz/.tnsrc 
 fi
 ###-tns-completion-end-###
+
+# added by Miniconda3 installer
+export PATH="/home/denz/miniconda3/bin:$PATH"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
