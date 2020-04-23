@@ -309,17 +309,17 @@ nmap ci> f<cT>
 nmap da, f,ld2F,i,<ESC>l "delete argument 
 nmap ca, f,ld2F,i,<ESC>a "delete arg and insert
 
-" delete surrounding characters
-noremap ds{ F{xf}x
-noremap cs{ F{xf}xi
-noremap ds" F"x,x
-noremap cs" F"x,xi
-noremap ds' F'x,x
-noremap cs' F'x,xi
-noremap ds( F(xf)x
-noremap cs( F(xf)xi
-noremap ds) F(xf)x
-noremap cs) F(xf)xi
+" " delete surrounding characters
+nnoremap ds{ F{xf}x
+nnoremap cs{ F{xf}xi
+nnoremap ds" F"x,x
+nnoremap cs" F"x,xi
+nnoremap ds' F'x,x
+nnoremap cs' F'x,xi
+nnoremap ds( F(xf)x
+nnoremap cs( F(xf)xi
+nnoremap ds) F(xf)x
+nnoremap cs) F(xf)xi
 
 " surround with characters
 noremap <Leader>sw' ea'bi'
