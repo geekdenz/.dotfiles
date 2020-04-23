@@ -65,5 +65,8 @@
 	name = Tim-Hinnerk Heuer
 [merge]
 	tool = vimdiff
+	tool = kdiff3
 #[http]
 # proxy = http://202.27.242.252:8080
+[mergetool "kdiff3"]
+	trustExitCode = false
