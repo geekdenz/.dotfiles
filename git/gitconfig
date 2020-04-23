@@ -68,3 +68,5 @@
 	tool = kdiff3
 #[http]
 # proxy = http://192.0.2.252:8080
+[mergetool "kdiff3"]
+	trustExitCode = false
