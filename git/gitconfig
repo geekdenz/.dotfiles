@@ -65,5 +65,6 @@
 	name = Example User
 [merge]
 	tool = vimdiff
+	tool = kdiff3
 #[http]
 # proxy = http://192.0.2.252:8080
