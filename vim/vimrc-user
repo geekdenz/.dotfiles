@@ -9,3 +9,7 @@ set noexpandtab
 set exrc
 set secure
 au FileType python          setlocal omnifunc=python3complete#Complete
+
+" let Comment='//'
+" xnoremap # :norm 0i<C-r>=Comment<CR><CR>
+" xnoremap & :norm ^<C-r>=len(Comment)<CR>x<CR>
