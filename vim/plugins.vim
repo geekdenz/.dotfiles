@@ -28,12 +28,15 @@ Bundle "sirver/ultisnips"
 Bundle "mjacobus/vim-snippets"
 Bundle "tomtom/tcomment_vim"
 Bundle "Lokaltog/vim-easymotion"
+
+
 " fixed "jiangmiao/auto-pairs"
 Bundle "yukunlin/auto-pairs"
 Bundle "mattn/webapi-vim.git"
 Bundle "mattn/gist-vim.git"
 Bundle "scrooloose/nerdtree"
 Bundle "kien/ctrlp.vim"
+
 Bundle "godlygeek/tabular"
 Bundle "scrooloose/syntastic"
 Bundle "weierophinney/argumentrewrap"
@@ -98,7 +101,8 @@ let g:hardtime_showmsg = 1
 
 
 " vim-to-cterm
-nnoremap tocterm :source ~/.vim/bundle/Vim-toCterm/tocterm.vim<CR>
+" nnoremap tocterm :source ~/.vim/bundle/Vim-toCterm/tocterm.vim<CR>
+" nnoremap TC :source ~/.vim/bundle/Vim-toCterm/tocterm.vim<CR>
 
 " php use
 nnoremap <Leader>u <C-O>:call PhpInsertUse()<CR>
