@@ -49,6 +49,19 @@ I usually run these:
 ~/.dotfiles/installers/ubuntu/16.4/nvm.sh
 ```
 
+## Add to ~/.zshrc.local:
+
+```bash
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+```
+
+and this to the end of ~./.zshrc:
+
+```bash
+```
+
 The below did not work for me
 -----------------------------
 
