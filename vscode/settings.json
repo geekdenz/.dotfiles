@@ -1,4 +1,5 @@
 {
     "vim.useSystemClipboard": true,
     "workbench.editor.enablePreview": false,
+    "editor.fontFamily": "Hack",
 }
