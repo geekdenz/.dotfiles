@@ -1,13 +1,9 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-#source install.sh
-
-curl https://raw.githubusercontent.com/geekdenz/.dotfiles/master/install.sh | bash
-
-ln -sf ~/.dotfiles/git/gitconfig.local ~/.gitconfig.local
-ln -sf ~/.dotfiles/shells/zshrc ~/.zshrc
-ln -sf ~/.dotfiles/vscode/settings.json ~/.config/Code/User/settings.json
-ln -sf ~/.dotfiles/shells/ssh-add.sh ~/.config/autostart-scripts/ssh-add.sh
+sudo apt update && sudo apt install -y zsh vim-gtk git-all && \
+./install.sh
+./installers/ubuntu/16.4/nvm.sh
+nvm install --lts
 mkdir -p ~/.config/plasma-workspace/env && ln -sf ~/.dotfiles/shells/ask-pass.sh ~/.config/plasma-workspace/env/askpass.sh
 # ensure powerline is installed
 git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k
@@ -20,4 +16,3 @@ curl https://www.fontsquirrel.com/fonts/download/hack > /tmp/hack.zip && \
 	popd
 
 curl -s "https://get.sdkman.io" | bash
-
