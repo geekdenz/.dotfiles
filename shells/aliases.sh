@@ -83,3 +83,10 @@ is_installed mvim      && alias gvim='mvim -v'
 is_installed gvim      && alias vim='gvim -v'
 is_installed gvim      && alias gvim='gvim -v'
 is_installed nvim      && alias vim=nvim
+
+#custom individual aliases
+alias py=python3
+alias gpp='git pull && git push'
+function gft {
+	grep -rn --include=\*.$1 $2 $3 $4 $5
+}
