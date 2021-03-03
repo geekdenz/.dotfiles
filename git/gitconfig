@@ -70,3 +70,8 @@
 # proxy = http://192.0.2.252:8080
 [mergetool "kdiff3"]
 	trustExitCode = false
+[filter "lfs"]
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
