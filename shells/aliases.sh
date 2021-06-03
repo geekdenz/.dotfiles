@@ -87,6 +87,7 @@ is_installed nvim      && alias vim=nvim
 #custom individual aliases
 alias py=python3
 alias gpp='git pull && git push'
+alias docker='sudo docker'
 function gft {
 	grep -rn --include=\*.$1 $2 $3 $4 $5
 }
