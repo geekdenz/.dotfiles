@@ -51,6 +51,7 @@ symlink_or_ask ~/.dotfiles/git/gitignore_global ~/.gitignore_global
 
 symlink_or_ask ~/.dotfiles/tmux/tmux.conf ~/.tmux.conf
 symlink_or_ask ~/.dotfiles/shells/zshrc ~/.zshrc
+symlink_or_ask ~/.dotfiles/shells/.p10k.zsh ~/.p10k.zsh
 symlink_or_ask ~/.dotfiles/ruby/irbrc ~/.irbrc
 symlink_or_ask ~/.dotfiles/vim ~/.vim
 symlink_or_ask ~/.dotfiles/vim/vimrc ~/.vimrc
