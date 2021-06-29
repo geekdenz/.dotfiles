@@ -16,3 +16,7 @@ function ghc {
   REPO=$1
   git clone git@github.com:$REPO.git
 }
+
+function gri {
+	grep --include=\*.$1 -rin $2 $3
+}
