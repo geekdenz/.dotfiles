@@ -6,14 +6,14 @@ source "`dirname $0`/config.sh"
 
 set -e
 
-install php7.0
-install php7.0-bcmath
-install php7.0-curl
-install php7.0-gd
-install php7.0-intl
-install php7.0-mbstring
-install php7.0-mysql
-install php7.0-xsl
+install php7.1
+install php7.1-bcmath
+install php7.1-curl
+install php7.1-gd
+install php7.1-intl
+install php7.1-mbstring
+install php7.1-mysql
+install php7.1-xsl
 
 if [ ! -f /usr/bin/composer.phar ]; then
   mecho "Installing composer..."
@@ -23,7 +23,7 @@ if [ ! -f /usr/bin/composer.phar ]; then
   sudo ln -fs /usr/bin/composer.phar /usr/bin/composer
 fi
 
-if [ ! -f /etc/php/7.0/mods-available/xdebug.ini ]; then
+if [ ! -f /etc/php/7.1/mods-available/xdebug.ini ]; then
   mecho "Installing xdebug"
 
   rm -f /tmp/xdebug-2.4.0.tgz
@@ -34,6 +34,6 @@ if [ ! -f /etc/php/7.0/mods-available/xdebug.ini ]; then
   sudo ./configure
   sudo make
   sudo cp modules/xdebug.so /usr/lib/php/20151012
-  sudo ln -s /etc/php/7.0/mods-available/xdebug.ini /etc/php/7.0/cli/conf.d/20-xedebug.ini
-  sudo ln -s /etc/php/7.0/mods-available/xdebug.ini /etc/php/7.0/fpm/conf.d/20-xedebug.ini
+  sudo ln -s /etc/php/7.1/mods-available/xdebug.ini /etc/php/7.1/cli/conf.d/20-xedebug.ini
+  sudo ln -s /etc/php/7.1/mods-available/xdebug.ini /etc/php/7.1/fpm/conf.d/20-xedebug.ini
 fi
