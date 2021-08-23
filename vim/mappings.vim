@@ -51,8 +51,8 @@ nnoremap <c-s> :w<cr>
 nnoremap <c-S> :w<cr>
 
 " saves and exits insert mode
-inoremap ,s <ESC>:w<cr>
-inoremap ,S <ESC>:w<cr>
+" inoremap ,s <ESC>:w<cr>
+" inoremap ,S <ESC>:w<cr>
 
 " Select all
 nnoremap <leader>a ggVG
@@ -61,7 +61,7 @@ nnoremap <leader>a ggVG
 nnoremap <c-w>t :tabnew<cr>
 
 " jumps to the next position after the closest closing char
-inoremap ,e <Esc>/[\]})"']<cr><Esc>:nohlsearch<cr>a
+" inoremap ,e <Esc>/[\]})"']<cr><Esc>:nohlsearch<cr>a
 
 " adds arrow
 inoremap <C-l> <Space>=><Space>,<left>
@@ -192,8 +192,8 @@ nnoremap <leader>et :vs ~/.tmp/
 "===============================================================================
 inoremap ć ç
 inoremap Ć Ç
-inoremap ,a â
-inoremap ,A Â
+" inoremap ,a â
+" inoremap ,A Â
 
 "===============================================================================
 " PHP
