@@ -94,3 +94,7 @@ function gft {
 }
 alias ed='code .'
 alias e='code'
+alias flushdns='sudo systemd-resolve --flush-caches'
+alias po=poweroff
+alias pbcopy='xclip -selection clipboard'
+alias pbpaste='xclip -selection clipboard -o'
