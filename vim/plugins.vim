@@ -1,12 +1,6 @@
 "=========================================================================
 " Plugins: Vundle config
 "=========================================================================
-set nocompatible              " be iMproved, required
-filetype off                  " required
-
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/Vundle.vim
-call vundle#begin()
 
 " Prolematic
 " " Bundle "ervandew/supertab"
@@ -86,9 +80,6 @@ Bundle 'mattn/emmet-vim'
 Bundle 'ap/vim-templates'
 " Bundle 'bryphe/vim-electrify' " don't work!
 
-" ending vundle
-call vundle#end()            " required
-filetype plugin indent on    " required
 
 "===============================================================================
 " Configs, mappings
