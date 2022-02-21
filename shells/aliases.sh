@@ -94,3 +94,4 @@ function gft {
 }
 alias ed='code .'
 alias e='code'
+alias sudo='sudo '
