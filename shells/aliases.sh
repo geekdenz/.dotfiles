@@ -98,3 +98,5 @@ alias flushdns='sudo systemd-resolve --flush-caches'
 alias po=poweroff
 alias pbcopy='xclip -selection clipboard'
 alias pbpaste='xclip -selection clipboard -o'
+alias vi=vim
+alias v=vim
