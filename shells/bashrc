@@ -117,3 +117,4 @@ fi
 unset __conda_setup
 # <<< conda init <<<
 eval (/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+. "$HOME/.cargo/env"
