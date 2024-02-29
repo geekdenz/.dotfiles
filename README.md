@@ -24,6 +24,12 @@ cd ~/.dotfiles
 ./install.sh
 ```
 
+## Powerlevel10k
+
+```bash
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+```
+
 Note that you need to logout of your current session for everything to work.
 
 Note that there are custom installers for some things:

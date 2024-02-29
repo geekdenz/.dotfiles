@@ -62,7 +62,10 @@
   commti = commit
 [user]
 	email = tim.heuer@triotech.co.nz
-	name = Tim Heuer
+#	name = Tim Heuer
+#	email = geekdenz@@users.noreply.github.com
+#	email = th.heuer@gmail.com
+	name = Tim-Hinnerk Heuer
 [merge]
 	tool = intellij
 	#tool = vimdiff

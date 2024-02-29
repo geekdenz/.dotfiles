@@ -161,7 +161,7 @@ if [ -f $HOME/google-cloud-sdk/completion.zsh.inc ]; then
 fi
 
 ###-tns-completion-start-###
-if [ -f ~/.tnsrc ]; then 
+if [ -f ~/.tnsrc ]; then
     source ~/.tnsrc
 fi
 ###-tns-completion-end-###
@@ -169,8 +169,8 @@ export PATH=~/apache-maven/bin:$PATH
 export PATH=~/.dotfiles/vim/bundle/phpctags/bin:$PATH
 
 ###-tns-completion-start-###
-if [ -f /home/denz/.tnsrc ]; then 
-    source /home/denz/.tnsrc 
+if [ -f /home/denz/.tnsrc ]; then
+    source /home/denz/.tnsrc
 fi
 ###-tns-completion-end-###
 # >>> conda initialize >>>
@@ -197,6 +197,17 @@ fi
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 alias sail="vendor/bin/sail"
+export ANDROID_HOME=$HOME/Android/Sdk
+export PATH=$ANDROID_HOME/emulator:$PATH
+export PATH=$ANDROID_HOME/platform-tools:$PATH
+# eval $(ssh-agent) # do not add this if using KDE wallet to manage keys!
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# export PATH=$PATH:~/idea/idea-IU-223.8617.56/bin
+
+
+# Load Angular CLI autocompletion.
+source <(ng completion script)
+
 export ANDROID_HOME=$HOME/Android/Sdk
 export PATH=$ANDROID_HOME/emulator:$PATH
 export PATH=$ANDROID_HOME/platform-tools:$PATH
