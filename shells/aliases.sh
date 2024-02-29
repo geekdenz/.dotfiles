@@ -58,9 +58,9 @@ alias csd='cap staging deploy'
 # alias -s cpp=vim
 # alias -s java=vim
 # alias -s gradle=vim
-# $ foo.rb 
+# $ foo.rb
 # vim => foo.rb
-# alias -g gp='| grep -i' #creates a global alias for grep
+alias -g gp='| grep -i' #creates a global alias for grep
 # $ ps ax gp ruby
 # (all ruby process will be displayed)
 
@@ -101,3 +101,5 @@ alias pbpaste='xclip -selection clipboard -o'
 alias l='exa -lah'
 alias ll='exa -lh'
 alias co='`pbpaste` && git merge'
+alias vi=vim
+alias v=vim
