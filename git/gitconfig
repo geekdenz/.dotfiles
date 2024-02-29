@@ -61,13 +61,19 @@
   lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
   commti = commit
 [user]
-	email = heuert@landcareresearch.co.nz
-	name = Tim-Hinnerk Heuer
+	email = tim.heuer@triotech.co.nz
+	name = Tim Heuer
 [merge]
-	tool = vimdiff
-	tool = kdiff3
+	tool = intellij
+	#tool = vimdiff
+	#tool = kdiff3
 #[http]
 # proxy = http://202.27.242.252:8080
+[difftool "intellij"]
+	cmd = idea diff $(cd $(dirname \"$LOCAL\") && pwd)/$(basename \"$LOCAL\") $(cd $(dirname \"$REMOTE\") && pwd)/$(basename \"$REMOTE\")
+[mergetool "intellij"]
+	cmd = idea merge $(cd $(dirname \"$LOCAL\") && pwd)/$(basename \"$LOCAL\") $(cd $(dirname \"$REMOTE\") && pwd)/$(basename \"$REMOTE\") $(cd $(dirname \"$BASE\") && pwd)/$(basename \"$BASE\") $(cd $(dirname \"$MERGED\") && pwd)/$(basename \"$MERGED\")
+	trustExitCode = true
 [mergetool "kdiff3"]
 	trustExitCode = false
 [filter "lfs"]
@@ -75,3 +81,6 @@
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
+
+[init]
+	defaultBranch = develop

@@ -50,17 +50,17 @@ alias cpd='cap production deploy'
 alias csd='cap staging deploy'
 
 # zsh
-alias -s php=vim #opens php files in vim
-alias -s rb=vim
-alias -s ts=vim
-alias -s js=vim
-alias -s c=vim
-alias -s cpp=vim
-alias -s java=vim
-alias -s gradle=vim
+# alias -s php=vim #opens php files in vim
+# alias -s rb=vim
+# alias -s ts=vim
+# alias -s js=vim
+# alias -s c=vim
+# alias -s cpp=vim
+# alias -s java=vim
+# alias -s gradle=vim
 # $ foo.rb 
 # vim => foo.rb
-alias -g gp='| grep -i' #creates a global alias for grep
+# alias -g gp='| grep -i' #creates a global alias for grep
 # $ ps ax gp ruby
 # (all ruby process will be displayed)
 
@@ -98,3 +98,6 @@ alias flushdns='sudo systemd-resolve --flush-caches'
 alias po=poweroff
 alias pbcopy='xclip -selection clipboard'
 alias pbpaste='xclip -selection clipboard -o'
+alias l='exa -lah'
+alias ll='exa -lh'
+alias co='`pbpaste` && git merge'
