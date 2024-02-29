@@ -111,9 +111,4 @@ else
     fi
 fi
 unset __conda_setup
-# <<< conda initialize <<<
-
-fi
-unset __conda_setup
-# <<< conda init <<<
-eval (/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+#eval (/home/linuxbrew/.linuxbrew/bin/brew shellenv)
