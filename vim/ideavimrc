@@ -86,3 +86,4 @@
   " https://github.com/JetBrains/ideavim/wiki/sethandler
   sethandler <C-C> n-v:ide i:vim
   sethandler <C-F> i-v:ide n:vim
+  sethandler <C-R> i-v:ide n:vim
