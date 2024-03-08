@@ -104,3 +104,4 @@ alias co='`pbpaste` && git merge'
 alias vi=vim
 alias v=vim
 alias s=sail
+alias mdev='git merge origin/develop'
