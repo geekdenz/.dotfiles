@@ -103,3 +103,4 @@ alias ll='exa -lh'
 alias co='`pbpaste` && git merge'
 alias vi=vim
 alias v=vim
+alias s=sail
