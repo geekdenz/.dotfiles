@@ -61,17 +61,29 @@
   lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
   commti = commit
 [user]
-	email = heuert@landcareresearch.co.nz
+	email = tim.heuer@triotech.co.nz
 	name = Tim-Hinnerk Heuer
 [merge]
-	tool = vimdiff
-	tool = kdiff3
+	tool = idea
+	#tool = kdiff3
+	#tool = vimdiff
 #[http]
 # proxy = http://202.27.242.252:8080
 [mergetool "kdiff3"]
 	trustExitCode = false
+[mergetool "idea"]
+	cmd = idea merge $(cd $(dirname \"$LOCAL\") && pwd)/$(basename \"$LOCAL\") $(cd $(dirname \"$REMOTE\") && pwd)/$(basename \"$REMOTE\") $(cd $(dirname \"$BASE\") && pwd)/$(basename \"$BASE\") $(cd $(dirname \"$MERGED\") && pwd)/$(basename \"$MERGED\")
+        trustExitCode = true
+	#/home/denz/apps/idea-IU-223.8836.41/bin/idea.sh
+[difftool "idea"]
+        cmd = idea diff $(cd $(dirname \"$LOCAL\") && pwd)/$(basename \"$LOCAL\") $(cd $(dirname \"$REMOTE\") && pwd)/$(basename \"$REMOTE\")
 [filter "lfs"]
 	required = true
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
+[init]
+	defaultBranch = main
+[credential "https://github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
