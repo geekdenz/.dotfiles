@@ -64,26 +64,28 @@
 	email = tim.heuer@triotech.co.nz
 	name = Tim-Hinnerk Heuer
 [merge]
-	tool = idea
-	#tool = kdiff3
+	tool = intellij
 	#tool = vimdiff
+	#tool = kdiff3
 #[http]
 # proxy = http://202.27.242.252:8080
+[difftool "intellij"]
+	cmd = idea diff $(cd $(dirname \"$LOCAL\") && pwd)/$(basename \"$LOCAL\") $(cd $(dirname \"$REMOTE\") && pwd)/$(basename \"$REMOTE\")
+[mergetool "intellij"]
+	cmd = idea merge $(cd $(dirname \"$LOCAL\") && pwd)/$(basename \"$LOCAL\") $(cd $(dirname \"$REMOTE\") && pwd)/$(basename \"$REMOTE\") $(cd $(dirname \"$BASE\") && pwd)/$(basename \"$BASE\") $(cd $(dirname \"$MERGED\") && pwd)/$(basename \"$MERGED\")
+	trustExitCode = true
 [mergetool "kdiff3"]
 	trustExitCode = false
-[mergetool "idea"]
-	cmd = idea merge $(cd $(dirname \"$LOCAL\") && pwd)/$(basename \"$LOCAL\") $(cd $(dirname \"$REMOTE\") && pwd)/$(basename \"$REMOTE\") $(cd $(dirname \"$BASE\") && pwd)/$(basename \"$BASE\") $(cd $(dirname \"$MERGED\") && pwd)/$(basename \"$MERGED\")
-        trustExitCode = true
-	#/home/denz/apps/idea-IU-223.8836.41/bin/idea.sh
-[difftool "idea"]
-        cmd = idea diff $(cd $(dirname \"$LOCAL\") && pwd)/$(basename \"$LOCAL\") $(cd $(dirname \"$REMOTE\") && pwd)/$(basename \"$REMOTE\")
 [filter "lfs"]
 	required = true
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
-[init]
-	defaultBranch = main
+#[init]
+#	defaultBranch = main
 [credential "https://github.com"]
-	helper = 
+	helper =
 	helper = !/usr/bin/gh auth git-credential
+
+[init]
+	defaultBranch = develop
