@@ -8,3 +8,6 @@ tags-*
 npm-debug.log
 /curl.sh
 shell_test.sh
+docker-compose.override.yml
+**/.env
+

@@ -50,15 +50,15 @@ alias cpd='cap production deploy'
 alias csd='cap staging deploy'
 
 # zsh
-alias -s php=vim #opens php files in vim
-alias -s rb=vim
-alias -s ts=vim
-alias -s js=vim
-alias -s c=vim
-alias -s cpp=vim
-alias -s java=vim
-alias -s gradle=vim
-# $ foo.rb 
+# alias -s php=vim #opens php files in vim
+# alias -s rb=vim
+# alias -s ts=vim
+# alias -s js=vim
+# alias -s c=vim
+# alias -s cpp=vim
+# alias -s java=vim
+# alias -s gradle=vim
+# $ foo.rb
 # vim => foo.rb
 alias -g gp='| grep -i' #creates a global alias for grep
 # $ ps ax gp ruby
@@ -98,12 +98,21 @@ alias flushdns='sudo systemd-resolve --flush-caches'
 alias po=poweroff
 alias pbcopy='xclip -selection clipboard'
 alias pbpaste='xclip -selection clipboard -o'
+alias l='exa -lah'
+alias ll='exa -lh'
+alias co='`pbpaste` && git merge'
 alias vi=vim
 alias v=vim
 alias sus='systemctl suspend'
 alias ls='exa'
-alias l='exa -la'
-alias ll='exa -l'
 # alias idea=~/bin/idea
 alias sail='vendor/bin/sail'
 alias ghcs='gh copilot suggest -s'
+alias s=sail
+alias mdev='git merge origin/develop'
+alias bhbc='sail composer install && sail artisan migrate:fresh --seed && ~/bin/ide-helper-generate-all && sail yarn format:fix && sail yarn lint:fix && sail pint && git s'
+alias gpush='git push'
+alias codev='git checkout develop'
+alias sa='sail artisan'
+alias sarl='sail artisan route:list'
+alias gdm='git diff | more'
