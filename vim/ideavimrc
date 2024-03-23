@@ -79,3 +79,4 @@
   autocmd FileType php inoremap .. ->
   autocmd FileType php inoremap ;; <esc>$a;
   " autocmd FileType php set nofoldenable
+  set clipboard+=unnamed
