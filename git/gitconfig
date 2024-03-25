@@ -62,9 +62,6 @@
   commti = commit
 [user]
 	email = tim.heuer@triotech.co.nz
-#	name = Tim Heuer
-#	email = geekdenz@@users.noreply.github.com
-#	email = th.heuer@gmail.com
 	name = Tim-Hinnerk Heuer
 [merge]
 	tool = intellij
@@ -84,6 +81,11 @@
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
+#[init]
+#	defaultBranch = main
+[credential "https://github.com"]
+	helper =
+	helper = !/usr/bin/gh auth git-credential
 
 [init]
 	defaultBranch = develop

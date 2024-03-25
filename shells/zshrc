@@ -201,7 +201,6 @@ export ANDROID_HOME=$HOME/Android/Sdk
 export PATH=$ANDROID_HOME/emulator:$PATH
 export PATH=$ANDROID_HOME/platform-tools:$PATH
 # eval $(ssh-agent) # do not add this if using KDE wallet to manage keys!
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 # export PATH=$PATH:~/idea/idea-IU-223.8617.56/bin
 
 
