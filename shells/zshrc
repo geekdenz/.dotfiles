@@ -210,4 +210,6 @@ source <(ng completion script)
 export ANDROID_HOME=$HOME/Android/Sdk
 export PATH=$ANDROID_HOME/emulator:$PATH
 export PATH=$ANDROID_HOME/platform-tools:$PATH
+export PATH=$HOME/.local/bin:$PATH
+eval $(thefuck --alias)
 
