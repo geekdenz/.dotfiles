@@ -81,6 +81,7 @@ if has("mac")
 elseif has("unix")
   set clipboard=unnamedplus
 endif
+" set clipboard=unnamed
 
 if exists("+relativenumber")
   set relativenumber
