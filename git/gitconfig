@@ -61,7 +61,7 @@
   lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
   commti = commit
 [user]
-	email = tim.heuer@triotech.co.nz
+	email = 479499+geekdenz@users.noreply.github.com
 	name = Tim-Hinnerk Heuer
 [merge]
 	tool = intellij
