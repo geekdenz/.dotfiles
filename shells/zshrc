@@ -213,3 +213,11 @@ export PATH=$ANDROID_HOME/platform-tools:$PATH
 export PATH=$HOME/.local/bin:$PATH
 eval $(thefuck --alias)
 
+
+# pnpm
+export PNPM_HOME="/home/tim/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
