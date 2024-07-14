@@ -8,6 +8,7 @@
 " ========================================================================
 
   let mapleader = ","
+  set easymotion
 
   " execute jasmine tests
   autocmd FileType javascript nnoremap <buffer> tt :! clear && npm test<cr>
@@ -87,3 +88,4 @@
   sethandler <C-C> n-v:ide i:vim
   sethandler <C-F> i-v:ide n:vim
   sethandler <C-R> i-v:ide n:vim
+  sethandler <C-Y> i-v:ide n:vim
