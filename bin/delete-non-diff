@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Define directories
+dirA=$1
+dirB=$2
+
+# Use find to get all files in dirA
+find "$dirA" -type f -print0 | while IFS= read -r -d '' fileA; do
+    # Replace the first part of the fileA path with dirB to get fileB path
+    fileB="${fileA/$dirA/$dirB}"
+    # Check if fileB exists
+    if [[ -f "$fileB" ]]; then
+        # Compare files
+        if diff -q "$fileA" "$fileB" > /dev/null; then
+            # If files are the same, delete fileB
+            echo rm "$fileB"
+            rm "$fileB"
+		else
+			echo KEEP "$fileB"
+        fi
+    fi
+done
