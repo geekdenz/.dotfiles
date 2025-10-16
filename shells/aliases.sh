@@ -1,5 +1,5 @@
 is_installed() {
-  type "$1" > /dev/null 2>&1
+  type "$1" >/dev/null 2>&1
   return $?
 }
 
@@ -78,11 +78,11 @@ alias ag=$(which ag)
 
 # conditional alias
 is_installed vim.gnome && alias vim=vim.gnome
-is_installed mvim      && alias vim='mvim -v'
-is_installed mvim      && alias gvim='mvim -v'
-is_installed gvim      && alias vim='gvim -v'
-is_installed gvim      && alias gvim='gvim -v'
-is_installed nvim      && alias vim=nvim
+is_installed mvim && alias vim='mvim -v'
+is_installed mvim && alias gvim='mvim -v'
+is_installed gvim && alias vim='gvim -v'
+is_installed gvim && alias gvim='gvim -v'
+is_installed nvim && alias vim=nvim
 
 #custom individual aliases
 alias py=python3
@@ -90,7 +90,7 @@ alias gpp='git pull && git push'
 alias vh='vagrant halt'
 #alias gri='grep --include=\*.$1 -rin $2'
 function gft {
-	grep -rn --include=\*.$1 $2 $3 $4 $5
+  grep -rn --include=\*.$1 $2 $3 $4 $5
 }
 alias ed='code .'
 alias e='code'
@@ -124,3 +124,4 @@ alias tinker='sail debug tinker'
 alias dockerstopall='docker stop $(docker ps -a -q)'
 alias docker-compose='docker compose'
 alias dcom='docker compose'
+alias avante='nvim -c "lua vim.defer_fn(function()require(\"avante.api\").zen_mode()end, 100)"'
