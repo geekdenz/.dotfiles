@@ -1,3 +1,6 @@
 [submodule "vim/bundle/vim-gradle"]
 	path = vim/bundle/vim-gradle
 	url = https://github.com/tfnico/vim-gradle.git
+[submodule "nvim/kickstart.nvim"]
+	path = nvim/kickstart.nvim
+	url = git@github.com:geekdenz/kickstart.nvim.git
