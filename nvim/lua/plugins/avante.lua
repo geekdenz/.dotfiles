@@ -13,8 +13,27 @@ return {
     -- this file can contain specific instructions for your project
     instructions_file = "avante.md",
     -- for example
-    provider = "claude",
+    provider = "ollama",
     providers = {
+      ollama = {
+        -- NOTE: no /v1 here; Avante knows how to talk to Ollama
+        endpoint = "http://127.0.0.1:11434",
+
+        -- This must match the model name you pulled with Ollama:
+        model = "qwen2.5-coder:3b",
+
+        timeout = 30000, -- ms
+
+        -- Request-body and model options go here (per Avante migration guide)
+        extra_request_body = {
+          options = {
+            temperature = 0.2,
+            num_ctx = 8192, -- context window; tune if you like
+            num_predict = 1024, -- max tokens to generate
+            -- keep_alive can be set here too, but we already set env var
+          },
+        },
+      },
       claude = {
         endpoint = "https://api.anthropic.com",
         model = "claude-sonnet-4-20250514",
