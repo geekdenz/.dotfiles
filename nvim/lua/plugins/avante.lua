@@ -20,7 +20,8 @@ return {
         endpoint = "http://127.0.0.1:11434",
 
         -- This must match the model name you pulled with Ollama:
-        model = "qwen2.5-coder:3b",
+        --- model = "qwen2.5-coder:3b",
+        model = "deepseek-coder:6.7b",
 
         timeout = 30000, -- ms
 
