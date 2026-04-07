@@ -8,3 +8,8 @@ vim.keymap.set("n", "tab", ":n<CR>", { desc = "Next Tab" })
 vim.keymap.set("n", "<leader>az", function()
   require("avante.api")
 end, { desc = "Avante Zen Mode" })
+
+-- lua/config/keymaps.lua
+vim.keymap.set({ "n", "v" }, "<S-F6>", function()
+  vim.lsp.buf.rename()
+end, { desc = "Rename Symbol" })
