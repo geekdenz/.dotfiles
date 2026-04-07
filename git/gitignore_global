@@ -10,4 +10,4 @@ npm-debug.log
 shell_test.sh
 docker-compose.override.yml
 **/.env
-
+*.run.xml

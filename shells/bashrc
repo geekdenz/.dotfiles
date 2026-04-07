@@ -119,3 +119,5 @@ unset __conda_setup
 # <<< conda init <<<
 eval (/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 . "$HOME/.cargo/env"
+export FROGONE_PATH=/mnt/c/Users/ExampleUser/projects/FrogOne
+export PANELPC_IP=192.0.2.93

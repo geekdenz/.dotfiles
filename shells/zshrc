@@ -1,3 +1,12 @@
+export LC_ALL=C
+export LANG=C
+
+# Restore MSYS2 core paths
+export PATH="/usr/bin:/bin:$PATH"
+
+DISABLE_UNTRACKED_FILES_DIRTY="true"
+DISABLE_AUTO_TITLE="true"
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -211,7 +220,7 @@ export ANDROID_HOME=$HOME/Android/Sdk
 export PATH=$ANDROID_HOME/emulator:$PATH
 export PATH=$ANDROID_HOME/platform-tools:$PATH
 export PATH=$HOME/.local/bin:$PATH
-eval $(thefuck --alias)
+#eval $(thefuck --alias)
 
 
 # pnpm
@@ -231,3 +240,16 @@ if [ -f $HOME/.env ]; then
   # Use set +a to disable automatic exporting
   set +a
 fi
+
+eval "$(ssh-agent -s)" > /dev/null
+export LC_ALL=C.UTF-8
+export LANG=C.UTF-8
+export FROGONE_PATH=/mnt/c/Users/ExampleUser/projects/linux/FrogOne
+export PANELPC_IP=192.0.2.93
+export PATH=~/bin:$PATH
+export DL=/mnt/c/Users/ExampleUser/Downloads
+export F=/mnt/c/Users/ExampleUser/projects/linux/FrogOne
+
+
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv zsh)"
+source <(fzf --zsh)
