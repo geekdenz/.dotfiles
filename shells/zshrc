@@ -261,7 +261,7 @@ fi
 export LC_ALL=C.UTF-8
 export LANG=C.UTF-8
 export FROGONE_PATH=/mnt/c/Users/ExampleUser/projects/linux/FrogOne
-export PANELPC_IP=192.0.2.93
+export PANELPC_IP=example-host
 export PATH=~/bin:$PATH
 export DL=/mnt/c/Users/ExampleUser/Downloads
 export F=/mnt/c/Users/ExampleUser/projects/linux/FrogOne
