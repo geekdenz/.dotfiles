@@ -231,3 +231,5 @@ if [ -f $HOME/.env ]; then
   # Use set +a to disable automatic exporting
   set +a
 fi
+
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv zsh)"
