@@ -287,3 +287,5 @@ fast_repo_prompt() {
 }
 
 add-zsh-hook chpwd fast_repo_prompt
+
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv zsh)"
