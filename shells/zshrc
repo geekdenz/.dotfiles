@@ -64,6 +64,8 @@ DISABLE_AUTO_TITLE="true"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
+
+source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 plugins=(git gitfast git-extras debian bundler composer gitfast urltools web-search vi-mode docker docker-compose wd node jsontools gitignore gradle magic-enter)
 
 source $ZSH/oh-my-zsh.sh
