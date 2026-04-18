@@ -5,20 +5,25 @@ if [ ! -d ~/.dotfiles ]; then
 fi
 
 cd ~/.dotfiles && git pull
+git switch nvim2
+mkdir -p /home/example/.local/bin
+ln -s /usr/bin/nvim /home/example/.local/bin/nvim-linux-x86_64.appimage
 
 # TODO: Check whether the inclusion of .dotfiles/bash_profile exists in either
 # ~/.bashrc or ~/bashrc and write it otherwise
 
-
 ask_should_symlink() {
-while true; do
-  read -p "Do you want to symlink $1 to $2 ? " yn
-  case $yn in
-    [Yy]* ) symlink_safe $1 $2; break;;
-    [Nn]* ) return ;;
-    * ) echo "Please answer yes or no.";
-  esac
-done
+  while true; do
+    read -p "Do you want to symlink $1 to $2 ? " yn
+    case $yn in
+    [Yy]*)
+      symlink_safe $1 $2
+      break
+      ;;
+    [Nn]*) return ;;
+    *) echo "Please answer yes or no." ;;
+    esac
+  done
 }
 
 symlink_or_ask() {
@@ -30,7 +35,7 @@ symlink_or_ask() {
 }
 
 backup_move() {
-  SCRIPT_TIME=`date +%Y%m%d%H_%M_%S`
+  SCRIPT_TIME=$(date +%Y%m%d%H_%M_%S)
   mv $1 "${1}_${SCRIPT_TIME}"
 }
 

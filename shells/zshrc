@@ -90,12 +90,14 @@ CLICOLOR=1 #Colorizes output of ls and others.
 EDITOR=vim
 VISUAL=$EDITOR
 PAGER=less
-TERM="screen-256color"
 LESS='-R -g -w'
 
 # disable flow control commands (keeps C-s from freezing everything)
-stty start undef
-stty stop undef
+#stty start undef
+#stty stop undef
+if [[ -o interactive ]] && [[ -t 0 ]]; then
+  stty -ixon
+fi
 
 source ~/.dotfiles/shells/rvm.sh
 source ~/.dotfiles/shells/configs.sh
@@ -115,7 +117,7 @@ fi
 
 # disable gnome effects
 which ggsettings > /dev/null 2>&1 && set org.gnome.desktop.interface enable-animations false
-which rbenv > /dev/null 2>&1 && eval "$(rbenv init - --no-rehash zsh)"
+#which rbenv > /dev/null 2>&1 && eval "$(rbenv init - --no-rehash zsh)"
 
 # example-user:
 
