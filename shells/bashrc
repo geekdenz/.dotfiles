@@ -121,3 +121,4 @@ eval (/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 . "$HOME/.cargo/env"
 export FROGONE_PATH=/mnt/c/Users/TimHeuer/projects/FrogOne
 export PANELPC_IP=10.1.1.93
+eval "$(/bin/brew shellenv)"
