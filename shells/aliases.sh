@@ -1,22 +1,22 @@
 is_installed() {
-  type "$1" >/dev/null 2>&1
-  return $?
+    type "$1" >/dev/null 2>&1
+    return $?
 }
 
 function php-cs-fixer() {
-  if [ -f ./vendor/bin/php-cs-fixer ]; then
-    ./vendor/bin/php-cs-fixer $@
-  else
-    ~/.dotfiles/composer/vendor/bin/php-cs-fixer
-  fi
+    if [ -f ./vendor/bin/php-cs-fixer ]; then
+        ./vendor/bin/php-cs-fixer $@
+    else
+        ~/.dotfiles/composer/vendor/bin/php-cs-fixer
+    fi
 }
 
 function phpunit() {
-  if [ -f ./vendor/bin/phpunit ]; then
-    ./vendor/bin/php-cs-fixer $@
-  else
-    ~/.dotfiles/composer/vendor/bin/phpunit
-  fi
+    if [ -f ./vendor/bin/phpunit ]; then
+        ./vendor/bin/php-cs-fixer $@
+    else
+        ~/.dotfiles/composer/vendor/bin/phpunit
+    fi
 }
 
 # Aliases.
@@ -93,7 +93,7 @@ alias gpp='git pull && git push'
 alias vh='vagrant halt'
 #alias gri='grep --include=\*.$1 -rin $2'
 function gft {
-  grep -rn --include=\*.$1 $2 $3 $4 $5
+    grep -rn --include=\*.$1 $2 $3 $4 $5
 }
 alias ed='code .'
 alias e='code'
@@ -129,7 +129,7 @@ alias dockerstopall='docker stop $(docker ps -a -q)'
 alias docker-compose='docker compose'
 alias dcom='docker compose'
 alias dc='docker compose'
-alias nvim=~/.local/bin/nvim-linux-x86_64.appimage
+#alias nvim=~/.local/bin/nvim-linux-x86_64.appimage
 #alias nvim=~/apps/nvim-linux-x86_64.appimage
 #alias vi=~/apps/nvim-linux-x86_64.appimage
 #alias v=~/apps/nvim-linux-x86_64.appimage
