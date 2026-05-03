@@ -1,91 +1,276 @@
 "
-" Vim mode provided for JetBrains editors
+" ~/.ideavimrc
+" LazyVim-ish IdeaVim setup for IntelliJ / Rider
 "
-" https://github.com/JetBrains/ideavim
-"
+
 " ========================================================================
-" Mappings
+" Leader
 " ========================================================================
 
-  let mapleader = ","
-  set easymotion
+let mapleader = " "
+let maplocalleader = "\\"
 
-  " execute jasmine tests
-  autocmd FileType javascript nnoremap <buffer> tt :! clear && npm test<cr>
-
-  " tags
-  nnoremap <f4> :! ctags <cr> | let tags='tags'
-
-  " escape alias
-  inoremap jj <esc>l
-
-  " buffer changing
-  nnoremap ,bn :bn<cr>
-  nnoremap ,bp :bp<cr>
-
-  " closes buffer
-  nnoremap ,bd :bd<cr>
-  nnoremap ,bdd :bd!<cr>
-  nnoremap ,bda :bufdo %bd!<cr>
-
-  " saves from normal mode
-  nnoremap ,s :w<cr>
-  nnoremap ,S :w<cr>
-
-  " saves and exits insert mode
-  inoremap ,s <ESC>:w<cr>
-  inoremap ,S <ESC>:w<cr>
-
-  " Select all
-  nnoremap ,a ggVG
-
-  " new tab
-  nnoremap <c-w>t :tabnew<cr>
-
-  " jumps to the next position after the closest closing char
-  inoremap ,e <Esc>/[\]})"']<cr><Esc>:nohlsearch<cr>a
-  nnoremap ,e <Esc>/[\]})"']<cr><Esc>:nohlsearch<cr>a
-
-  " adds arrow
-  inoremap <C-l> <Space>=><Space>
-
-  " Ruby old style hashes to new style hashes
-  vnoremap ,h :s/:\(\w*\) *=>/\1:/g<cr>
-
-  " Rails specific
-  nnoremap ,ac :sp app/controllers/application_controller.rb<cr>
-  vnoremap ,h :s/\:\([a-zA-Z_]\+\)\s\+=>/\=printf("%s:", submatch(1))/g<CR><ESC>:let @/ = ""<CR>
-  nnoremap ,p :set paste<CR>o<esc>"*]p:set nopaste<cr>
-  nnoremap ,quit <ESC>:q<cr>
+" Keep Space Space free because it clashes with JetBrains VimMode behavior.
+silent! nunmap <leader><space>
+silent! iunmap <leader><space>
+silent! vunmap <leader><space>
 
 
-  " save and quit Run Ruby, for interactive editor
-  nnoremap ,rr <esc>:wq<CR>
+" ========================================================================
+" IdeaVim plugins / behaviour
+" ========================================================================
 
-  " Open vim rc
-  nnoremap ,vim :edit $MYVIMRC<CR>
-  nnoremap ,rel :source $MYVIMRC<CR>
+set easymotion
+set number
+set relativenumber
+set clipboard+=unnamed
 
-  " Fix anoying original K
-  nnoremap K <nop>
-  nnoremap U <nop>
-  inoremap <Esc> <nop>
+" Optional JetBrains integration. Comment out any of these if IdeaVim complains.
+set ideajoin
+set ideaput
+set ideamarks
 
-  " Find
-  inoremap ,f <ESC>/
-  nnoremap ,f <ESC>/
 
-  " php specific
-  autocmd FileType php inoremap ... ../
-  autocmd FileType php inoremap .. ->
-  autocmd FileType php inoremap ;; <esc>$a;
-  " autocmd FileType php set nofoldenable
-  set clipboard+=unnamed
-  set relativenumber
-  set number
+" ========================================================================
+" Escape / basic editing
+" ========================================================================
 
-  " https://github.com/JetBrains/ideavim/wiki/sethandler
-  sethandler <C-C> n-v:ide i:vim
-  sethandler <C-F> i-v:ide n:vim
-  sethandler <C-R> i-v:ide n:vim
-  sethandler <C-Y> i-v:ide n:vim
+" Keep your insert-mode escape alias.
+inoremap jj <Esc>
+
+" LazyVim-like: Esc clears search highlight in normal mode.
+nnoremap <Esc> :nohlsearch<CR>
+
+" Do NOT disable real Esc.
+" Old config had: inoremap <Esc> <nop>
+" I recommend leaving Esc alone.
+
+
+" ========================================================================
+" Save / quit
+" ========================================================================
+
+" LazyVim-style save.
+nnoremap <C-s> :w<CR>
+inoremap <C-s> <C-o>:w<CR>
+vnoremap <C-s> <Esc>:w<CR>
+
+" Space-based normal-mode save aliases.
+nnoremap <leader>w :w<CR>
+nnoremap <leader>W :wa<CR>
+
+" Legacy comma save aliases from your old setup.
+nnoremap ,s :w<CR>
+nnoremap ,S :w<CR>
+inoremap ,s <Esc>:w<CR>
+inoremap ,S <Esc>:w<CR>
+
+" Quit.
+nnoremap <leader>qq :q<CR>
+nnoremap <leader>qQ :qa!<CR>
+
+" Legacy quit.
+nnoremap ,quit :q<CR>
+
+
+" ========================================================================
+" Files / find / recent files
+" ========================================================================
+" NOTE:
+" Use nmap/map rather than nnoremap for <Action>(...) mappings.
+" IdeaVim documents <Action>(...) as the preferred way to call IDE actions.
+
+" LazyVim-ish find files.
+nmap <leader>ff <Action>(GotoFile)
+nmap <leader>fF <Action>(GotoFile)
+
+" Recent files.
+nmap <leader>fr <Action>(RecentFiles)
+
+" Buffers / switcher.
+nmap <leader>, <Action>(Switcher)
+nmap <leader>fb <Action>(Switcher)
+
+" Find in files / grep.
+nmap <leader>/  <Action>(FindInPath)
+nmap <leader>sg <Action>(FindInPath)
+nmap <leader>sG <Action>(FindInPath)
+
+" Search everywhere / actions.
+nmap <leader>sa <Action>(GotoAction)
+
+" Normal Vim search.
+nnoremap / /
+nnoremap ? ?
+
+" Legacy old find key.
+nnoremap ,f /
+
+
+" ========================================================================
+" Buffers / tabs
+" ========================================================================
+
+" LazyVim-like buffer navigation.
+nmap <S-h> <Action>(PreviousTab)
+nmap <S-l> <Action>(NextTab)
+
+nmap [b <Action>(PreviousTab)
+nmap ]b <Action>(NextTab)
+
+" Keep your old buffer-style commands too.
+nnoremap ,bn :bn<CR>
+nnoremap ,bp :bp<CR>
+
+" Delete buffer / close editor.
+" If :bd behaves better for you than CloseContent in Rider/IntelliJ, keep this.
+nnoremap <leader>bd :bd<CR>
+nnoremap <leader>bD :bd!<CR>
+nnoremap <leader>ba :bufdo %bd!<CR>
+
+" Legacy close-buffer aliases.
+nnoremap ,bd :bd<CR>
+nnoremap ,bdd :bd!<CR>
+nnoremap ,bda :bufdo %bd!<CR>
+
+" New Vim tab.
+nnoremap <C-w>t :tabnew<CR>
+
+
+" ========================================================================
+" Windows / splits
+" ========================================================================
+
+" LazyVim-style window movement.
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+" Keep your insert-mode arrow helper.
+inoremap <C-l> <Space>=><Space>
+
+
+" ========================================================================
+" Code navigation
+" ========================================================================
+
+nmap gd <Action>(GotoDeclaration)
+nmap gD <Action>(GotoTypeDeclaration)
+nmap gi <Action>(GotoImplementation)
+nmap gr <Action>(ShowUsages)
+nmap gy <Action>(GotoTypeDeclaration)
+
+" Hover / quick documentation.
+nmap K  <Action>(ShowHoverInfo)
+nmap gh <Action>(ShowHoverInfo)
+
+
+" ========================================================================
+" Code actions / refactoring / formatting
+" ========================================================================
+
+" LazyVim-ish code namespace.
+nmap <leader>ca <Action>(ShowIntentionActions)
+nmap <leader>cr <Action>(RenameElement)
+nmap <leader>cf <Action>(ReformatCode)
+nmap <leader>co <Action>(OptimizeImports)
+
+" Refactor popup.
+nmap <leader>r  <Action>(Refactorings)
+nmap <leader>rn <Action>(RenameElement)
+
+
+" ========================================================================
+" Diagnostics / errors
+" ========================================================================
+
+nmap ]d <Action>(GotoNextError)
+nmap [d <Action>(GotoPreviousError)
+
+nmap ]e <Action>(GotoNextError)
+nmap [e <Action>(GotoPreviousError)
+
+nmap <leader>cd <Action>(ShowErrorDescription)
+
+
+" ========================================================================
+" Project / IDE
+" ========================================================================
+
+" Select current file in Project view.
+nmap <leader>e <Action>(SelectInProjectView)
+
+" Open project/tool window.
+nmap <leader>E <Action>(ActivateProjectToolWindow)
+
+" Run/debug.
+nmap <leader>rr <Action>(Run)
+nmap <leader>rd <Action>(Debug)
+nmap <leader>rs <Action>(Stop)
+
+
+" ========================================================================
+" Select all
+" ========================================================================
+
+nnoremap <leader>A ggVG
+
+" Legacy.
+nnoremap ,a ggVG
+
+
+" ========================================================================
+" Your custom helpers
+" ========================================================================
+
+" Execute Jasmine tests.
+autocmd FileType javascript nnoremap <buffer> tt :! clear && npm test<CR>
+
+" Tags.
+nnoremap <F4> :! ctags<CR>:set tags=tags<CR>
+
+" Jump to the next position after the closest closing char.
+inoremap ,e <Esc>/[\]})"']<CR><Esc>:nohlsearch<CR>a
+nnoremap ,e /[\]})"']<CR><Esc>:nohlsearch<CR>a
+
+" Ruby old style hashes to new style hashes.
+vnoremap ,h :s/\:\([a-zA-Z_]\+\)\s\+=>/\=printf("%s:", submatch(1))/g<CR><ESC>:let @/ = ""<CR>
+
+" Rails specific.
+nnoremap ,ac :sp app/controllers/application_controller.rb<CR>
+
+" Paste from system clipboard.
+nnoremap ,p :set paste<CR>o<Esc>"*]p:set nopaste<CR>
+
+" Save and quit / old interactive Ruby helper.
+nnoremap ,rr <Esc>:wq<CR>
+
+" Open/reload IdeaVim config.
+nnoremap <leader>vi :edit ~/.ideavimrc<CR>
+nnoremap <leader>vR :source ~/.ideavimrc<CR>
+
+" Legacy names.
+nnoremap ,vim :edit ~/.ideavimrc<CR>
+nnoremap ,rel :source ~/.ideavimrc<CR>
+
+
+" ========================================================================
+" PHP specific
+" ========================================================================
+
+autocmd FileType php inoremap ... ../
+autocmd FileType php inoremap .. ->
+autocmd FileType php inoremap ;; <Esc>$a;
+
+
+" ========================================================================
+" Shortcut conflict handling
+" ========================================================================
+" Your existing handler choices, preserved.
+" Adjust these in JetBrains Settings > Editor > Vim if needed.
+
+sethandler <C-C> n-v:ide i:vim
+sethandler <C-F> i-v:ide n:vim
+sethandler <C-R> i-v:ide n:vim
+sethandler <C-Y> i-v:ide n:vim
