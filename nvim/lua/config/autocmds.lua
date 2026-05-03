@@ -84,3 +84,26 @@ end
 --   "mycustom",
 --
 -- }
+
+local ideavimrc_group = vim.api.nvim_create_augroup("user_ideavimrc_compat", { clear = true })
+
+vim.api.nvim_create_autocmd("FileType", {
+  group = ideavimrc_group,
+  pattern = "javascript",
+  callback = function(event)
+    vim.keymap.set("n", "tt", "<cmd>!clear && npm test<cr>", {
+      buffer = event.buf,
+      desc = "Run Jasmine Tests",
+    })
+  end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+  group = ideavimrc_group,
+  pattern = "php",
+  callback = function(event)
+    vim.keymap.set("i", "...", "../", { buffer = event.buf, desc = "Insert Parent Directory" })
+    vim.keymap.set("i", "..", "->", { buffer = event.buf, desc = "Insert PHP Object Operator" })
+    vim.keymap.set("i", ";;", "<esc>$a;", { buffer = event.buf, desc = "Append Semicolon" })
+  end,
+})

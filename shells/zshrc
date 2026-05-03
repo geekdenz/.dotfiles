@@ -13,6 +13,16 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+if [[ -f "$HOME/.env" ]]; then
+  if [[ -o allexport ]]; then
+    source "$HOME/.env"
+  else
+    set -a
+    source "$HOME/.env"
+    set +a
+  fi
+fi
+
 #POWERLEVEL9K_MODE=
 #POWERLEVEL9K_MODE='awesome-fontconfig'
 #ZSH_THEME="romkatv/powerlevel10k"
@@ -233,16 +243,6 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
-
-# Load environment variables from .env if it exists in the current directory
-if [ -f $HOME/.env ]; then
-  # Use set -a to automatically export all subsequent assignments
-  set -a
-  # Source the .env file
-  source $HOME/.env
-  # Use set +a to disable automatic exporting
-  set +a
-fi
 
 #eval "$(ssh-agent -s)" > /dev/null
 if [ -z "$SSH_AUTH_SOCK" ] || ! ssh-add -l >/dev/null 2>&1; then
