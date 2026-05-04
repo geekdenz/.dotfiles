@@ -177,8 +177,8 @@ nmap <leader>cf <Action>(ReformatCode)
 nmap <leader>co <Action>(OptimizeImports)
 
 " Refactor popup.
-nmap <leader>r  <Action>(Refactorings)
-nmap <leader>rn <Action>(RenameElement)
+"nmap <leader>r  <Action>(Refactorings)
+"nmap <leader>rn <Action>(RenameElement)
 
 
 " ========================================================================
