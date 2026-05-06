@@ -123,3 +123,6 @@ map(
 map("n", ",ac", "<cmd>split app/controllers/application_controller.rb<cr>", { desc = "Open Application Controller" })
 map("n", ",p", '<cmd>set paste<cr>o<esc>"*]p<cmd>set nopaste<cr>', { desc = "Paste From System Clipboard" })
 map("n", ",rr", "<esc><cmd>wq<cr>", { desc = "Save and Quit" })
+
+map("n", "<C-d>", "<C-d>zz")
+map("n", "<C-u>", "<C-u>zz")
