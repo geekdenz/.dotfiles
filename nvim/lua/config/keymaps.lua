@@ -129,3 +129,5 @@ map("n", "<C-u>", "<C-u>zz")
 
 map("n", "n", "nzzzv")
 map("n", "N", "Nzzzv")
+
+map("x", "<leader>p", '"_dP') -- Keep in paste
