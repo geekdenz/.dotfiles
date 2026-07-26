@@ -12,3 +12,10 @@ docker-compose.override.yml
 **/.env
 *.run.xml
 .codex/
+
+gitignored/
+
+.cursor/skills/
+SQL Scripts/Migrations/MigrationsForIssuerCodeChanges.zip
+Web/FrogOne.Web.ApiHost/appsettings.uat.json
+

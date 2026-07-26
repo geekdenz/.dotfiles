@@ -264,7 +264,8 @@ fi
 
 export LC_ALL=C.UTF-8
 export LANG=C.UTF-8
-export FROGONE_PATH=/mnt/c/Users/TimHeuer/projects/linux/FrogOne
+#export FROGONE_PATH=/mnt/c/Users/TimHeuer/projects/linux/FrogOne
+export FROGONE_PATH=~/FrogOne
 #export PANELPC_IP=ppc-aaa-evade-poled-cola
 export PANELPC_IP=10.1.1.162
 #export PANELPC_HOST=ppc-aaa-evade-poled-cola
