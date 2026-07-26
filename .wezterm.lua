@@ -4,11 +4,11 @@ local config = wezterm.config_builder()
 config.enable_wayland = false
 
 -- General
-config.font = wezterm.font_with_fallback({
-	"JetBrainsMono Nerd Font Mono",
-	"JetBrainsMonoNL Nerd Font Propo",
-	"Cascadia Mono",
-})
+-- config.font = wezterm.font_with_fallback({
+-- "JetBrainsMono Nerd Font Mono",
+-- "JetBrainsMonoNL Nerd Font Propo",
+-- "Cascadia Mono",
+-- })
 config.font_size = 19
 config.line_height = 1
 config.color_scheme = "tokyonight_night"
@@ -144,7 +144,10 @@ config.launch_menu = {
 	},
 }
 
--- Key bindings
+-- config.enable_tab_bar = false
+
+-- Key window_decoration
+
 config.keys = {
 	{
 		key = "w",
