@@ -35,6 +35,7 @@ local msys_home = "C:\\msys64\\home\\" .. (os.getenv("USERNAME") or "")
 -- Launch menu mirrors Windows Terminal profiles (visible ones)
 -- Open with: Ctrl+Shift+L
 config.launch_menu = {
+	{ label = "ZSH Linux", args = { "/bin/zsh" } },
 	{
 		label = "ZSH Ubuntu",
 		args = { "wsl.exe", "-e", "zsh" },
