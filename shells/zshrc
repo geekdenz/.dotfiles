@@ -83,7 +83,13 @@ DISABLE_AUTO_TITLE="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 
-source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+if [[ -r /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
+  source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+elif [[ -r "$HOME/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
+  source "$HOME/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh"
+elif [[ -r "$HOME/.zsh/zsh-autosuggestions/autosuggestions.zsh" ]]; then
+  source "$HOME/.zsh/zsh-autosuggestions/autosuggestions.zsh"
+fi
 plugins=(git gitfast git-extras debian bundler composer gitfast urltools web-search vi-mode docker docker-compose wd node jsontools gitignore gradle magic-enter)
 #plugins=(debian bundler composer urltools web-search vi-mode docker docker-compose wd node jsontools gitignore gradle magic-enter)
 
@@ -297,3 +303,6 @@ fast_repo_prompt() {
 add-zsh-hook chpwd fast_repo_prompt
 
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv zsh)"
+export PATH="$HOME/.nimble/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.local/share/bob/nvim-bin:$PATH"

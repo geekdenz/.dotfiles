@@ -22,7 +22,7 @@ config.window_decorations = "RESIZE"
 -- config.enable_tab_bar = false
 
 -- Same default as Windows Terminal: ZSH Ubuntu
-config.default_prog = { "wsl.exe", "-e", "zsh" }
+-- config.default_prog = { "wsl.exe", "-e", "zsh" }
 config.default_cwd = wezterm.home_dir
 config.default_domain = "local"
 
