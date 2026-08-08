@@ -306,3 +306,5 @@ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv zsh)"
 export PATH="$HOME/.nimble/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.local/share/bob/nvim-bin:$PATH"
+
+eval "$(/home/tim/.local/bin/mise activate zsh)" # added by https://mise.run/zsh
