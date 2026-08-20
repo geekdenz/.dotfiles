@@ -18,6 +18,16 @@ return {
           PATH = os.getenv("PATH"),
         },
       },
+      cursor = {
+        command = vim.fn.expand("~/.local/bin/agent"),
+        args = { "acp" },
+        auth_method = "cursor_login",
+
+        env = {
+          HOME = os.getenv("HOME"),
+          PATH = os.getenv("PATH"),
+        },
+      },
     },
   },
 }
