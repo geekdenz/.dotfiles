@@ -1,0 +1,13 @@
+onboarding = false
+
+[ui.sidebar.agents]
+# Avante reports its active ACP backend through the optional $provider token.
+# Other agents omit the token automatically.
+rows = [["state_icon", "agent"], ["$provider"], ["workspace", "tab"]]
+
+[ui.toast]
+delivery = "herdr"
+
+[theme]
+name = "dracula"
+auto_switch = false

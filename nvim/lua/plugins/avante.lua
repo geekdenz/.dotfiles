@@ -1,5 +1,9 @@
 return {
   "yetone/avante.nvim",
+  config = function(_, opts)
+    require("avante").setup(opts)
+    require("config.herdr_avante").setup()
+  end,
   opts = {
     provider = "codex",
     mode = "agentic",
