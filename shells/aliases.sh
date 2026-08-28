@@ -110,6 +110,7 @@ alias co='`pbpaste` && git merge'
 alias sus='systemctl suspend'
 alias rsyncp='rsync -aH --info=progress2'
 alias down='xdg-open "$HOME/Downloads" >/dev/null 2>&1 &'
+alias open='xdg-open'
 # alias idea=~/bin/idea
 alias sail='vendor/bin/sail'
 alias ghcs='gh copilot suggest -s'
