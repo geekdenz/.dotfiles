@@ -111,14 +111,15 @@ else
     fi
 fi
 unset __conda_setup
-#eval (/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 # <<< conda initialize <<<
 
-fi
-unset __conda_setup
-# <<< conda init <<<
-eval (/home/linuxbrew/.linuxbrew/bin/brew shellenv)
-. "$HOME/.cargo/env"
+[ -r "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 export FROGONE_PATH=/mnt/c/Users/TimHeuer/projects/FrogOne
 export PANELPC_IP=10.1.1.93
-eval "$(/bin/brew shellenv)"
+if command -v brew >/dev/null 2>&1; then
+    eval "$(brew shellenv)"
+fi
+
+# >>> Codex installer >>>
+export PATH="/home/denz/.local/bin:$PATH"
+# <<< Codex installer <<<
