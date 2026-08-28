@@ -1,7 +1,42 @@
 # My .dotfiles
 
-Instalation
--------------
+Installation
+------------
+
+## Shell prompt
+
+The repository includes a Powerlevel10k Zsh prompt, plus a clean built-in Zsh
+fallback for machines where the optional tools are not installed. Run the setup
+script from anywhere:
+
+```bash
+~/.dotfiles/shells/setup.sh
+exec zsh
+```
+
+The script creates these links:
+
+- `~/.zshrc` → `~/.dotfiles/shells/zshrc`
+- `~/.p10k.zsh` → `~/.dotfiles/shells/.p10k.zsh`
+- `~/.bashrc` → `~/.dotfiles/shells/bashrc`
+
+It is safe to run again. A conflicting file or link is moved to a timestamped
+`.backup-YYYYMMDD-HHMMSS` path before the new link is created.
+
+For the full icon-rich prompt, install [Oh My Zsh](https://ohmyz.sh/),
+[Powerlevel10k](https://github.com/romkatv/powerlevel10k), and select a Nerd
+Font in your terminal. Powerlevel10k can be installed with:
+
+```bash
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
+  "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
+```
+
+Without Powerlevel10k, the config uses an Oh My Zsh theme when available, or a
+dependency-free colored prompt otherwise. Customize the full prompt later with
+`p10k configure`.
+
+## Legacy full installation
 
 ZSH:
 
@@ -9,11 +44,10 @@ ZSH:
 sudo apt-get install zsh
 ```
 
-Oh My ZSH:
+Oh My Zsh:
 
 ```bash
-sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-rm ~/.zsh* # ONLY IF YOU WANT THE DEFAULT FILE FROM THIS REPOSITORY
+sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 ```
 
 ```bash
