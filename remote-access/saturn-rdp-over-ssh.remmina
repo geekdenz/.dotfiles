@@ -1,0 +1,24 @@
+[remmina]
+name=Saturn RDP over SSH
+group=Remote Access
+protocol=RDP
+server=127.0.0.1:3389
+username=denz
+domain=
+password=
+resolution_mode=2
+colordepth=32
+quality=9
+network=auto
+security=negotiate
+cert_ignore=0
+disablepasswordstoring=1
+ssh_tunnel_enabled=1
+ssh_tunnel_loopback=1
+ssh_tunnel_server=100.65.91.24:22
+ssh_tunnel_username=denz
+ssh_tunnel_auth=2
+ssh_tunnel_privatekey=
+ssh_tunnel_password=
+ssh_tunnel_passphrase=
+ssh_tunnel_stricthostkeycheck=1
