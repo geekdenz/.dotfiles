@@ -11,3 +11,10 @@ delivery = "herdr"
 [theme]
 name = "dracula"
 auto_switch = false
+
+# Herdr 0.8.2 uses the panel contrast color for active tabs and hovered
+# context-menu entries. Keep panels on the terminal background and make that
+# contrast color readable.
+[theme.custom]
+panel_bg = "reset"
+surface_dim = "#ffffff"
