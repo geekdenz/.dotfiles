@@ -20,6 +20,7 @@ config.colors = {
 
 config.window_decorations = "RESIZE"
 -- config.enable_tab_bar = false
+config.hide_tab_bar_if_only_one_tab = true
 
 -- Same default as Windows Terminal: ZSH Ubuntu
 -- config.default_prog = { "wsl.exe", "-e", "zsh" }
