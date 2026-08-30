@@ -32,4 +32,4 @@ link_config "$script_dir/.p10k.zsh" "$HOME/.p10k.zsh"
 link_config "$script_dir/bashrc" "$HOME/.bashrc"
 
 printf '\nShell configuration installed. Start a new shell with: exec zsh\n'
-printf 'For the full prompt, install Powerlevel10k and use a Nerd Font.\n'
+printf 'Run ~/.dotfiles/install.sh to install Zsh, Powerlevel10k, and the Nerd Font.\n'

@@ -1,100 +1,165 @@
-#!/bin/bash
+#!/bin/sh
 
-if [ ! -d ~/.dotfiles ]; then
-  git clone https://github.com/example-user/.dotfiles.git ~/.dotfiles
-fi
+# One-shot dotfiles bootstrap for Debian- and Arch-based Linux systems.
+# Safe to rerun: managed links are left alone and conflicting files are backed up.
 
-cd ~/.dotfiles && git pull
-git switch nvim2
-mkdir -p /home/example/.local/bin
-ln -s /usr/bin/nvim /home/example/.local/bin/nvim-linux-x86_64.appimage
+set -eu
 
-# TODO: Check whether the inclusion of .dotfiles/bash_profile exists in either
-# ~/.bashrc or ~/bashrc and write it otherwise
+dotfiles_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+backup_suffix="before-dotfiles-$(date +%Y%m%d-%H%M%S)"
 
-ask_should_symlink() {
-  while true; do
-    read -p "Do you want to symlink $1 to $2 ? " yn
-    case $yn in
-    [Yy]*)
-      symlink_safe $1 $2
-      break
-      ;;
-    [Nn]*) return ;;
-    *) echo "Please answer yes or no." ;;
-    esac
+log() {
+  printf '\n==> %s\n' "$*"
+}
+
+die() {
+  printf 'dotfiles install: %s\n' "$*" >&2
+  exit 1
+}
+
+as_root() {
+  if [ "$(id -u)" -eq 0 ]; then
+    "$@"
+  elif command -v sudo >/dev/null 2>&1; then
+    sudo "$@"
+  else
+    die "root privileges are required; install sudo or run as root"
+  fi
+}
+
+install_packages() {
+  if command -v apt-get >/dev/null 2>&1; then
+    log "Installing Debian packages"
+    as_root env DEBIAN_FRONTEND=noninteractive apt-get update
+    as_root env DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+      ca-certificates curl fontconfig fzf git openssh-client pinentry-curses unzip wl-clipboard zsh
+    platform=debian
+  elif command -v pacman >/dev/null 2>&1; then
+    log "Installing Arch packages"
+    as_root pacman -Syu --needed --noconfirm \
+      ca-certificates curl fontconfig fzf git openssh pinentry ttf-jetbrains-mono-nerd unzip wl-clipboard zsh
+    platform=arch
+  else
+    die "unsupported distribution: expected apt-get or pacman"
+  fi
+}
+
+backup_target() {
+  target=$1
+  backup="${target}.${backup_suffix}"
+  counter=0
+  while [ -e "$backup" ] || [ -L "$backup" ]; do
+    counter=$((counter + 1))
+    backup="${target}.${backup_suffix}.${counter}"
   done
+  mv -- "$target" "$backup"
+  printf 'Backed up: %s -> %s\n' "$target" "$backup"
 }
 
-symlink_or_ask() {
-  if [ -f $2 ]; then
-    ask_should_symlink $1 $2
+link_config() {
+  source_path=$1
+  target_path=$2
+
+  [ -e "$source_path" ] || die "managed source does not exist: $source_path"
+  mkdir -p "$(dirname -- "$target_path")"
+
+  if [ -L "$target_path" ] && [ "$(readlink -f -- "$target_path")" = "$(readlink -f -- "$source_path")" ]; then
+    printf 'Already linked: %s\n' "$target_path"
+    return
+  fi
+
+  if [ -e "$target_path" ] || [ -L "$target_path" ]; then
+    backup_target "$target_path"
+  fi
+
+  ln -s -- "$source_path" "$target_path"
+  printf 'Linked: %s -> %s\n' "$target_path" "$source_path"
+}
+
+clone_or_update() {
+  repository=$1
+  destination=$2
+
+  if [ -d "$destination/.git" ]; then
+    printf 'Already installed: %s\n' "$destination"
+  elif [ -e "$destination" ]; then
+    die "$destination exists but is not a Git checkout"
   else
-    ln -s $1 $2
+    git clone --depth=1 "$repository" "$destination"
   fi
 }
 
-backup_move() {
-  SCRIPT_TIME=$(date +%Y%m%d%H_%M_%S)
-  mv $1 "${1}_${SCRIPT_TIME}"
-}
+install_jetbrains_font() {
+  [ "$platform" = debian ] || return 0
 
-symlink_safe() {
-  if [ -f $2 ]; then
-    backup_move $2 && ln -sf $1 $2
-  else
-    ln -sf $1 $2
+  font_dir="${XDG_DATA_HOME:-$HOME/.local/share}/fonts/JetBrainsMonoNerd"
+  if find "$font_dir" -maxdepth 1 -type f -name '*.ttf' -print -quit 2>/dev/null | grep -q .; then
+    printf 'Already installed: JetBrainsMono Nerd Font\n'
+    return
   fi
+
+  log "Installing JetBrainsMono Nerd Font"
+  archive=$(mktemp)
+  trap 'rm -f "$archive"' EXIT HUP INT TERM
+  curl -fL --retry 3 \
+    https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip \
+    -o "$archive"
+  mkdir -p "$font_dir"
+  unzip -q -o "$archive" '*.ttf' -d "$font_dir"
+  rm -f "$archive"
+  trap - EXIT HUP INT TERM
+  fc-cache -f "$font_dir" >/dev/null
 }
 
-symlink_or_ask ~/.dotfiles/shells/bashrc ~/.bash_profile
-symlink_or_ask ~/.dotfiles/shells/bashrc ~/.bashrc
+install_packages
 
-# git config
-symlink_or_ask ~/.dotfiles/git/gitconfig ~/.gitconfig
-symlink_or_ask ~/.dotfiles/git/gitignore_global ~/.gitignore_global
+log "Installing shell framework and prompt"
+clone_or_update https://github.com/ohmyzsh/ohmyzsh.git "$HOME/.oh-my-zsh"
+clone_or_update https://github.com/romkatv/powerlevel10k.git "$HOME/powerlevel10k"
+install_jetbrains_font
 
-symlink_or_ask ~/.dotfiles/tmux/tmux.conf ~/.tmux.conf
-symlink_or_ask ~/.dotfiles/shells/zshrc ~/.zshrc
-symlink_or_ask ~/.dotfiles/shells/.p10k.zsh ~/.p10k.zsh
-symlink_or_ask ~/.dotfiles/ruby/irbrc ~/.irbrc
-symlink_or_ask ~/.dotfiles/vim ~/.vim
-symlink_or_ask ~/.dotfiles/vim/vimrc ~/.vimrc
-symlink_or_ask ~/.dotfiles/vim/nvimrc ~/.nvimrc
-symlink_or_ask ~/.dotfiles/vim/ ~/.nvim
-symlink_or_ask ~/.dotfiles/vim/ideavimrc ~/.ideavimrc
-symlink_or_ask ~/.dotfiles/vim/gvimrc ~/.gvimrc
-symlink_or_ask ~/.dotfiles/ctags ~/.ctags
-symlink_or_ask ~/.dotfiles/agignore ~/.agignore
-symlink_or_ask ~/.dotfiles/composer ~/.composer
+log "Linking dotfiles"
+link_config "$dotfiles_dir/shells/bashrc" "$HOME/.bashrc"
+link_config "$dotfiles_dir/shells/zshrc" "$HOME/.zshrc"
+link_config "$dotfiles_dir/shells/.p10k.zsh" "$HOME/.p10k.zsh"
+link_config "$dotfiles_dir/git/gitconfig" "$HOME/.gitconfig"
+link_config "$dotfiles_dir/git/gitignore_global" "$HOME/.gitignore_global"
+link_config "$dotfiles_dir/tmux/tmux.conf" "$HOME/.tmux.conf"
+link_config "$dotfiles_dir/ruby/irbrc" "$HOME/.irbrc"
+link_config "$dotfiles_dir/vim/ideavimrc" "$HOME/.ideavimrc"
+link_config "$dotfiles_dir/ctags" "$HOME/.ctags"
+link_config "$dotfiles_dir/agignore" "$HOME/.agignore"
+link_config "$dotfiles_dir/nvim" "${XDG_CONFIG_HOME:-$HOME/.config}/nvim"
+link_config "$dotfiles_dir/herdr/config.toml" "${XDG_CONFIG_HOME:-$HOME/.config}/herdr/config.toml"
+link_config "$dotfiles_dir/.wezterm.lua" "$HOME/.wezterm.lua"
+link_config "$dotfiles_dir/gnupg/gpg-agent.conf" "$HOME/.gnupg/gpg-agent.conf"
+link_config "$dotfiles_dir/bin/wl-copy" "$HOME/.local/bin/wl-copy"
 
-# Fixes nvim config
-# https://github.com/neovim/neovim/issues/3499
-# https://github.com/ZyX-I/neovim/blob/42047acb4f07c689936b051864c6b4448b1b6aa1/runtime/doc/nvim_from_vim.txt#L12-L18
-if [[ -d ~/.config ]]; then
-  symlink_or_ask ~/.nvim ~/.config/nvim
-  symlink_or_ask ~/.nvimrc ~/.config/nvim/init.vim
+if [ -d /usr/share/omarchy ]; then
+  link_config "$dotfiles_dir/hypr" "${XDG_CONFIG_HOME:-$HOME/.config}/hypr"
+  link_config "$dotfiles_dir/omarchy/xdg-terminals.list" "${XDG_CONFIG_HOME:-$HOME/.config}/xdg-terminals.list"
 fi
 
-# install vundle
-if [ ! -f ~/.dotfiles/vim/Vundle.vim ]; then
-  cd ~/.dotfiles/vim && git clone https://github.com/gmarik/Vundle.vim.git
-  vim +BundleInstall +BundleClean +BundleClean +quitall
+chmod 700 "$HOME/.gnupg"
+
+if command -v gpgconf >/dev/null 2>&1; then
+  gpgconf --kill gpg-agent >/dev/null 2>&1 || true
 fi
 
-if [ ! -d ~/.oh-my-zsh ]; then
-  sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+current_shell=$(getent passwd "$(id -un)" 2>/dev/null | cut -d: -f7 || true)
+zsh_path=$(readlink -f "$(command -v zsh)")
+if [ "$current_shell" != "$zsh_path" ] && command -v chsh >/dev/null 2>&1; then
+  log "Setting the default shell to Zsh"
+  if [ "$(id -u)" -eq 0 ]; then
+    chsh -s "$zsh_path" "$(id -un)" || printf 'Warning: could not change the default shell.\n' >&2
+  else
+    as_root chsh -s "$zsh_path" "$(id -un)" || printf 'Warning: could not change the default shell.\n' >&2
+  fi
 fi
 
-# cd ~/.vim/bundle/YouCompleteMe && ./install.sh --clang-completer
-
-if [ ! -e ~/.dotfiles/bin/composer.phar ]; then
-  curl http://getcomposer.org/composer.phar -o ~/.dotfiles/bin/composer.phar
-  chmod +x ~/.dotfiles/bin/composer.phar
+if command -v herdr >/dev/null 2>&1; then
+  herdr config check
 fi
 
-cd ~/.dotfiles/composer && composer install
-cd -
-
-git clone https://github.com/tarruda/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
-git clone https://github.com/jimmijj/zsh-syntax-highlighting ~/.zsh/zsh-syntax-highlighting
+log "Installation complete"
+printf 'Start Zsh now with: exec zsh\n'

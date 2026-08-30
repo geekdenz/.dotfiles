@@ -251,8 +251,10 @@ case ":$PATH:" in
 esac
 # pnpm end
 
-#eval "$(ssh-agent -s)" > /dev/null
-if [ -z "$SSH_AUTH_SOCK" ] || ! ssh-add -l >/dev/null 2>&1; then
+# Start a reusable SSH agent only in a real interactive terminal.
+if [[ -o interactive && -t 0 ]] && (( $+commands[ssh-agent] && $+commands[ssh-add] )) && \
+  { [ -z "$SSH_AUTH_SOCK" ] || ! ssh-add -l >/dev/null 2>&1; }; then
+  mkdir -p "$HOME/.ssh"
   agent_file="$HOME/.ssh/agent.env"
   if [ -f "$agent_file" ]; then
     . "$agent_file" >/dev/null 2>&1
@@ -265,7 +267,9 @@ if [ -z "$SSH_AUTH_SOCK" ] || ! ssh-add -l >/dev/null 2>&1; then
       echo "export SSH_AGENT_PID=$SSH_AGENT_PID"
     } > "$agent_file"
     chmod 600 "$agent_file"
-    ssh-add ~/.ssh/id_ed25519 </dev/tty
+    if [ -f "$HOME/.ssh/id_ed25519" ]; then
+      ssh-add "$HOME/.ssh/id_ed25519" </dev/tty
+    fi
   fi
 fi
 
@@ -284,7 +288,9 @@ export F=/mnt/c/Users/ExampleUser/projects/linux/FrogOne
 
 [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]] && \
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv zsh)"
-source <(fzf --zsh)
+if [[ -o interactive && -t 0 ]] && (( $+commands[fzf] )); then
+  source <(fzf --zsh 2>/dev/null)
+fi
 
 DISABLE_UNTRACKED_FILES_DIRTY=true
 
@@ -309,5 +315,8 @@ add-zsh-hook chpwd fast_repo_prompt
 export PATH="$HOME/.nimble/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.local/share/bob/nvim-bin:$PATH"
+
+# Keep GnuPG/passphrase prompts in the active terminal.
+export GPG_TTY="$(tty)"
 
 (( $+commands[mise] )) && eval "$(mise activate zsh)" # added by https://mise.run/zsh

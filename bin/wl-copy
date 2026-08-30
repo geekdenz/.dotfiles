@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# A direct wl-copy inside a persistent Herdr server targets the server's
+# compositor. OSC 52 lets Herdr forward the text to the viewing client instead.
+if [[ ${HERDR_ENV:-} == 1 || -n ${HERDR_PANE_ID:-} ]]; then
+  if [[ " $* " == *" --clear "* ]]; then
+    printf '\033]52;c;\a' > /dev/tty
+    exit 0
+  fi
+
+  payload=$(base64 --wrap=0)
+  printf '\033]52;c;%s\a' "$payload" > /dev/tty
+  exit 0
+fi
+
+exec /usr/bin/wl-copy "$@"
