@@ -243,7 +243,7 @@ export PATH=$HOME/.local/bin:$PATH
 
 
 # pnpm
-export PNPM_HOME="/home/tim/.local/share/pnpm"
+export PNPM_HOME="$HOME/.local/share/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
@@ -307,4 +307,4 @@ export PATH="$HOME/.nimble/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.local/share/bob/nvim-bin:$PATH"
 
-eval "$(/home/tim/.local/bin/mise activate zsh)" # added by https://mise.run/zsh
+eval "$(/home/example/.local/bin/mise activate zsh)" # added by https://mise.run/zsh
