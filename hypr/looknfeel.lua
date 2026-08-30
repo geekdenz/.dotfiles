@@ -8,6 +8,15 @@ hl.config({
   },
 })
 
+-- Tile windows edge-to-edge, separated only by a thin outline.
+hl.config({
+  general = {
+    gaps_in = 0,
+    gaps_out = 0,
+    border_size = 1,
+  },
+})
+
 -- https://wiki.hypr.land/Configuring/Basics/Variables/#general
 -- hl.config({
 --   general = {

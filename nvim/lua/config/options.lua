@@ -4,3 +4,6 @@
 
 vim.g.snacks_animate = false
 vim.opt.smoothscroll = false
+
+-- Share yanks, deletes, and puts with the Wayland system clipboard.
+vim.opt.clipboard = "unnamedplus"
