@@ -26,7 +26,8 @@ fi
 #POWERLEVEL9K_MODE=
 #POWERLEVEL9K_MODE='awesome-fontconfig'
 #ZSH_THEME="romkatv/powerlevel10k"
-source ~/powerlevel10k/powerlevel10k.zsh-theme
+[[ -r "$HOME/powerlevel10k/powerlevel10k.zsh-theme" ]] && \
+  source "$HOME/powerlevel10k/powerlevel10k.zsh-theme"
 # Path to your oh-my-zsh configuration.
 ZSH=$HOME/.oh-my-zsh
 
@@ -281,7 +282,8 @@ export DL=/mnt/c/Users/ExampleUser/Downloads
 export F=/mnt/c/Users/ExampleUser/projects/linux/FrogOne
 
 
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv zsh)"
+[[ -x /home/linuxbrew/.linuxbrew/bin/brew ]] && \
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv zsh)"
 source <(fzf --zsh)
 
 DISABLE_UNTRACKED_FILES_DIRTY=true
@@ -302,9 +304,10 @@ fast_repo_prompt() {
 
 add-zsh-hook chpwd fast_repo_prompt
 
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv zsh)"
+[[ -x /home/linuxbrew/.linuxbrew/bin/brew ]] && \
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv zsh)"
 export PATH="$HOME/.nimble/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.local/share/bob/nvim-bin:$PATH"
 
-eval "$(/home/example/.local/bin/mise activate zsh)" # added by https://mise.run/zsh
+(( $+commands[mise] )) && eval "$(mise activate zsh)" # added by https://mise.run/zsh

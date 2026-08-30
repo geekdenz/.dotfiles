@@ -1,0 +1,17 @@
+[remmina]
+name=Saturn RDP over Tailscale
+group=Remote Access
+protocol=RDP
+server=192.0.2.24:3389
+username=example-user
+domain=
+password=
+resolution_mode=2
+colordepth=32
+quality=9
+network=auto
+security=tls
+cert_ignore=0
+disablepasswordstoring=1
+ssh_tunnel_enabled=0
+
