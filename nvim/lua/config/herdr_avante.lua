@@ -4,6 +4,8 @@ local agent = "avante"
 local source = "avante.nvim"
 local metadata_source = source .. ":metadata"
 local sequence = 0
+local streaming_wrapped = false
+local provider_switching_wrapped = false
 
 local provider_labels = {
   codex = "Codex ACP",
@@ -94,7 +96,7 @@ end
 
 local function wrap_streaming()
   local llm = require("avante.llm")
-  if llm._herdr_wrapped then return end
+  if streaming_wrapped then return end
 
   local original_stream = llm.stream
   llm.stream = function(opts)
@@ -114,12 +116,12 @@ local function wrap_streaming()
     return result
   end
 
-  llm._herdr_wrapped = true
+  streaming_wrapped = true
 end
 
 local function wrap_provider_switching()
   local api = require("avante.api")
-  if api._herdr_wrapped then return end
+  if provider_switching_wrapped then return end
 
   local original_switch_provider = api.switch_provider
   api.switch_provider = function(target)
@@ -128,7 +130,7 @@ local function wrap_provider_switching()
     return result
   end
 
-  api._herdr_wrapped = true
+  provider_switching_wrapped = true
 end
 
 function M.setup()
