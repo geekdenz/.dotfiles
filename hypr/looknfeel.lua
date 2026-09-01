@@ -15,6 +15,11 @@ hl.config({
     gaps_out = 0,
     border_size = 1,
   },
+  scrolling = {
+    -- Two columns should consume the full monitor width (Omarchy defaults to
+    -- 0.49, which leaves a visible strip at both outer edges).
+    column_width = 0.5,
+  },
 })
 
 -- https://wiki.hypr.land/Configuring/Basics/Variables/#general
