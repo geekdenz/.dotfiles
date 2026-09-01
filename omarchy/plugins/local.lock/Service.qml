@@ -157,6 +157,7 @@ Item {
     sessionLock.locked = false
     logEvent("unlocked")
     runWake()
+    if (!cleanupProcess.running) cleanupProcess.running = true
   }
 
   function armBlankTimer() {
@@ -403,12 +404,17 @@ Item {
 
   Process {
     id: wakeProcess
-    command: ["bash", "-c", "omarchy-system-wake"]
+    command: ["bash", "-c", root.home + "/.config/omarchy/plugins/example-user.lock/display-power on; omarchy-brightness-keyboard on"]
   }
 
   Process {
     id: blankProcess
-    command: ["bash", "-c", "omarchy-brightness-keyboard off; omarchy-brightness-display off"]
+    command: ["bash", "-c", "omarchy-brightness-keyboard off; " + root.home + "/.config/omarchy/plugins/example-user.lock/display-power off"]
+  }
+
+  Process {
+    id: cleanupProcess
+    command: ["bash", "-c", root.home + "/.config/omarchy/plugins/example-user.lock/display-power cleanup"]
   }
 
   Timer {

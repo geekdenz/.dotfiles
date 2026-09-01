@@ -1,0 +1,89 @@
+#!/bin/bash
+
+# Keep Hyprland outputs alive while the physical monitors sleep. Quickshell
+# 0.3.1 can lose its lock surfaces when compositor DPMS removes every output.
+set -u
+
+action="${1:-}"
+runtime_dir="${XDG_RUNTIME_DIR:-/tmp}/example-user-lock-display-power"
+bus_cache="$runtime_dir/buses"
+headless_name="LOCK-KEEPALIVE"
+
+case "$action" in
+  off) power_value=04 ;;
+  on) power_value=01 ;;
+  cleanup) ;;
+  *) exit 2 ;;
+esac
+
+mkdir -p "$runtime_dir" 2>/dev/null || exit 1
+exec {power_lock_fd}>"$runtime_dir/operation.lock"
+flock "$power_lock_fd"
+logger -t example-user-lock-display-power "action=$action begin"
+
+discover_buses() {
+  mkdir -p "$runtime_dir" 2>/dev/null || return 1
+  ddcutil --skip-ddc-checks detect --brief 2>/dev/null |
+    awk '/I2C bus:/ { sub(/^.*\/i2c-/, "", $NF); if ($NF ~ /^[0-9]+$/) print $NF }' |
+    sort -nu >"$bus_cache"
+  [[ -s "$bus_cache" ]]
+}
+
+headless_present() {
+  hyprctl monitors -j 2>/dev/null |
+    jq -e --arg name "$headless_name" 'any(.[]; .name == $name)' >/dev/null 2>&1
+}
+
+physical_outputs_ready() {
+  hyprctl monitors -j 2>/dev/null |
+    jq -e --arg name "$headless_name" '[.[] | select(.name != $name and .disabled == false and .dpmsStatus == true)] | length >= 3' >/dev/null 2>&1
+}
+
+if [[ $action == cleanup ]]; then
+  if headless_present; then
+    for _ in {1..40}; do
+      physical_outputs_ready && break
+      sleep 0.25
+    done
+    if physical_outputs_ready; then
+      hyprctl output remove "$headless_name" >/dev/null 2>&1
+      logger -t example-user-lock-display-power "action=cleanup removed=$headless_name"
+    else
+      logger -t example-user-lock-display-power "action=cleanup kept=$headless_name reason=physical-outputs-not-ready"
+    fi
+  fi
+  exit 0
+fi
+
+if [[ $action == off ]] && ! headless_present; then
+  hyprctl output create headless "$headless_name" >/dev/null 2>&1 || true
+  # Give Quickshell time to establish a lock surface on the keepalive output
+  # before the physical DisplayPort links disappear.
+  sleep 1
+fi
+
+if [[ $action == off ]] && ! headless_present; then
+  logger -t example-user-lock-display-power "action=off aborted reason=headless-output-missing"
+  exit 1
+fi
+
+[[ -s "$bus_cache" ]] || discover_buses || true
+
+success=0
+if [[ -s "$bus_cache" ]]; then
+  while read -r bus; do
+    [[ $bus =~ ^[0-9]+$ ]] || continue
+    if timeout 4 ddcutil --bus "$bus" --skip-ddc-checks --noverify setvcp D6 "$power_value" >/dev/null 2>&1; then
+      success=1
+    elif [[ $action == on ]]; then
+      rm -f "$bus_cache"
+    fi
+  done <"$bus_cache"
+fi
+
+if (( success == 0 )); then
+  if [[ $action == off ]]; then dpms_action=disable; else dpms_action=enable; fi
+  hyprctl dispatch "hl.dsp.dpms({ action = \"$dpms_action\" })" >/dev/null 2>&1
+fi
+
+logger -t example-user-lock-display-power "action=$action complete headless=$(headless_present && echo present || echo absent)"
