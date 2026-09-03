@@ -1,0 +1,22 @@
+[remmina]
+name=Saturn — Omarchy desktop (WayVNC over SSH)
+protocol=VNC
+server=127.0.0.1:5900
+ssh_tunnel_enabled=1
+ssh_tunnel_server=192.0.2.24
+ssh_tunnel_port=22
+ssh_tunnel_username=example-user
+ssh_tunnel_auth=2
+ssh_tunnel_loopback=1
+ssh_tunnel_privatekey=
+ssh_tunnel_certfile=
+ssh_tunnel_password=.
+ssh_tunnel_passphrase=.
+disablepasswordstoring=1
+disableclipboard=0
+viewonly=0
+colordepth=99
+quality=2
+scale=2
+viewmode=2
+keyboard_grab=1

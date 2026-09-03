@@ -1,0 +1,6 @@
+# WayVNC listens only on this computer.  Remote access is provided by an SSH
+# tunnel in the accompanying Remmina profile, so VNC is never exposed on the
+# LAN or Tailscale network.
+address=127.0.0.1
+port=5900
+enable_auth=false
