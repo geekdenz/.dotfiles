@@ -1,7 +1,9 @@
 local wezterm = require("wezterm")
 local config = wezterm.config_builder()
 
-config.enable_wayland = false
+-- Native Wayland keeps text sharp on example-host's 4K displays at fractional scale.
+-- Other hosts retain their existing backend choice.
+config.enable_wayland = wezterm.hostname() == "example-host"
 
 -- General
 -- config.font = wezterm.font_with_fallback({
@@ -164,6 +166,31 @@ config.keys = {
 		action = wezterm.action.SpawnTab("CurrentPaneDomain"),
 	},
 	{ key = "l", mods = "ALT|SHIFT", action = wezterm.action.ShowLauncher },
+}
+
+-- Herdr enables terminal mouse reporting for its UI, which normally sends
+-- middle-clicks to Herdr instead of using WezTerm's primary-selection paste.
+-- Override only that button while mouse reporting is active; Herdr still
+-- receives left/right clicks, drags, and wheel events.
+config.mouse_bindings = {
+	{
+		event = { Down = { streak = 1, button = "Middle" } },
+		mods = "NONE",
+		mouse_reporting = true,
+		action = wezterm.action.PasteFrom("PrimarySelection"),
+	},
+	{
+		event = { Drag = { streak = 1, button = "Middle" } },
+		mods = "NONE",
+		mouse_reporting = true,
+		action = wezterm.action.Nop,
+	},
+	{
+		event = { Up = { streak = 1, button = "Middle" } },
+		mods = "NONE",
+		mouse_reporting = true,
+		action = wezterm.action.Nop,
+	},
 }
 
 return config
