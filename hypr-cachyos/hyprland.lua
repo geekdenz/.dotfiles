@@ -65,7 +65,9 @@ hl.env("HYPRCURSOR_SIZE", "24")
 hl.config({
   general = {
     gaps_in = 5,
-    gaps_out = 10,
+    -- Keep tiled windows separated, but let the outermost windows touch the
+    -- monitor edge so no wallpaper strip is visible around the layout.
+    gaps_out = 0,
     border_size = 2,
     col = {
       active_border = { colors = { "rgba(7aa2f7ee)", "rgba(bb9af7ee)" }, angle = 45 },
@@ -75,7 +77,7 @@ hl.config({
     layout = "dwindle",
   },
   decoration = {
-    rounding = 8,
+    rounding = 0,
     active_opacity = 1.0,
     inactive_opacity = 0.96,
     shadow = {
