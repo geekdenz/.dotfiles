@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+
+# Select a screen region, extract its text with Tesseract, and copy the result.
+# OMARCHY_OCR_LANGS can select installed languages, for example eng+deu.
+# Passing an image path skips screen capture, which is useful for testing.
+
+set -Eeuo pipefail
+
+freeze_pid=""
+
+cleanup() {
+  if [[ -n $freeze_pid ]]; then
+    kill "$freeze_pid" 2>/dev/null || true
+    wait "$freeze_pid" 2>/dev/null || true
+  fi
+}
+
+notify() {
+  local urgency=$1
+  local title=$2
+  local message=$3
+
+  command -v notify-send >/dev/null 2>&1 || return 0
+  notify-send --app-name="Screenshot OCR" --urgency="$urgency" "$title" "$message" || true
+}
+
+fail() {
+  printf 'Screenshot OCR: %s\n' "$1" >&2
+  notify critical "OCR failed" "$1"
+  exit 1
+}
+
+require_command() {
+  command -v "$1" >/dev/null 2>&1 || fail "Required command not found: $1"
+}
+
+trap cleanup EXIT INT TERM
+
+ocr_languages=${OMARCHY_OCR_LANGS:-eng}
+image_path=${1:-}
+
+require_command tesseract
+require_command wl-copy
+
+if (($# > 1)); then
+  fail "Usage: capture-text [image-file]"
+fi
+
+if [[ -n $image_path ]]; then
+  [[ -r $image_path ]] || fail "Cannot read image: $image_path"
+  text=$(tesseract "$image_path" stdout \
+    --oem 1 --psm 6 -l "$ocr_languages" --dpi 300 \
+    -c preserve_interword_spaces=1 2>/dev/null) || \
+    fail "Tesseract could not read the image"
+else
+  require_command grim
+  require_command slurp
+
+  # Match Omarchy's frozen-screen selection when hyprpicker is available.
+  if command -v hyprpicker >/dev/null 2>&1; then
+    hyprpicker -r -z >/dev/null 2>&1 &
+    freeze_pid=$!
+    sleep 0.1
+  fi
+
+  selection=$(slurp 2>/dev/null) || exit 0
+  [[ -n $selection ]] || exit 0
+
+  text=$(grim -g "$selection" - | tesseract stdin stdout \
+    --oem 1 --psm 6 -l "$ocr_languages" --dpi 300 \
+    -c preserve_interword_spaces=1 2>/dev/null) || \
+    fail "Could not capture or recognize the selected region"
+fi
+
+[[ -n ${text//[[:space:]]/} ]] || fail "No text was found in the selection"
+
+printf '%s' "$text" | wl-copy || fail "Could not copy the recognized text"
+notify normal "Text copied" "The recognized text is now on the clipboard."
