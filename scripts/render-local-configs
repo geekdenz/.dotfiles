@@ -41,7 +41,7 @@ render() {
 }
 
 render "$repo_dir/git/gitconfig.local.example" "$HOME/.gitconfig.local"
-render "$repo_dir/remmina/example-host-wayvnc.remmina.template" \
-  "$HOME/.local/share/remmina/example-host-wayvnc.remmina"
-render "$repo_dir/remote-access/example-host-rdp-tailscale.remmina.template" \
-  "$HOME/.local/share/remmina/example-host-rdp-tailscale.remmina"
+render "$repo_dir/remmina/wayvnc.remmina.template" \
+  "$HOME/.local/share/remmina/wayvnc.remmina"
+render "$repo_dir/remote-access/rdp-tailscale.remmina.template" \
+  "$HOME/.local/share/remmina/rdp-tailscale.remmina"
