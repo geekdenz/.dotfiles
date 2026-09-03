@@ -22,12 +22,23 @@ if uid_pipe then
   uid_pipe:close()
 end
 
-local monitor_config = {
-  example-host = "hosts.example-host",
-}
+local configured_monitor_hostname = os.getenv("CACHYOS_MONITOR_HOSTNAME") or ""
+if configured_monitor_hostname == "" then
+  local env_file = io.open((os.getenv("HOME") or "") .. "/.dotfiles/.env", "r")
+  if env_file then
+    for line in env_file:lines() do
+      local value = line:match("^CACHYOS_MONITOR_HOSTNAME=(.*)$")
+      if value then
+        configured_monitor_hostname = value:gsub('^"(.*)"$', "%1")
+        break
+      end
+    end
+    env_file:close()
+  end
+end
 
-if monitor_config[hostname] then
-  require(monitor_config[hostname])
+if configured_monitor_hostname ~= "" and configured_monitor_hostname == hostname then
+  require("hosts.workstation")
 else
   hl.monitor({ output = "", mode = "preferred", position = "auto", scale = "auto" })
 end
