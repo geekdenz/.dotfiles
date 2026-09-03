@@ -1,0 +1,6 @@
+[user]
+	name = ${DOTFILES_GIT_NAME}
+	email = ${DOTFILES_GIT_EMAIL}
+
+[github]
+	user = ${DOTFILES_GITHUB_USER}

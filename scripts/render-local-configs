@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+repo_dir=$(cd -- "$script_dir/.." && pwd)
+env_file=${DOTFILES_ENV_FILE:-$repo_dir/.env}
+
+command -v envsubst >/dev/null 2>&1 || {
+  printf 'render-local-configs: gettext (envsubst) is required\n' >&2
+  exit 1
+}
+
+if [[ -r $env_file ]]; then
+  set -a
+  # shellcheck disable=SC1090
+  source "$env_file"
+  set +a
+fi
+
+for variable in DOTFILES_SATURN_HOST DOTFILES_SATURN_IP DOTFILES_REMOTE_USERNAME; do
+  [[ -n ${!variable:-} ]] || {
+    printf 'render-local-configs: set %s in %s\n' "$variable" "$env_file" >&2
+    exit 1
+  }
+done
+
+render() {
+  local template=$1
+  local destination=$2
+  local temporary
+
+  mkdir -p "$(dirname -- "$destination")"
+  temporary=$(mktemp "${destination}.XXXXXX")
+  trap 'rm -f -- "$temporary"' RETURN
+  envsubst < "$template" > "$temporary"
+  chmod 600 "$temporary"
+  mv -f -- "$temporary" "$destination"
+  trap - RETURN
+  printf 'Rendered: %s\n' "$destination"
+}
+
+render "$repo_dir/git/gitconfig.local.example" "$HOME/.gitconfig.local"
+render "$repo_dir/remmina/example-host-wayvnc.remmina.template" \
+  "$HOME/.local/share/remmina/example-host-wayvnc.remmina"
+render "$repo_dir/remote-access/example-host-rdp-tailscale.remmina.template" \
+  "$HOME/.local/share/remmina/example-host-rdp-tailscale.remmina"

@@ -42,6 +42,8 @@ reuse the loaded key.
 - Herdr configuration and an OSC 52 `wl-copy` bridge for remote sessions
 - GPG terminal pinentry through `pinentry-curses`
 - A persistent per-user OpenSSH agent service
+- Machine-specific values loaded from an ignored `.env` file and rendered into
+  local Git and Remmina configuration
 - The current Hyprland configuration when installing on Omarchy
 - WezTerm as the default terminal on Omarchy
 

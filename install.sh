@@ -32,12 +32,12 @@ install_packages() {
     log "Installing Debian packages"
     as_root env DEBIAN_FRONTEND=noninteractive apt-get update
     as_root env DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-      ca-certificates curl fontconfig fzf git openssh-client pinentry-curses unzip wl-clipboard zsh
+      ca-certificates curl gettext fontconfig fzf git openssh-client pinentry-curses unzip wl-clipboard zsh
     platform=debian
   elif command -v pacman >/dev/null 2>&1; then
     log "Installing Arch packages"
     as_root pacman -Syu --needed --noconfirm \
-      ca-certificates curl fontconfig fzf git openssh pinentry ttf-jetbrains-mono-nerd unzip wl-clipboard zsh
+      ca-certificates curl gettext fontconfig fzf git openssh pinentry ttf-jetbrains-mono-nerd unzip wl-clipboard zsh
     platform=arch
   else
     die "unsupported distribution: expected apt-get or pacman"
@@ -135,6 +135,12 @@ link_config "$dotfiles_dir/.wezterm.lua" "$HOME/.wezterm.lua"
 link_config "$dotfiles_dir/gnupg/gpg-agent.conf" "$HOME/.gnupg/gpg-agent.conf"
 link_config "$dotfiles_dir/bin/wl-copy" "$HOME/.local/bin/wl-copy"
 link_config "$dotfiles_dir/systemd/user/ssh-agent.service" "$HOME/.config/systemd/user/ssh-agent.service"
+
+if [ -r "$dotfiles_dir/.env" ]; then
+  "$dotfiles_dir/scripts/render-local-configs"
+else
+  printf 'Copy .env.example to .env to render machine-specific Git and Remmina settings.\n'
+fi
 
 if command -v systemctl >/dev/null 2>&1; then
   systemctl --user daemon-reload || printf 'Warning: could not reload the user systemd manager.\n' >&2

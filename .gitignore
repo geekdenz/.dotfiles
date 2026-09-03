@@ -10,3 +10,7 @@ vim/flavors
 /bin/composer.phar
 composer/composer.lock
 /*.log
+/.env
+/git/gitconfig.local
+/remmina/*.remmina
+/remote-access/*.remmina

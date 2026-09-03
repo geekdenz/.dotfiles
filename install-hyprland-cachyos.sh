@@ -58,6 +58,7 @@ packages=(
   cachyos-wallpapers
   dolphin
   grim
+  gettext
   hypridle
   hyprland
   hyprlock

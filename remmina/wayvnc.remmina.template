@@ -1,11 +1,11 @@
 [remmina]
-name=Saturn — Omarchy desktop (WayVNC over SSH)
+name=${DOTFILES_SATURN_HOST} — Omarchy desktop (WayVNC over SSH)
 protocol=VNC
 server=127.0.0.1:5900
 ssh_tunnel_enabled=1
-ssh_tunnel_server=192.0.2.24
+ssh_tunnel_server=${DOTFILES_SATURN_IP}
 ssh_tunnel_port=22
-ssh_tunnel_username=example-user
+ssh_tunnel_username=${DOTFILES_REMOTE_USERNAME}
 ssh_tunnel_auth=2
 ssh_tunnel_loopback=1
 ssh_tunnel_privatekey=
