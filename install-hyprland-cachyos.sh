@@ -61,7 +61,9 @@ packages=(
   hypridle
   hyprland
   hyprlock
+  hyprpicker
   hyprpolkitagent
+  libnotify
   mako
   network-manager-applet
   noto-fonts-emoji
@@ -71,6 +73,8 @@ packages=(
   qt6-wayland
   slurp
   swaybg
+  tesseract
+  tesseract-data-eng
   ttf-font-awesome
   ttf-jetbrains-mono-nerd
   uwsm
@@ -95,6 +99,8 @@ log "Linking the tracked CachyOS Hyprland configuration"
 source_config="$script_dir/hypr-cachyos"
 target_config="$target_home/.config/hypr"
 [[ -f $source_config/hyprland.lua ]] || die "missing $source_config/hyprland.lua"
+[[ -x $source_config/scripts/capture-text ]] || \
+  die "missing executable $source_config/scripts/capture-text"
 
 if [[ -L $target_config ]] && \
    [[ $(readlink -f -- "$target_config") == $(readlink -f -- "$source_config") ]]; then

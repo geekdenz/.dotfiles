@@ -165,6 +165,11 @@ hl.bind(main_mod .. " + E", hl.dsp.exec_cmd(file_manager), { description = "File
 hl.bind(main_mod .. " + R", hl.dsp.exec_cmd(menu), { description = "Application menu" })
 hl.bind(main_mod .. " + M", hl.dsp.exec_cmd("hyprctl dispatch 'hl.dsp.exit()'"), { description = "Exit Hyprland" })
 hl.bind("Print", hl.dsp.exec_cmd("grim -g \"$(slurp)\" - | wl-copy"), { description = "Screenshot" })
+hl.bind(
+  main_mod .. " + CTRL + Print",
+  hl.dsp.exec_cmd("~/.config/hypr/scripts/capture-text"),
+  { description = "Extract text from screenshot" }
+)
 
 local directions = {
   left = "l",
