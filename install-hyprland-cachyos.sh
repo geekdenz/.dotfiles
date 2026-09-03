@@ -67,6 +67,7 @@ packages=(
   mako
   network-manager-applet
   noto-fonts-emoji
+  openssh
   pavucontrol
   playerctl
   qt5-wayland
@@ -101,6 +102,22 @@ target_config="$target_home/.config/hypr"
 [[ -f $source_config/hyprland.lua ]] || die "missing $source_config/hyprland.lua"
 [[ -x $source_config/scripts/capture-text ]] || \
   die "missing executable $source_config/scripts/capture-text"
+[[ -x $source_config/scripts/daily-wallpaper ]] || \
+  die "missing executable $source_config/scripts/daily-wallpaper"
+
+target_systemd_user="$target_home/.config/systemd/user/ssh-agent.service"
+install -d -m 0755 "$(dirname -- "$target_systemd_user")"
+if [[ -e $target_systemd_user || -L $target_systemd_user ]]; then
+  if [[ ! -L $target_systemd_user || $(readlink -f -- "$target_systemd_user") != $(readlink -f -- "$script_dir/systemd/user/ssh-agent.service") ]]; then
+    backup="$target_systemd_user.before-dotfiles-$(date +%Y%m%d-%H%M%S)"
+    mv -- "$target_systemd_user" "$backup"
+    printf 'Backed up: %s -> %s\n' "$target_systemd_user" "$backup"
+  fi
+fi
+if [[ ! -e $target_systemd_user && ! -L $target_systemd_user ]]; then
+  ln -s -- "$script_dir/systemd/user/ssh-agent.service" "$target_systemd_user"
+  printf 'Linked: %s -> %s\n' "$target_systemd_user" "$script_dir/systemd/user/ssh-agent.service"
+fi
 
 if [[ -L $target_config ]] && \
    [[ $(readlink -f -- "$target_config") == $(readlink -f -- "$source_config") ]]; then

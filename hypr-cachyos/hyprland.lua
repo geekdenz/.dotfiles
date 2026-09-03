@@ -14,6 +14,14 @@ if hostname_file then
 end
 hostname = hostname:match("^[^.]+") or hostname
 
+-- Resolve the user runtime directory at load time so the agent socket is
+-- portable across hosts and users.
+local uid_pipe = io.popen("id -u", "r")
+local user_uid = uid_pipe and uid_pipe:read("*l") or ""
+if uid_pipe then
+  uid_pipe:close()
+end
+
 local monitor_config = {
   example-host = "hosts.example-host",
 }
@@ -40,6 +48,7 @@ local menu = "wofi --show drun"
 -------------------
 
 hl.on("hyprland.start", function()
+  hl.exec_cmd("systemctl --user start ssh-agent.service")
   -- UWSM keeps launched applications in the graphical session's systemd
   -- scopes. The service start gives privileged apps an authentication agent.
   hl.exec_cmd("systemctl --user start hyprpolkitagent.service")
@@ -48,7 +57,7 @@ hl.on("hyprland.start", function()
   )
   hl.exec_cmd("uwsm app -- mako")
   hl.exec_cmd("uwsm app -- nm-applet --indicator")
-  hl.exec_cmd("uwsm app -- swaybg -i /usr/share/wallpapers/cachyos-wallpapers/Abstract.png -m fill")
+  hl.exec_cmd("uwsm app -- ~/.config/hypr/scripts/daily-wallpaper")
 end)
 
 -------------------------------
@@ -57,6 +66,9 @@ end)
 
 hl.env("XCURSOR_SIZE", "24")
 hl.env("HYPRCURSOR_SIZE", "24")
+if user_uid ~= "" then
+  hl.env("SSH_AUTH_SOCK", "/run/user/" .. user_uid .. "/ssh-agent.socket")
+end
 
 -----------------------
 ---- LOOK AND FEEL ----
@@ -64,9 +76,9 @@ hl.env("HYPRCURSOR_SIZE", "24")
 
 hl.config({
   general = {
-    gaps_in = 5,
-    -- Keep tiled windows separated, but let the outermost windows touch the
-    -- monitor edge so no wallpaper strip is visible around the layout.
+    -- Borders provide the separation; windows tile directly against each
+    -- other and the monitor edge without wallpaper strips.
+    gaps_in = 0,
     gaps_out = 0,
     border_size = 2,
     col = {

@@ -229,7 +229,6 @@ alias sail="vendor/bin/sail"
 export ANDROID_HOME=$HOME/Android/Sdk
 export PATH=$ANDROID_HOME/emulator:$PATH
 export PATH=$ANDROID_HOME/platform-tools:$PATH
-# eval $(ssh-agent) # do not add this if using KDE wallet to manage keys!
 # export PATH=$PATH:~/idea/idea-IU-223.8617.56/bin
 
 
@@ -251,24 +250,25 @@ case ":$PATH:" in
 esac
 # pnpm end
 
-# Start a reusable SSH agent only in a real interactive terminal.
-if [[ -o interactive && -t 0 ]] && (( $+commands[ssh-agent] && $+commands[ssh-add] )) && \
-  { [ -z "$SSH_AUTH_SOCK" ] || ! ssh-add -l >/dev/null 2>&1; }; then
-  mkdir -p "$HOME/.ssh"
-  agent_file="$HOME/.ssh/agent.env"
-  if [ -f "$agent_file" ]; then
-    . "$agent_file" >/dev/null 2>&1
+# Reuse one per-user systemd SSH agent instead of starting one per terminal.
+# The first interactive shell loads one default key and prompts once; later
+# shells and Hyprland-launched applications reuse the same agent.
+if (( $+commands[ssh-add] )); then
+  export SSH_AUTH_SOCK="${SSH_AUTH_SOCK:-${XDG_RUNTIME_DIR:-/run/user/$UID}/ssh-agent.socket}"
+  if (( $+commands[systemctl] )); then
+    systemctl --user start ssh-agent.service >/dev/null 2>&1 || true
   fi
-
-  if ! ssh-add -l >/dev/null 2>&1; then
-    eval "$(ssh-agent -s)" >/dev/null
-    {
-      echo "export SSH_AUTH_SOCK=$SSH_AUTH_SOCK"
-      echo "export SSH_AGENT_PID=$SSH_AGENT_PID"
-    } > "$agent_file"
-    chmod 600 "$agent_file"
-    if [ -f "$HOME/.ssh/id_ed25519" ]; then
-      ssh-add "$HOME/.ssh/id_ed25519" </dev/tty
+  if [[ -o interactive && -t 0 ]] && [[ -S "$SSH_AUTH_SOCK" ]] && \
+    ! ssh-add -l >/dev/null 2>&1; then
+    key_file=""
+    for candidate in "$HOME/.ssh/id_ed25519" "$HOME/.ssh/id_rsa" "$HOME/.ssh/id_example"; do
+      if [[ -f "$candidate" ]]; then
+        key_file="$candidate"
+        break
+      fi
+    done
+    if [[ -n "$key_file" ]]; then
+      ssh-add "$key_file" </dev/tty
     fi
   fi
 fi

@@ -134,6 +134,13 @@ link_config "$dotfiles_dir/herdr/config.toml" "${XDG_CONFIG_HOME:-$HOME/.config}
 link_config "$dotfiles_dir/.wezterm.lua" "$HOME/.wezterm.lua"
 link_config "$dotfiles_dir/gnupg/gpg-agent.conf" "$HOME/.gnupg/gpg-agent.conf"
 link_config "$dotfiles_dir/bin/wl-copy" "$HOME/.local/bin/wl-copy"
+link_config "$dotfiles_dir/systemd/user/ssh-agent.service" "$HOME/.config/systemd/user/ssh-agent.service"
+
+if command -v systemctl >/dev/null 2>&1; then
+  systemctl --user daemon-reload || printf 'Warning: could not reload the user systemd manager.\n' >&2
+  systemctl --user enable --now ssh-agent.service || \
+    printf 'Warning: could not enable the user SSH agent; start it after logging into your desktop.\n' >&2
+fi
 
 if [ -d /usr/share/omarchy ]; then
   link_config "$dotfiles_dir/hypr" "${XDG_CONFIG_HOME:-$HOME/.config}/hypr"

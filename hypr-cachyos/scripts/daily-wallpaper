@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+# Pick one CachyOS wallpaper per calendar day and keep it stable until the
+# next day. Running this script again (for example after a Hyprland reload)
+# reuses today's image instead of changing it unexpectedly.
+
+set -Eeuo pipefail
+
+wallpaper_dir=${CACHYOS_WALLPAPER_DIR:-/usr/share/wallpapers/cachyos-wallpapers}
+state_dir=${XDG_STATE_HOME:-$HOME/.local/state}/cachyos-hyprland
+state_file=$state_dir/daily-wallpaper
+today=$(date +%F)
+
+mkdir -p "$state_dir"
+
+selected_date=""
+selected_path=""
+if [[ -r $state_file ]]; then
+  IFS= read -r selected_date < "$state_file" || true
+  IFS= read -r selected_path < <(sed -n '2p' "$state_file") || true
+fi
+
+if [[ $selected_date != "$today" || ! -f $selected_path ]]; then
+  mapfile -d '' -t wallpapers < <(
+    find "$wallpaper_dir" -type f \
+      \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \) \
+      -print0 | sort -z
+  )
+  ((${#wallpapers[@]} > 0)) || {
+    printf 'Daily wallpaper: no images found in %s\n' "$wallpaper_dir" >&2
+    exit 1
+  }
+
+  selected_path=${wallpapers[RANDOM % ${#wallpapers[@]}]}
+  temp_state=$(mktemp "$state_file.XXXXXX")
+  trap 'rm -f -- "$temp_state"' EXIT
+  printf '%s\n%s\n' "$today" "$selected_path" > "$temp_state"
+  mv -f -- "$temp_state" "$state_file"
+  trap - EXIT
+fi
+
+pkill -x swaybg 2>/dev/null || true
+exec swaybg -i "$selected_path" -m fill
