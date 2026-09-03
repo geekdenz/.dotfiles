@@ -1,0 +1,107 @@
+{
+  "layer": "top",
+  "position": "top",
+  "height": 36,
+  "spacing": 4,
+  "exclusive": true,
+  "reload_style_on_change": true,
+  "on-sigusr1": "toggle",
+
+  "modules-left": [
+    "custom/launcher",
+    "hyprland/workspaces",
+    "hyprland/window"
+  ],
+  "modules-center": [
+    "clock"
+  ],
+  "modules-right": [
+    "idle_inhibitor",
+    "tray",
+    "network",
+    "pulseaudio",
+    "custom/lock"
+  ],
+
+  "custom/launcher": {
+    "format": "",
+    "tooltip-format": "Applications  Super+Space",
+    "on-click": "pkill -x wofi || wofi --show drun",
+    "on-click-right": "wezterm start --always-new-process"
+  },
+
+  "hyprland/workspaces": {
+    "format": "{icon}",
+    "format-icons": {
+      "active": "",
+      "urgent": "",
+      "default": ""
+    },
+    "show-special": true,
+    "special-visible-only": true,
+    "sort-by": "number",
+    "move-to-monitor": true
+  },
+
+  "hyprland/window": {
+    "format": "{}",
+    "max-length": 55,
+    "separate-outputs": true,
+    "rewrite": {
+      "": "Desktop"
+    }
+  },
+
+  "clock": {
+    "format": "{:%H:%M}",
+    "format-alt": "{:%a %d %b  %H:%M}",
+    "tooltip-format": "<big>{:%A, %d %B %Y}</big>\n<tt><small>{calendar}</small></tt>"
+  },
+
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "format-icons": {
+      "activated": "",
+      "deactivated": ""
+    },
+    "tooltip-format-activated": "Stay awake enabled",
+    "tooltip-format-deactivated": "Stay awake disabled"
+  },
+
+  "tray": {
+    "icon-size": 16,
+    "spacing": 8
+  },
+
+  "network": {
+    "format-wifi": "󰤨",
+    "format-ethernet": "󰈀",
+    "format-linked": "󰈀",
+    "format-disconnected": "󰤭",
+    "tooltip-format-wifi": "{essid}\n{signalStrength}%  {ipaddr}",
+    "tooltip-format-ethernet": "{ifname}\n{ipaddr}/{cidr}",
+    "tooltip-format-disconnected": "Network disconnected",
+    "on-click": "nm-connection-editor"
+  },
+
+  "pulseaudio": {
+    "format": "{icon}",
+    "format-bluetooth": "󰂰",
+    "format-muted": "󰝟",
+    "format-icons": {
+      "headphone": "",
+      "headset": "󰋎",
+      "default": ["", "", ""]
+    },
+    "tooltip-format": "Volume {volume}%",
+    "on-click": "pavucontrol",
+    "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+    "scroll-step": 5
+  },
+
+  "custom/lock": {
+    "format": "",
+    "tooltip-format": "Lock screen  Super+Ctrl+L",
+    "on-click": "hyprlock"
+  }
+}

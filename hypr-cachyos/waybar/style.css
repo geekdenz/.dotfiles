@@ -1,0 +1,152 @@
+* {
+  min-height: 0;
+  border: none;
+  border-radius: 0;
+  font-family: "JetBrainsMono Nerd Font", "Noto Sans", sans-serif;
+  font-size: 13px;
+}
+
+window#waybar {
+  background: rgba(26, 27, 38, 0.96);
+  border-bottom: 1px solid rgba(65, 72, 104, 0.8);
+  color: #c0caf5;
+}
+
+window#waybar.hidden {
+  opacity: 0;
+}
+
+tooltip {
+  background: #1a1b26;
+  border: 1px solid #414868;
+  border-radius: 10px;
+}
+
+tooltip label {
+  color: #c0caf5;
+  padding: 8px;
+}
+
+button {
+  box-shadow: none;
+  text-shadow: none;
+}
+
+button:hover,
+#idle_inhibitor:hover,
+#network:hover,
+#pulseaudio:hover,
+#custom-lock:hover {
+  background: rgba(65, 72, 104, 0.65);
+}
+
+#custom-launcher {
+  color: #7aa2f7;
+  font-size: 18px;
+  padding: 0 13px 0 12px;
+}
+
+#custom-launcher:hover {
+  color: #bb9af7;
+}
+
+#workspaces {
+  margin: 4px 0;
+  padding: 0 3px;
+  background: #24283b;
+  border-radius: 10px;
+}
+
+#workspaces button {
+  min-width: 25px;
+  margin: 2px;
+  padding: 0 6px;
+  background: transparent;
+  border-radius: 8px;
+  color: #565f89;
+}
+
+#workspaces button:hover {
+  background: #414868;
+  color: #c0caf5;
+}
+
+#workspaces button.active {
+  background: #7aa2f7;
+  color: #1a1b26;
+}
+
+#workspaces button.urgent {
+  background: #f7768e;
+  color: #1a1b26;
+}
+
+#window {
+  padding: 0 12px;
+  color: #a9b1d6;
+  font-size: 12px;
+}
+
+#clock {
+  margin: 4px 0;
+  padding: 0 14px;
+  background: #24283b;
+  border: 1px solid #414868;
+  border-radius: 10px;
+  color: #c0caf5;
+  font-weight: bold;
+}
+
+#idle_inhibitor,
+#network,
+#pulseaudio,
+#custom-lock {
+  min-width: 18px;
+  margin: 4px 1px;
+  padding: 0 8px;
+  border-radius: 9px;
+}
+
+#idle_inhibitor.activated {
+  color: #e0af68;
+}
+
+#idle_inhibitor.deactivated {
+  color: #565f89;
+}
+
+#network {
+  color: #7dcfff;
+}
+
+#network.disconnected {
+  color: #f7768e;
+}
+
+#pulseaudio {
+  color: #9ece6a;
+}
+
+#pulseaudio.muted {
+  color: #565f89;
+}
+
+#custom-lock {
+  margin-right: 7px;
+  color: #bb9af7;
+}
+
+#tray {
+  margin: 4px 2px;
+  padding: 0 7px;
+}
+
+#tray > .passive {
+  -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+  -gtk-icon-effect: highlight;
+  background: #f7768e;
+  border-radius: 6px;
+}
