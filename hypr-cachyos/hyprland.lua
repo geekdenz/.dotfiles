@@ -5,14 +5,9 @@
 ---- MONITORS ----
 ------------------
 
--- Keep physical display layouts out of the shared config. Each known host gets
--- its own module; unknown hosts use automatic preferred modes and placement.
-local hostname_file = io.open("/etc/hostname", "r")
-local hostname = hostname_file and hostname_file:read("*l") or ""
-if hostname_file then
-  hostname_file:close()
-end
-hostname = hostname:match("^[^.]+") or hostname
+-- The workstation module contains the fixed EDID layout and a generic
+-- preferred-mode fallback for other hardware.
+require("hosts.workstation")
 
 -- Resolve the user runtime directory at load time so the agent socket is
 -- portable across hosts and users.
@@ -20,27 +15,6 @@ local uid_pipe = io.popen("id -u", "r")
 local user_uid = uid_pipe and uid_pipe:read("*l") or ""
 if uid_pipe then
   uid_pipe:close()
-end
-
-local configured_monitor_hostname = os.getenv("CACHYOS_MONITOR_HOSTNAME") or ""
-if configured_monitor_hostname == "" then
-  local env_file = io.open((os.getenv("HOME") or "") .. "/.dotfiles/.env", "r")
-  if env_file then
-    for line in env_file:lines() do
-      local value = line:match("^CACHYOS_MONITOR_HOSTNAME=(.*)$")
-      if value then
-        configured_monitor_hostname = value:gsub('^"(.*)"$', "%1")
-        break
-      end
-    end
-    env_file:close()
-  end
-end
-
-if configured_monitor_hostname ~= "" and configured_monitor_hostname == hostname then
-  require("hosts.workstation")
-else
-  hl.monitor({ output = "", mode = "preferred", position = "auto", scale = "auto" })
 end
 
 ---------------------
