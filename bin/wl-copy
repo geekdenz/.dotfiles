@@ -2,14 +2,17 @@
 
 # A direct wl-copy inside a persistent Herdr server targets the server's
 # compositor. OSC 52 lets Herdr forward the text to the viewing client instead.
-if [[ ${HERDR_ENV:-} == 1 || -n ${HERDR_PANE_ID:-} ]]; then
+if [[ ${HERDR_ENV:-} == 1 || -n ${HERDR_PANE_ID:-} ]] && [[ -w /dev/tty ]]; then
+  selection=c
+  [[ " $* " == *" --primary "* ]] && selection=p
+
   if [[ " $* " == *" --clear "* ]]; then
-    printf '\033]52;c;\a' > /dev/tty
+    printf '\033]52;%s;\a' "$selection" > /dev/tty
     exit 0
   fi
 
   payload=$(base64 --wrap=0)
-  printf '\033]52;c;%s\a' "$payload" > /dev/tty
+  printf '\033]52;%s;%s\a' "$selection" "$payload" > /dev/tty
   exit 0
 fi
 
