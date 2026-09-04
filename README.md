@@ -34,6 +34,11 @@ key (`id_ed25519`, `id_rsa`, or `id_example`) from the first interactive shell.
 Enter its passphrase once per login session; subsequent terminals and GUI apps
 reuse the loaded key.
 
+Hardware-specific Hyprland modules are hostname-gated. Set
+`CACHYOS_HARDWARE_HOSTNAME` to the machine's `/etc/hostname` and select a
+`CACHYOS_HARDWARE_PROFILE` in the ignored `.env`; unmatched hosts use automatic
+monitor detection.
+
 ## What it configures
 
 - Zsh, Oh My Zsh, Powerlevel10k, and `~/.p10k.zsh`

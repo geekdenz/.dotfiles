@@ -5,9 +5,43 @@
 ---- MONITORS ----
 ------------------
 
--- The workstation module contains the fixed EDID layout and a generic
--- preferred-mode fallback for other hardware.
-require("hosts.workstation")
+-- Hardware-specific modules are selected only when the current hostname
+-- matches the opt-in profile declared in the ignored .env file. New hosts
+-- therefore use automatic preferred modes until explicitly configured.
+local hostname_file = io.open("/etc/hostname", "r")
+local hostname = hostname_file and hostname_file:read("*l") or ""
+if hostname_file then
+  hostname_file:close()
+end
+hostname = hostname:match("^[^.]+") or hostname
+
+local function local_env_value(key)
+  local env_file = io.open((os.getenv("HOME") or "") .. "/.dotfiles/.env", "r")
+  if not env_file then
+    return ""
+  end
+  local value = ""
+  for line in env_file:lines() do
+    local candidate = line:match("^" .. key .. "=(.*)$")
+    if candidate then
+      value = candidate:gsub('^"(.*)"$', "%1")
+      break
+    end
+  end
+  env_file:close()
+  return value
+end
+
+local hardware_hostname = os.getenv("CACHYOS_HARDWARE_HOSTNAME")
+  or local_env_value("CACHYOS_HARDWARE_HOSTNAME")
+local hardware_profile = os.getenv("CACHYOS_HARDWARE_PROFILE")
+  or local_env_value("CACHYOS_HARDWARE_PROFILE")
+
+if hardware_hostname ~= "" and hardware_hostname == hostname and hardware_profile == "workstation" then
+  require("hosts.workstation")
+else
+  hl.monitor({ output = "", mode = "preferred", position = "auto", scale = "auto" })
+end
 
 -- Resolve the user runtime directory at load time so the agent socket is
 -- portable across hosts and users.
