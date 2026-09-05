@@ -24,7 +24,7 @@
   ],
 
   "custom/launcher": {
-    "format": "",
+    "format": "",
     "tooltip-format": "Applications  Super+Space",
     "on-click": "pkill -x wofi || wofi --show drun",
     "on-click-right": "wezterm start --always-new-process"

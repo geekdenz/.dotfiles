@@ -57,6 +57,7 @@ packages=(
   brightnessctl
   cachyos-wallpapers
   dolphin
+  fzf
   grim
   gettext
   hypridle
@@ -105,6 +106,8 @@ target_config="$target_home/.config/hypr"
   die "missing executable $source_config/scripts/capture-text"
 [[ -x $source_config/scripts/daily-wallpaper ]] || \
   die "missing executable $source_config/scripts/daily-wallpaper"
+[[ -x $source_config/scripts/launch-waybar ]] || \
+  die "missing executable $source_config/scripts/launch-waybar"
 
 target_systemd_user="$target_home/.config/systemd/user/ssh-agent.service"
 install -d -m 0755 "$(dirname -- "$target_systemd_user")"

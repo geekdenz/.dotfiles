@@ -111,11 +111,25 @@ install_jetbrains_font() {
   fc-cache -f "$font_dir" >/dev/null
 }
 
+install_fzf() {
+  if command -v fzf >/dev/null 2>&1; then
+    printf 'Already installed: fzf (%s)\n' "$(fzf --version 2>/dev/null | head -n1 || echo 'present')"
+    return 0
+  fi
+
+  log "Installing fzf via git fallback"
+  clone_or_update https://github.com/junegunn/fzf.git "$HOME/.fzf"
+  "$HOME/.fzf/install" --bin --no-key-bindings --no-completion --no-update-rc
+  mkdir -p "${XDG_BIN_HOME:-$HOME/.local/bin}"
+  ln -sf "$HOME/.fzf/bin/fzf" "${XDG_BIN_HOME:-$HOME/.local/bin}/fzf"
+}
+
 install_packages
 
 log "Installing shell framework and prompt"
 clone_or_update https://github.com/ohmyzsh/ohmyzsh.git "$HOME/.oh-my-zsh"
 clone_or_update https://github.com/romkatv/powerlevel10k.git "$HOME/powerlevel10k"
+install_fzf
 install_jetbrains_font
 
 log "Linking dotfiles"

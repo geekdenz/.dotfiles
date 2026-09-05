@@ -1,0 +1,11 @@
+{
+  "include": [
+    "~/.config/hypr/waybar/config.jsonc"
+  ],
+  "custom/launcher": {
+    "format": "",
+    "tooltip-format": "Applications (Fedora)  Super+Space",
+    "on-click": "pkill -x wofi || wofi --show drun",
+    "on-click-right": "wezterm start --always-new-process"
+  }
+}

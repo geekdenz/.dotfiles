@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+
+# Launch or restart Waybar with OS-dependent configuration.
+# Resolves configuration from ~/.config/hypr/waybar/os/<id>.jsonc (or <id_like>.jsonc)
+# with a fallback to ~/.config/hypr/waybar/config.jsonc.
+
+set -Eeuo pipefail
+
+restart=false
+waybar_args=()
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -r|--restart)
+      restart=true
+      shift
+      ;;
+    -h|--help)
+      cat << 'HELP'
+Usage: launch-waybar [options] [-- extra waybar options]
+
+Options:
+  -r, --restart    Kill existing Waybar instances before launching
+  -h, --help       Show this help message
+HELP
+      exit 0
+      ;;
+    --)
+      shift
+      waybar_args+=("$@")
+      break
+      ;;
+    *)
+      waybar_args+=("$1")
+      shift
+      ;;
+  esac
+done
+
+if [[ "$restart" == true ]]; then
+  pkill -x waybar 2>/dev/null || true
+  sleep 0.2
+fi
+
+# Detect operating system from /etc/os-release
+os_id=""
+os_id_like=""
+
+if [[ -r /etc/os-release ]]; then
+  # shellcheck disable=SC1091
+  source /etc/os-release
+  os_id="${ID:-}"
+  os_id_like="${ID_LIKE:-}"
+fi
+
+base_dir="${XDG_CONFIG_HOME:-$HOME/.config}/hypr/waybar"
+
+# Resolve OS-specific config
+config_file="$base_dir/config.jsonc"
+if [[ -n "$os_id" && -f "$base_dir/os/${os_id}.jsonc" ]]; then
+  config_file="$base_dir/os/${os_id}.jsonc"
+elif [[ -n "$os_id_like" ]]; then
+  for like in $os_id_like; do
+    if [[ -f "$base_dir/os/${like}.jsonc" ]]; then
+      config_file="$base_dir/os/${like}.jsonc"
+      break
+    fi
+  done
+fi
+
+# Resolve OS-specific style
+style_file="$base_dir/style.css"
+if [[ -n "$os_id" && -f "$base_dir/os/${os_id}.css" ]]; then
+  style_file="$base_dir/os/${os_id}.css"
+elif [[ -n "$os_id_like" ]]; then
+  for like in $os_id_like; do
+    if [[ -f "$base_dir/os/${like}.css" ]]; then
+      style_file="$base_dir/os/${like}.css"
+      break
+    fi
+  done
+fi
+
+exec waybar --config "$config_file" --style "$style_file" "${waybar_args[@]}"

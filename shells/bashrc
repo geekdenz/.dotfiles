@@ -131,3 +131,69 @@ fi
 # >>> Codex installer >>>
 export PATH="$HOME/.local/bin:$PATH"
 # <<< Codex installer <<<
+
+# Reuse one per-user systemd SSH agent instead of starting one per terminal.
+# Local interactive shells load the first available key and prompt once; the
+# agent keeps it unlocked for all later shells and applications in this login.
+if command -v ssh-add >/dev/null 2>&1; then
+    if [ -z "${SSH_CONNECTION:-}" ]; then
+        export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR:-/run/user/$UID}/ssh-agent.socket"
+        if command -v systemctl >/dev/null 2>&1; then
+            systemctl --user start ssh-agent.service >/dev/null 2>&1 || true
+        fi
+        case $- in
+            *i*) _ssh_interactive=true ;;
+            *) _ssh_interactive=false ;;
+        esac
+        if [ "$_ssh_interactive" = true ] && [ -S "$SSH_AUTH_SOCK" ]; then
+            if ! ssh-add -l >/dev/null 2>&1; then
+                for _ssh_key in "$HOME/.ssh/id_ed25519" "$HOME/.ssh/id_rsa" "$HOME/.ssh/id_example"; do
+                    if [ -f "$_ssh_key" ]; then
+                        ssh-add "$_ssh_key" </dev/tty
+                        break
+                    fi
+                done
+            fi
+        fi
+        unset _ssh_interactive _ssh_key
+    fi
+fi
+
+# fzf shell integration
+if [[ $- == *i* ]] && command -v fzf >/dev/null 2>&1; then
+    if fzf --bash >/dev/null 2>&1; then
+        eval "$(fzf --bash)"
+    else
+        for _fzf_bash in \
+            /usr/share/fzf/key-bindings.bash \
+            /usr/share/doc/fzf/examples/key-bindings.bash \
+            /etc/bash_completion.d/fzf \
+            "$HOME/.fzf/shell/key-bindings.bash"; do
+            if [[ -r "$_fzf_bash" ]]; then
+                # shellcheck disable=SC1090
+                . "$_fzf_bash"
+                break
+            fi
+        done
+        for _fzf_comp in \
+            /usr/share/fzf/completion.bash \
+            /usr/share/doc/fzf/examples/completion.bash \
+            "$HOME/.fzf/shell/completion.bash"; do
+            if [[ -r "$_fzf_comp" ]]; then
+                # shellcheck disable=SC1090
+                . "$_fzf_comp"
+                break
+            fi
+        done
+        unset _fzf_bash _fzf_comp
+    fi
+    if [[ $(type -t __fzf_history__) == "function" ]]; then
+        bind -m emacs-standard -x '"\C-r": __fzf_history__' 2>/dev/null || true
+        bind -m vi-command -x '"\C-r": __fzf_history__' 2>/dev/null || true
+        bind -m vi-insert -x '"\C-r": __fzf_history__' 2>/dev/null || true
+    fi
+fi
+
+
+# Added by Antigravity CLI installer
+export PATH="$HOME/.local/bin:$PATH"

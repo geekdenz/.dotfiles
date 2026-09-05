@@ -1,14 +1,21 @@
-vim.opt.clipboard = "unnamedplus"
+local M = {}
 
-vim.api.nvim_create_autocmd("TextYankPost", {
-  callback = function()
-    if vim.v.event.operator ~= "y" then
-      return
-    end
+function M.setup()
+  vim.opt.clipboard = "unnamedplus"
 
-    require("vim.ui.clipboard.osc52").copy("+")(
-      vim.v.event.regcontents,
-      vim.v.event.regtype
-    )
-  end,
-})
+  vim.api.nvim_create_autocmd("TextYankPost", {
+    pattern = "*",
+    callback = function()
+      if vim.v.event.operator ~= "y" then
+        return
+      end
+
+      require("vim.ui.clipboard.osc52").copy("+")(
+        vim.v.event.regcontents,
+        vim.v.event.regtype
+      )
+    end,
+  })
+end
+
+return M

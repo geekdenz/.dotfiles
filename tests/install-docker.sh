@@ -21,6 +21,11 @@ run_case() {
       test "$shell_output" = interactive-zsh-ok
       test -f "$HOME/powerlevel10k/powerlevel10k.zsh-theme"
       fc-list | grep -qi JetBrainsMono
+      command -v fzf
+      zsh_ctrl_r=$(TERM=xterm-256color zsh -i -c "bindkey '^R'" 2>&1)
+      echo "$zsh_ctrl_r" | grep -q fzf-history-widget
+      bash_ctrl_r=$(TERM=xterm-256color bash -i -c "bind -X" 2>&1)
+      echo "$bash_ctrl_r" | grep -q __fzf_history__
     '
 }
 
