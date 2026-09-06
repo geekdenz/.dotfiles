@@ -108,6 +108,8 @@ target_config="$target_home/.config/hypr"
   die "missing executable $source_config/scripts/daily-wallpaper"
 [[ -x $source_config/scripts/launch-waybar ]] || \
   die "missing executable $source_config/scripts/launch-waybar"
+[[ -f $source_config/hypridle.conf ]] || \
+  die "missing $source_config/hypridle.conf"
 
 target_systemd_user="$target_home/.config/systemd/user/ssh-agent.service"
 install -d -m 0755 "$(dirname -- "$target_systemd_user")"

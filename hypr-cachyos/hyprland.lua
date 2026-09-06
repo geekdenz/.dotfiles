@@ -71,6 +71,7 @@ hl.on("hyprland.start", function()
   -- UWSM keeps launched applications in the graphical session's systemd
   -- scopes. The service start gives privileged apps an authentication agent.
   hl.exec_cmd("systemctl --user start hyprpolkitagent.service")
+  hl.exec_cmd("pidof hypridle || uwsm app -- hypridle")
   hl.exec_cmd("uwsm app -- ~/.config/hypr/scripts/launch-waybar")
   hl.exec_cmd("uwsm app -- mako")
   hl.exec_cmd("uwsm app -- nm-applet --indicator")
