@@ -34,6 +34,27 @@ key (`id_ed25519`, `id_rsa`, or `id_example`) from the first interactive shell.
 Enter its passphrase once per login session; subsequent terminals and GUI apps
 reuse the loaded key.
 
+## Per-machine Hyprland hardware
+
+Display layouts, GPU workarounds, and anything else tied to physical hardware
+live in a profile named after the machine, so installing these dotfiles on one
+machine never overwrites another machine's setup:
+
+```
+hypr/hosts/<hostname>.lua           # Omarchy machines
+hypr-cachyos/hosts/<hostname>.lua   # CachyOS machines
+hypr-common/hosts.lua               # Shared loader, linked into both trees
+```
+
+The loader reads `/etc/hostname`, strips any domain suffix, and loads the
+matching profile. A machine with no profile keeps the shared configuration,
+which leaves monitors on Hyprland's automatic placement. Set `HYPR_HOST` to
+load a profile under a different name.
+
+Everything outside those profiles is expected to suit every machine. To add a
+new one, create `hosts/<hostname>.lua` in the tree that machine uses and put
+its `hl.monitor` rules there.
+
 ## What it configures
 
 - Zsh, Oh My Zsh, Powerlevel10k, and `~/.p10k.zsh`

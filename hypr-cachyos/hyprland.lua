@@ -5,9 +5,12 @@
 ---- MONITORS ----
 ------------------
 
--- The workstation module contains the fixed EDID layout and a generic
--- preferred-mode fallback for other hardware.
-require("hosts.workstation")
+-- Anything not claimed by a host profile still comes up usable.
+hl.monitor({ output = "", mode = "preferred", position = "auto", scale = "auto" })
+
+-- This machine's display layout, from hosts/<hostname>.lua. Scoping it by
+-- hostname keeps one machine's layout from overwriting another's.
+require("hosts")
 
 -- Resolve the user runtime directory at load time so the agent socket is
 -- portable across hosts and users.

@@ -270,7 +270,12 @@ if (( $+commands[ssh-add] )); then
       fi
     done
     if [[ -n "$key_file" ]]; then
+      # An interrupt at the passphrase prompt must cancel only the prompt.
+      # Without this, Ctrl-C aborts the rest of this file, silently leaving the
+      # shell without its fzf key bindings, PATH additions and locale.
+      TRAPINT() { return 0 }
       ssh-add "$key_file" </dev/tty
+      unfunction TRAPINT 2>/dev/null
     fi
   fi
 fi
@@ -287,8 +292,20 @@ export F="${FROGONE_WSL_PATH:-$FROGONE_PATH}"
 
 [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]] && \
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv zsh)"
-if [[ -o interactive && -t 0 ]] && (( $+commands[fzf] )); then
-  source <(fzf --zsh 2>/dev/null)
+if [[ -o interactive ]] && (( $+commands[fzf] )); then
+  if fzf --zsh >/dev/null 2>&1; then
+    source <(fzf --zsh)
+  else
+    # Builds older than fzf 0.48 ship the integration as files instead.
+    for fzf_script in \
+      /usr/share/fzf/key-bindings.zsh \
+      /usr/share/fzf/completion.zsh \
+      /usr/share/doc/fzf/examples/key-bindings.zsh \
+      /usr/share/doc/fzf/examples/completion.zsh; do
+      [[ -r $fzf_script ]] && source "$fzf_script"
+    done
+    unset fzf_script
+  fi
 fi
 
 DISABLE_UNTRACKED_FILES_DIRTY=true
