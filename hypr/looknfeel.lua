@@ -1,12 +1,5 @@
 -- Change the default Omarchy look'n'feel.
-
--- Avoid cursor-plane flicker with the NVIDIA Quadro P1000/Nouveau driver.
--- Render the pointer as part of the compositor scene instead.
-hl.config({
-  cursor = {
-    no_hardware_cursors = 1,
-  },
-})
+-- GPU-specific workarounds belong in hypr/hosts/<hostname>.lua instead.
 
 -- Tile windows edge-to-edge, separated only by a thin outline.
 hl.config({

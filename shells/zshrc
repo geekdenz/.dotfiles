@@ -271,7 +271,12 @@ if (( $+commands[ssh-add] )); then
         fi
       done
       if [[ -n "$key_file" ]]; then
+        # An interrupt at the passphrase prompt must cancel only the prompt.
+        # Without this, Ctrl-C aborts the rest of this file, silently leaving the
+        # shell without its fzf key bindings, PATH additions and locale.
+        TRAPINT() { return 0 }
         ssh-add "$key_file" </dev/tty
+        unfunction TRAPINT 2>/dev/null
       fi
     fi
   fi

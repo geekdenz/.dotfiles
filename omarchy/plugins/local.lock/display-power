@@ -7,6 +7,7 @@ set -u
 action="${1:-}"
 runtime_dir="${XDG_RUNTIME_DIR:-/tmp}/example-user-lock-display-power"
 bus_cache="$runtime_dir/buses"
+output_count_cache="$runtime_dir/physical-outputs"
 headless_name="LOCK-KEEPALIVE"
 
 case "$action" in
@@ -34,9 +35,26 @@ headless_present() {
     jq -e --arg name "$headless_name" 'any(.[]; .name == $name)' >/dev/null 2>&1
 }
 
+count_physical_outputs() {
+  hyprctl monitors -j 2>/dev/null |
+    jq --arg name "$headless_name" '[.[] | select(.name != $name and .disabled == false)] | length' 2>/dev/null
+}
+
+# How many outputs this machine had when it went to sleep, rather than a fixed
+# number, so the same script suits any monitor count.
+expected_physical_outputs() {
+  local expected=""
+  if [[ -r $output_count_cache ]]; then
+    expected=$(<"$output_count_cache")
+  fi
+  [[ $expected =~ ^[1-9][0-9]*$ ]] || expected=1
+  printf '%s' "$expected"
+}
+
 physical_outputs_ready() {
   hyprctl monitors -j 2>/dev/null |
-    jq -e --arg name "$headless_name" '[.[] | select(.name != $name and .disabled == false and .dpmsStatus == true)] | length >= 3' >/dev/null 2>&1
+    jq -e --arg name "$headless_name" --argjson expected "$(expected_physical_outputs)" \
+      '[.[] | select(.name != $name and .disabled == false and .dpmsStatus == true)] | length >= $expected' >/dev/null 2>&1
 }
 
 if [[ $action == cleanup ]]; then
@@ -53,6 +71,13 @@ if [[ $action == cleanup ]]; then
     fi
   fi
   exit 0
+fi
+
+if [[ $action == off ]]; then
+  physical_outputs=$(count_physical_outputs)
+  if [[ $physical_outputs =~ ^[1-9][0-9]*$ ]]; then
+    printf '%s\n' "$physical_outputs" >"$output_count_cache"
+  fi
 fi
 
 if [[ $action == off ]] && ! headless_present; then
@@ -83,7 +108,7 @@ fi
 
 if (( success == 0 )); then
   if [[ $action == off ]]; then dpms_action=disable; else dpms_action=enable; fi
-  hyprctl dispatch "hl.dsp.dpms({ action = \"$dpms_action\" })" >/dev/null 2>&1
+  hyprctl eval "hl.dispatch(hl.dsp.dpms({ action = \"$dpms_action\" }))" >/dev/null 2>&1
 fi
 
 logger -t example-user-lock-display-power "action=$action complete headless=$(headless_present && echo present || echo absent)"

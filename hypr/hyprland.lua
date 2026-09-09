@@ -22,6 +22,11 @@ require("hypr.bindings")
 require("hypr.looknfeel")
 require("hypr.autostart")
 
+-- This machine's display layout and hardware workarounds, from
+-- hypr/hosts/<hostname>.lua. Loaded last so a host can override the shared
+-- settings above, and scoped by hostname so other machines are untouched.
+require("hypr.hosts")
+
 -- Toggle config flags dynamically.
 require("default.hypr.toggles")
 
