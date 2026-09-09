@@ -354,6 +354,13 @@ export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.local/share/bob/nvim-bin:$PATH"
 
 # Keep GnuPG/passphrase prompts in the active terminal.
-export GPG_TTY="$(tty)"
+# Use zsh's $TTY; $(tty) runs in a pipe and reports "not a tty", which makes
+# pinentry-curses fail with "No such file or directory".
+if [[ -n ${TTY:-} && $TTY != 'not a tty' ]]; then
+  export GPG_TTY=$TTY
+  if [[ -o interactive ]] && (( $+commands[gpg-connect-agent] )); then
+    gpg-connect-agent updatestartuptty /bye >/dev/null 2>&1 || true
+  fi
+fi
 
 (( $+commands[mise] )) && eval "$(mise activate zsh)" # added by https://mise.run/zsh

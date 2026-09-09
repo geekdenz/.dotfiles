@@ -16,6 +16,13 @@ Item {
   readonly property string userName: Quickshell.env("USER") || Quickshell.env("LOGNAME")
   readonly property string currentBackgroundLink: stateHome + "/omarchy/current/background"
 
+  // How long a locked screen stays lit before its panels are powered down.
+  // Keyed by hostname because these dotfiles are shared: a machine without an
+  // entry keeps the stock five seconds.
+  property string hostName: ""
+  readonly property var hostBlankDelays: ({ "saturn": 30 * 60 * 1000 })
+  readonly property int blankDelay: hostBlankDelays[hostName] || 5000
+
   property bool lockRequested: false
   property bool pendingSessionLock: false
   property bool authenticatingPassword: false
@@ -419,7 +426,7 @@ Item {
 
   Timer {
     id: idleBlankTimer
-    interval: 5000
+    interval: root.blankDelay
     repeat: false
     property double armedAt: 0
     onTriggered: {
@@ -484,6 +491,15 @@ Item {
     else armBlankTimer()
   }
 
+  // Loaded synchronously so the delay is already host-correct if a lock lands
+  // before the first event loop turn.
+  FileView {
+    path: "/etc/hostname"
+    blockLoading: true
+    printErrors: false
+    onLoaded: root.hostName = String(text()).trim().split(".")[0]
+  }
+
   FileView {
     path: "/etc/pam.d/omarchy-lock-password"
     watchChanges: true
@@ -531,6 +547,8 @@ Item {
         sessionLocked: sessionLock.locked,
         secure: sessionLock.secure,
         realScreens: root.realScreenCount(),
+        host: root.hostName,
+        blankDelay: root.blankDelay,
         passwordPam: root.passwordPamConfigured,
         fingerprint: root.fingerprintConfigured,
         authenticating: root.authenticating,
