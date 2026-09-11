@@ -22,7 +22,9 @@ local function local_env_value(key)
 	return value
 end
 
-config.enable_wayland = wezterm.hostname() == local_env_value("CACHYOS_HARDWARE_HOSTNAME")
+local is_local_workstation = wezterm.hostname() == local_env_value("CACHYOS_HARDWARE_HOSTNAME")
+
+config.enable_wayland = is_local_workstation
 
 -- General
 -- config.font = wezterm.font_with_fallback({
@@ -30,7 +32,9 @@ config.enable_wayland = wezterm.hostname() == local_env_value("CACHYOS_HARDWARE_
 -- "JetBrainsMonoNL Nerd Font Propo",
 -- "Cascadia Mono",
 -- })
-config.font_size = 19
+-- ~19.25% smaller than the 19pt default (15% then another 5%), only on
+-- this workstation (eris).
+config.font_size = is_local_workstation and 15.34 or 19
 config.line_height = 1
 config.color_scheme = "tokyonight_night"
 
