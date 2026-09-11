@@ -13,8 +13,10 @@ name = "dracula"
 auto_switch = false
 
 # Herdr 0.8.2 uses the panel contrast color for active tabs and hovered
-# context-menu entries. Keep panels on the terminal background and make that
-# contrast color readable.
+# context-menu entries. Keep panels on the terminal background, and keep that
+# contrast color dark: tab labels are drawn in the theme's near-white text
+# color, so a light surface here hides them.
 [theme.custom]
 panel_bg = "reset"
 surface_dim = "#ffffff"
+surface0 = "#cdd2e3"
