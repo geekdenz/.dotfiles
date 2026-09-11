@@ -1,9 +1,28 @@
 local wezterm = require("wezterm")
 local config = wezterm.config_builder()
 
--- Native Wayland keeps text sharp on example-host's 4K displays at fractional scale.
--- Other hosts retain their existing backend choice.
-config.enable_wayland = wezterm.hostname() == "example-host"
+-- Native Wayland keeps text sharp on this host's 4K displays at fractional
+-- scale (XWayland renders at 1x and gets upscaled, which shows up as visible
+-- pixelation). The matching hostname lives in the ignored .env, not here, so
+-- other hosts retain their existing backend choice.
+local function local_env_value(key)
+	local env_file = io.open(wezterm.home_dir .. "/.dotfiles/.env", "r")
+	if not env_file then
+		return ""
+	end
+	local value = ""
+	for line in env_file:lines() do
+		local candidate = line:match("^" .. key .. "=(.*)$")
+		if candidate then
+			value = candidate:gsub('^"(.*)"$', "%1")
+			break
+		end
+	end
+	env_file:close()
+	return value
+end
+
+config.enable_wayland = wezterm.hostname() == local_env_value("CACHYOS_HARDWARE_HOSTNAME")
 
 -- General
 -- config.font = wezterm.font_with_fallback({
