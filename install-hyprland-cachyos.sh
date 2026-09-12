@@ -97,6 +97,15 @@ as_root pacman -Syu --needed --noconfirm "${packages[@]}"
 [[ -f /usr/share/wayland-sessions/$session_file ]] || \
   die "Hyprland's UWSM session was not installed"
 
+nvidia_sleep_units=(nvidia-suspend.service nvidia-hibernate.service nvidia-resume.service)
+if [[ -f /usr/lib/systemd/system/${nvidia_sleep_units[0]} ]]; then
+  log "Enabling NVIDIA suspend/resume hooks"
+  # Without these, NVIDIA's GPU driver state is not saved/restored across
+  # suspend, and Wayland/Vulkan clients (WezTerm's native-Wayland renderer
+  # included) can come back from sleep in a broken state and crash.
+  as_root systemctl enable "${nvidia_sleep_units[@]}"
+fi
+
 log "Linking the tracked CachyOS Hyprland configuration"
 source_config="$script_dir/hypr-cachyos"
 target_config="$target_home/.config/hypr"
