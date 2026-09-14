@@ -1,0 +1,14 @@
+[Unit]
+Description=WezTerm multiplexer server (keeps terminal sessions alive across GUI crashes)
+Documentation=https://wezterm.org/multiplexing.html
+After=graphical-session.target
+PartOf=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/wezterm-mux-server
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=graphical-session.target

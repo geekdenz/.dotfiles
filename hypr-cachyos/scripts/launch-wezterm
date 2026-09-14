@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+# Open a WezTerm window backed by the persistent wezterm-mux-server
+# (systemd/user/wezterm-mux.service) instead of a standalone process.
+#
+# WezTerm's native-Wayland event loop has a known, unresolved upstream bug
+# where it dies after an extended idle period with "running message loop:
+# Io error: Resource temporarily unavailable (os error 11)"
+# (wezterm/wezterm#2360, #7806). Routing every window through the mux
+# server means that crash only kills the GUI: the shells, scrollback, and
+# anything running in them (Neovim, Herdr, long jobs) keep running
+# server-side and come back by reconnecting.
+#
+# - If a GUI client is already attached to the mux server, spawn a
+#   genuinely new, independent window (matching the previous
+#   --always-new-process behavior).
+# - If no client is attached (fresh login, or recovering from the crash
+#   above), reconnect instead: this redisplays every window that was open
+#   before, not just a blank new one.
+
+set -Eeuo pipefail
+
+socket_dir=${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/wezterm
+export WEZTERM_UNIX_SOCKET="$socket_dir/sock"
+
+client_lines=$(wezterm cli list-clients 2>/dev/null | wc -l)
+
+if ((client_lines > 1)); then
+  exec wezterm cli spawn --new-window >/dev/null
+else
+  exec wezterm-gui connect unix
+fi

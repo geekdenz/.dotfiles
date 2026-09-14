@@ -4,7 +4,8 @@ local config = wezterm.config_builder()
 -- Native Wayland keeps text sharp on this host's 4K displays at fractional
 -- scale (XWayland renders at 1x and gets upscaled, which shows up as visible
 -- pixelation). The matching hostname lives in the ignored .env, not here, so
--- other hosts retain their existing backend choice.
+-- other hosts retain their existing backend choice. See the comment further
+-- down, above config.enable_wayland, for the trade-off this involves.
 local function local_env_value(key)
 	local env_file = io.open(wezterm.home_dir .. "/.dotfiles/.env", "r")
 	if not env_file then
@@ -24,6 +25,15 @@ end
 
 local is_local_workstation = wezterm.hostname() == local_env_value("CACHYOS_HARDWARE_HOSTNAME")
 
+-- Trade-off: native Wayland has a known, unresolved upstream bug where the
+-- event loop dies after an extended idle period with "running message
+-- loop: Io error: Resource temporarily unavailable (os error 11)"
+-- (wezterm/wezterm#2360, #7806), reported on Hyprland, Sway, and GNOME
+-- alike. Rather than give up the sharper text, hypr-cachyos/hyprland.lua
+-- and systemd/user/wezterm-mux.service route every window through a
+-- persistent wezterm-mux-server, so that crash only kills the GUI: shells,
+-- scrollback, and anything running in them keep going server-side and come
+-- back by reconnecting (see hypr-cachyos/scripts/launch-wezterm).
 config.enable_wayland = is_local_workstation
 
 -- General

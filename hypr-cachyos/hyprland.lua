@@ -24,9 +24,11 @@ end
 ---- APPLICATIONS ----
 ---------------------
 
--- A fresh GUI process cannot inherit an already-running XWayland backend;
--- WezTerm will therefore honor this host's native-Wayland setting every time.
-local terminal = "wezterm start --always-new-process"
+-- Routes through the persistent wezterm-mux-server (wezterm-mux.service)
+-- instead of a standalone process, so WezTerm's native-Wayland idle-crash
+-- bug (see .wezterm.lua and scripts/launch-wezterm) only kills the GUI,
+-- not the shells running inside it.
+local terminal = "~/.config/hypr/scripts/launch-wezterm"
 local browser = "chromium --new-window"
 local file_manager = "dolphin"
 local menu = "wofi --show drun"
@@ -37,6 +39,7 @@ local menu = "wofi --show drun"
 
 hl.on("hyprland.start", function()
   hl.exec_cmd("systemctl --user start ssh-agent.service")
+  hl.exec_cmd("systemctl --user start wezterm-mux.service")
   -- UWSM keeps launched applications in the graphical session's systemd
   -- scopes. The service start gives privileged apps an authentication agent.
   hl.exec_cmd("systemctl --user start hyprpolkitagent.service")

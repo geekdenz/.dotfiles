@@ -114,20 +114,24 @@ target_config="$target_home/.config/hypr"
   die "missing executable $source_config/scripts/capture-text"
 [[ -x $source_config/scripts/daily-wallpaper ]] || \
   die "missing executable $source_config/scripts/daily-wallpaper"
+[[ -x $source_config/scripts/launch-wezterm ]] || \
+  die "missing executable $source_config/scripts/launch-wezterm"
 
-target_systemd_user="$target_home/.config/systemd/user/ssh-agent.service"
-install -d -m 0755 "$(dirname -- "$target_systemd_user")"
-if [[ -e $target_systemd_user || -L $target_systemd_user ]]; then
-  if [[ ! -L $target_systemd_user || $(readlink -f -- "$target_systemd_user") != $(readlink -f -- "$script_dir/systemd/user/ssh-agent.service") ]]; then
-    backup="$target_systemd_user.before-dotfiles-$(date +%Y%m%d-%H%M%S)"
-    mv -- "$target_systemd_user" "$backup"
-    printf 'Backed up: %s -> %s\n' "$target_systemd_user" "$backup"
+for unit in ssh-agent.service wezterm-mux.service; do
+  target_systemd_user="$target_home/.config/systemd/user/$unit"
+  install -d -m 0755 "$(dirname -- "$target_systemd_user")"
+  if [[ -e $target_systemd_user || -L $target_systemd_user ]]; then
+    if [[ ! -L $target_systemd_user || $(readlink -f -- "$target_systemd_user") != $(readlink -f -- "$script_dir/systemd/user/$unit") ]]; then
+      backup="$target_systemd_user.before-dotfiles-$(date +%Y%m%d-%H%M%S)"
+      mv -- "$target_systemd_user" "$backup"
+      printf 'Backed up: %s -> %s\n' "$target_systemd_user" "$backup"
+    fi
   fi
-fi
-if [[ ! -e $target_systemd_user && ! -L $target_systemd_user ]]; then
-  ln -s -- "$script_dir/systemd/user/ssh-agent.service" "$target_systemd_user"
-  printf 'Linked: %s -> %s\n' "$target_systemd_user" "$script_dir/systemd/user/ssh-agent.service"
-fi
+  if [[ ! -e $target_systemd_user && ! -L $target_systemd_user ]]; then
+    ln -s -- "$script_dir/systemd/user/$unit" "$target_systemd_user"
+    printf 'Linked: %s -> %s\n' "$target_systemd_user" "$script_dir/systemd/user/$unit"
+  fi
+done
 
 if [[ -L $target_config ]] && \
    [[ $(readlink -f -- "$target_config") == $(readlink -f -- "$source_config") ]]; then
