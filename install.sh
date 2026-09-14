@@ -134,6 +134,7 @@ link_config "$dotfiles_dir/herdr/config.toml" "${XDG_CONFIG_HOME:-$HOME/.config}
 link_config "$dotfiles_dir/.wezterm.lua" "$HOME/.wezterm.lua"
 link_config "$dotfiles_dir/gnupg/gpg-agent.conf" "$HOME/.gnupg/gpg-agent.conf"
 link_config "$dotfiles_dir/bin/wl-copy" "$HOME/.local/bin/wl-copy"
+link_config "$dotfiles_dir/bin/browser-tab" "$HOME/.local/bin/browser-tab"
 link_config "$dotfiles_dir/systemd/user/ssh-agent.service" "$HOME/.config/systemd/user/ssh-agent.service"
 
 if [ -r "$dotfiles_dir/.env" ]; then
@@ -149,8 +150,15 @@ if command -v systemctl >/dev/null 2>&1; then
 fi
 
 if [ -d /usr/share/omarchy ]; then
+  omarchy_config="${XDG_CONFIG_HOME:-$HOME/.config}/omarchy"
   link_config "$dotfiles_dir/hypr" "${XDG_CONFIG_HOME:-$HOME/.config}/hypr"
   link_config "$dotfiles_dir/omarchy/xdg-terminals.list" "${XDG_CONFIG_HOME:-$HOME/.config}/xdg-terminals.list"
+  link_config "$dotfiles_dir/omarchy/shell.json" "$omarchy_config/shell.json"
+  # Each plugin must be linked under the id its manifest declares, which is
+  # also the id shell.json enables; the shared config drops the username.
+  link_config "$dotfiles_dir/omarchy/plugins/local.lock" "$omarchy_config/plugins/example-user.lock"
+  link_config "$dotfiles_dir/omarchy/plugins/local.notifications" \
+    "$omarchy_config/plugins/example-user.notifications"
 fi
 
 chmod 700 "$HOME/.gnupg"

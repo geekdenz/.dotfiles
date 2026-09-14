@@ -1,0 +1,46 @@
+#!/bin/sh
+
+# Open a URL as a tab in an already running browser.
+#
+# Chromium hands a URL to whichever of its windows was focused last, and PWA
+# windows cannot hold tabs, so a URL opened while Outlook or Teams had focus
+# lands in a new window instead. Focusing a tabbed window first avoids that.
+
+set -eu
+
+url=${1:?usage: browser-tab URL}
+
+tabbed_browser_window() {
+  active=$(hyprctl activeworkspace | awk 'NR == 1 { print $3; exit }')
+
+  hyprctl clients | awk -v active="$active" '
+    /^Window / { window = $2; class = ""; workspace = "" }
+    /^\tworkspace: / { workspace = $2 }
+    /^\tclass: / { class = $2 }
+    # The title line closes a window record. Chromium names its PWA windows
+    # chrome-<app-id>-<profile>, which must not match: those cannot hold tabs.
+    /^\ttitle: / {
+      if (class ~ /^(chromium|chrome|google-chrome|brave-browser|firefox|firefox-esr)$/) {
+        if (workspace == active) { print window; exit }
+        if (fallback == "") { fallback = window }
+      }
+    }
+    END { if (fallback != "") { print fallback } }
+  '
+}
+
+focus_window() {
+  # Hyprland moved its dispatchers behind a Lua namespace; older builds only
+  # understand the flat name.
+  hyprctl dispatch "focuswindow address:$1" 2>&1 | grep -qx ok && return 0
+  hyprctl eval "hl.dispatch(hl.dsp.focus({ window = \"address:$1\" }))" >/dev/null 2>&1 || true
+}
+
+if command -v hyprctl >/dev/null 2>&1; then
+  window=$(tabbed_browser_window || true)
+  if [ -n "${window:-}" ]; then
+    focus_window "0x$window"
+  fi
+fi
+
+exec xdg-open "$url"
