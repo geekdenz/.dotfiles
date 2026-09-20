@@ -18,5 +18,5 @@ auto_switch = false
 # color, so a light surface here hides them.
 [theme.custom]
 panel_bg = "reset"
-surface_dim = "#ffffff"
-surface0 = "#cdd2e3"
+surface_dim = "#343746"
+surface0 = "#44475a"
