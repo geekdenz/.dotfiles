@@ -135,6 +135,8 @@ link_config "$dotfiles_dir/.wezterm.lua" "$HOME/.wezterm.lua"
 link_config "$dotfiles_dir/gnupg/gpg-agent.conf" "$HOME/.gnupg/gpg-agent.conf"
 link_config "$dotfiles_dir/bin/wl-copy" "$HOME/.local/bin/wl-copy"
 link_config "$dotfiles_dir/bin/browser-tab" "$HOME/.local/bin/browser-tab"
+link_config "$dotfiles_dir/bin/ssh-askpass-tty" "$HOME/.local/bin/ssh-askpass-tty"
+link_config "$dotfiles_dir/shells/ssh_askpass.conf" "${XDG_CONFIG_HOME:-$HOME/.config}/environment.d/ssh_askpass.conf"
 link_config "$dotfiles_dir/systemd/user/ssh-agent.service" "$HOME/.config/systemd/user/ssh-agent.service"
 
 if [ -r "$dotfiles_dir/.env" ]; then

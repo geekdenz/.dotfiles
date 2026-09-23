@@ -4,10 +4,9 @@ sudo apt update && sudo apt install -y zsh vim-gtk git-all && \
 ./install.sh
 ./installers/ubuntu/16.4/nvm.sh
 nvm install --lts
-mkdir -p $HOME/.config/autostart-scripts
-ln -sf ~/.dotfiles/shells/ssh-unlock.sh $HOME/.config/autostart-scripts/ssh-unlock.sh
-#cp ~/.dotfiles/shells/ssh-unlock.sh $HOME/.config/autostart-scripts/ssh-unlock.sh
-mkdir -p ~/.config/plasma-workspace/env && ln -sf ~/.dotfiles/shells/ask-pass.sh ~/.config/plasma-workspace/env/askpass.sh
+mkdir -p ~/.local/bin ~/.config/environment.d
+ln -sf ~/.dotfiles/bin/ssh-askpass-tty ~/.local/bin/ssh-askpass-tty
+ln -sf ~/.dotfiles/shells/ssh_askpass.conf ~/.config/environment.d/ssh_askpass.conf
 # ensure powerline is installed
 git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k
 # install Hack font
