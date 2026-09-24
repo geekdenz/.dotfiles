@@ -57,6 +57,12 @@ end)
 
 hl.env("XCURSOR_SIZE", "24")
 hl.env("HYPRCURSOR_SIZE", "24")
+-- xdg-open only recognizes a hardcoded list of desktop environments via
+-- XDG_CURRENT_DESKTOP; "Hyprland" matches none of them, so it falls back to
+-- a Debian-oriented browser list starting with x-www-browser, which does
+-- not exist on Arch/CachyOS. Setting BROWSER makes xdg-open use it directly
+-- instead of reaching that broken fallback.
+hl.env("BROWSER", "chromium")
 if user_uid ~= "" then
   hl.env("SSH_AUTH_SOCK", "/run/user/" .. user_uid .. "/ssh-agent.socket")
 end
