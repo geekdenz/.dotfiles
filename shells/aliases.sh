@@ -110,7 +110,12 @@ alias co='`pbpaste` && git merge'
 alias sus='systemctl suspend'
 alias rsyncp='rsync -aH --info=progress2'
 alias down='xdg-open "$HOME/Downloads" >/dev/null 2>&1 &'
-alias open='xdg-open'
+# CachyOS only: other machines using these dotfiles (macOS, other distros)
+# either already have their own "open" or shouldn't get xdg-open aliased
+# over it.
+if [ "$(. /etc/os-release 2>/dev/null && echo "$ID")" = "cachyos" ]; then
+  alias open='xdg-open'
+fi
 # alias idea=~/bin/idea
 alias sail='vendor/bin/sail'
 alias ghcs='gh copilot suggest -s'
