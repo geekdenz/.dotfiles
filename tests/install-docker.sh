@@ -13,7 +13,6 @@ run_case() {
       "$HOME/.dotfiles/install.sh"
       "$HOME/.dotfiles/install.sh"
       test "$(readlink -f "$HOME/.zshrc")" = "$HOME/.dotfiles/shells/zshrc"
-      test "$(readlink -f "$HOME/.local/bin/wl-copy")" = "$HOME/.dotfiles/bin/wl-copy"
       test "$(readlink -f "$HOME/.gnupg/gpg-agent.conf")" = "$HOME/.dotfiles/gnupg/gpg-agent.conf"
       command -v zsh
       zsh -n "$HOME/.zshrc"

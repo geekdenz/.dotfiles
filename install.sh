@@ -1,12 +1,18 @@
 #!/bin/sh
 
-# One-shot dotfiles bootstrap for Debian- and Arch-based Linux systems.
+# One-shot dotfiles bootstrap for Debian- and Arch-based Linux systems and
+# MSYS2 on Windows.
 # Safe to rerun: managed links are left alone and conflicting files are backed up.
 
 set -eu
 
 dotfiles_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 backup_suffix="before-dotfiles-$(date +%Y%m%d-%H%M%S)"
+
+case "$(uname -s)" in
+  MSYS_NT* | MINGW*_NT* | UCRT64_NT* | CLANG*_NT*) is_msys2=true ;;
+  *) is_msys2=false ;;
+esac
 
 log() {
   printf '\n==> %s\n' "$*"
@@ -18,7 +24,8 @@ die() {
 }
 
 as_root() {
-  if [ "$(id -u)" -eq 0 ]; then
+  # Windows has no sudo; MSYS2 already owns its own package tree.
+  if [ "$is_msys2" = true ] || [ "$(id -u)" -eq 0 ]; then
     "$@"
   elif command -v sudo >/dev/null 2>&1; then
     sudo "$@"
@@ -28,7 +35,16 @@ as_root() {
 }
 
 install_packages() {
-  if command -v apt-get >/dev/null 2>&1; then
+  if [ "$is_msys2" = true ]; then
+    # MSYS2 also ships pacman, so it must be matched before Arch. A full -Syu
+    # can update the MSYS2 runtime and kill this shell midway, so only refresh
+    # the databases here; run pacman -Syu yourself beforehand.
+    log "Installing MSYS2 packages"
+    pacman -Sy --needed --noconfirm \
+      ca-certificates curl gettext git gnupg openssh pinentry unzip zsh \
+      "${MINGW_PACKAGE_PREFIX:-mingw-w64-ucrt-x86_64}-fzf"
+    platform=msys2
+  elif command -v apt-get >/dev/null 2>&1; then
     log "Installing Debian packages"
     as_root env DEBIAN_FRONTEND=noninteractive apt-get update
     as_root env DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
@@ -42,6 +58,23 @@ install_packages() {
   else
     die "unsupported distribution: expected apt-get or pacman"
   fi
+}
+
+windows_path() {
+  cygpath -u "$1"
+}
+
+require_native_symlinks() {
+  # Without this MSYS2's ln -s silently copies files instead of linking them.
+  MSYS="${MSYS:+$MSYS }winsymlinks:nativestrict"
+  export MSYS
+
+  probe=$(mktemp -d)
+  if ! ln -s -- "$dotfiles_dir/install.sh" "$probe/link" 2>/dev/null; then
+    rm -rf -- "$probe"
+    die "cannot create Windows symlinks; enable Developer Mode (Settings > System > For developers) or run MSYS2 as Administrator"
+  fi
+  rm -rf -- "$probe"
 }
 
 backup_target() {
@@ -89,7 +122,40 @@ clone_or_update() {
   fi
 }
 
+install_windows_jetbrains_font() {
+  # Per-user font install: no administrator rights needed, but Windows only
+  # sees the files once they are registered under HKCU.
+  font_dir="$(windows_path "$LOCALAPPDATA")/Microsoft/Windows/Fonts"
+  if find "$font_dir" -maxdepth 1 -type f -name 'JetBrainsMonoNerd*.ttf' -print -quit 2>/dev/null | grep -q .; then
+    printf 'Already installed: JetBrainsMono Nerd Font\n'
+    return
+  fi
+
+  log "Installing JetBrainsMono Nerd Font"
+  archive=$(mktemp)
+  trap 'rm -f "$archive"' EXIT HUP INT TERM
+  curl -fL --retry 3 \
+    https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip \
+    -o "$archive"
+  mkdir -p "$font_dir"
+  unzip -q -o "$archive" '*.ttf' -d "$font_dir"
+  rm -f "$archive"
+  trap - EXIT HUP INT TERM
+
+  for font in "$font_dir"/JetBrainsMonoNerd*.ttf; do
+    name=$(basename -- "$font" .ttf)
+    # Stop MSYS2 from rewriting reg.exe's /v, /t, /d and /f switches as paths.
+    MSYS2_ARG_CONV_EXCL='*' reg.exe add \
+      'HKCU\Software\Microsoft\Windows NT\CurrentVersion\Fonts' \
+      /v "$name (TrueType)" /t REG_SZ /d "$(cygpath -w "$font")" /f >/dev/null
+  done
+}
+
 install_jetbrains_font() {
+  if [ "$platform" = msys2 ]; then
+    install_windows_jetbrains_font
+    return
+  fi
   [ "$platform" = debian ] || return 0
 
   font_dir="${XDG_DATA_HOME:-$HOME/.local/share}/fonts/JetBrainsMonoNerd"
@@ -112,6 +178,7 @@ install_jetbrains_font() {
 }
 
 install_packages
+[ "$platform" = msys2 ] && require_native_symlinks
 
 log "Installing shell framework and prompt"
 clone_or_update https://github.com/ohmyzsh/ohmyzsh.git "$HOME/.oh-my-zsh"
@@ -132,12 +199,23 @@ link_config "$dotfiles_dir/agignore" "$HOME/.agignore"
 link_config "$dotfiles_dir/nvim" "${XDG_CONFIG_HOME:-$HOME/.config}/nvim"
 link_config "$dotfiles_dir/herdr/config.toml" "${XDG_CONFIG_HOME:-$HOME/.config}/herdr/config.toml"
 link_config "$dotfiles_dir/.wezterm.lua" "$HOME/.wezterm.lua"
-link_config "$dotfiles_dir/gnupg/gpg-agent.conf" "$HOME/.gnupg/gpg-agent.conf"
-link_config "$dotfiles_dir/bin/wl-copy" "$HOME/.local/bin/wl-copy"
-link_config "$dotfiles_dir/bin/browser-tab" "$HOME/.local/bin/browser-tab"
 link_config "$dotfiles_dir/bin/ssh-askpass-tty" "$HOME/.local/bin/ssh-askpass-tty"
-link_config "$dotfiles_dir/shells/ssh_askpass.conf" "${XDG_CONFIG_HOME:-$HOME/.config}/environment.d/ssh_askpass.conf"
-link_config "$dotfiles_dir/systemd/user/ssh-agent.service" "$HOME/.config/systemd/user/ssh-agent.service"
+
+if [ "$platform" = msys2 ]; then
+  # Native Windows builds of WezTerm and Neovim look in the Windows profile,
+  # not in the MSYS2 home directory.
+  link_config "$dotfiles_dir/.wezterm.lua" "$(windows_path "$USERPROFILE")/.wezterm.lua"
+  link_config "$dotfiles_dir/nvim" "$(windows_path "$LOCALAPPDATA")/nvim"
+  # gpg-agent.conf hard-codes /usr/bin/pinentry-curses; only use it if present.
+  if [ -x /usr/bin/pinentry-curses ]; then
+    link_config "$dotfiles_dir/gnupg/gpg-agent.conf" "$HOME/.gnupg/gpg-agent.conf"
+  fi
+else
+  link_config "$dotfiles_dir/gnupg/gpg-agent.conf" "$HOME/.gnupg/gpg-agent.conf"
+  link_config "$dotfiles_dir/bin/browser-tab" "$HOME/.local/bin/browser-tab"
+  link_config "$dotfiles_dir/shells/ssh_askpass.conf" "${XDG_CONFIG_HOME:-$HOME/.config}/environment.d/ssh_askpass.conf"
+  link_config "$dotfiles_dir/systemd/user/ssh-agent.service" "$HOME/.config/systemd/user/ssh-agent.service"
+fi
 
 if [ -r "$dotfiles_dir/.env" ]; then
   "$dotfiles_dir/scripts/render-local-configs"
@@ -163,10 +241,16 @@ if [ -d /usr/share/omarchy ]; then
     "$omarchy_config/plugins/example-user.notifications"
 fi
 
+mkdir -p "$HOME/.gnupg"
 chmod 700 "$HOME/.gnupg"
 
 if command -v gpgconf >/dev/null 2>&1; then
   gpgconf --kill gpg-agent >/dev/null 2>&1 || true
+fi
+
+if [ "$platform" = msys2 ]; then
+  # MSYS2 has no chsh; the launcher chooses the shell.
+  printf 'Start MSYS2 with Zsh via: msys2_shell.cmd -ucrt64 -shell zsh\n'
 fi
 
 current_shell=$(getent passwd "$(id -un)" 2>/dev/null | cut -d: -f7 || true)

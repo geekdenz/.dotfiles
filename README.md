@@ -18,6 +18,31 @@ moved to timestamped `before-dotfiles-*` backups before links are created.
 The installer detects `apt-get` and `pacman` automatically. On non-root systems
 it uses `sudo` for package installation and changing the default shell.
 
+## Windows (MSYS2) installation
+
+The same installer runs in an MSYS2 shell (MSYS, UCRT64, MINGW64 or CLANG64).
+Update MSYS2 first, because the installer does not run a full upgrade itself: a
+runtime upgrade would stop the shell partway through.
+
+```bash
+pacman -Syu   # repeat until nothing is left to update
+git clone https://github.com/example-user/.dotfiles.git ~/.dotfiles
+~/.dotfiles/install.sh
+msys2_shell.cmd -ucrt64 -shell zsh
+```
+
+Links are real Windows symlinks, so turn on Developer Mode (Settings > System >
+For developers) or run the shell as Administrator. The installer stops if it
+cannot create one.
+
+On Windows it also:
+
+- installs JetBrainsMono Nerd Font for the current user and registers it
+- links `.wezterm.lua` into `%USERPROFILE%` and `nvim` into `%LOCALAPPDATA%`
+  for the Windows builds of WezTerm and Neovim
+- skips the Linux-only parts: systemd, `environment.d`, `browser-tab` and
+  `chsh`
+
 ## CachyOS Hyprland installation
 
 For the complete CachyOS desktop setup, including Hyprland, Waybar, OCR
