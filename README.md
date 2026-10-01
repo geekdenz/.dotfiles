@@ -85,6 +85,8 @@ its `hl.monitor` rules there.
 - Zsh, Oh My Zsh, Powerlevel10k, and `~/.p10k.zsh`
 - JetBrainsMono Nerd Font
 - Neovim, Git, tmux, IdeaVim, WezTerm, ctags, and agignore links
+- Node.js (through nvm) and a per-user .NET SDK, which Mason needs to install
+  the TypeScript, JSON, Svelte, Elm and F# language servers
 - Herdr configuration and an OSC 52 `wl-copy` bridge for remote sessions
 - GPG terminal pinentry through `pinentry-curses`
 - A persistent per-user OpenSSH agent service

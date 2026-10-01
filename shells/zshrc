@@ -173,6 +173,12 @@ load-nvmrc() {
   fi
 }
 
+# Per-user .NET SDK from install.sh; Mason needs it for F# and C# tooling.
+if [[ -x "$HOME/.dotnet/dotnet" ]]; then
+  export DOTNET_ROOT="$HOME/.dotnet"
+  export PATH="$DOTNET_ROOT:$DOTNET_ROOT/tools:$PATH"
+fi
+
 #export NODE_PATH=`which node`
 #nvm use stable
 

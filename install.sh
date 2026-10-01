@@ -42,18 +42,21 @@ install_packages() {
     log "Installing MSYS2 packages"
     pacman -Sy --needed --noconfirm \
       ca-certificates curl gettext git gnupg openssh pinentry unzip zsh \
-      "${MINGW_PACKAGE_PREFIX:-mingw-w64-ucrt-x86_64}-fzf"
+      "${MINGW_PACKAGE_PREFIX:-mingw-w64-ucrt-x86_64}-fzf" \
+      "${MINGW_PACKAGE_PREFIX:-mingw-w64-ucrt-x86_64}-nodejs"
     platform=msys2
   elif command -v apt-get >/dev/null 2>&1; then
     log "Installing Debian packages"
     as_root env DEBIAN_FRONTEND=noninteractive apt-get update
+    # The .NET SDK needs ICU, whose package name carries its version number.
+    libicu=$(apt-cache search --names-only '^libicu[0-9]+$' | awk '{ print $1 }' | sort -V | tail -n 1)
     as_root env DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-      ca-certificates curl gettext fontconfig fzf git openssh-client pinentry-curses unzip wl-clipboard zsh
+      ca-certificates curl gettext fontconfig fzf git $libicu openssh-client pinentry-curses unzip wl-clipboard zsh
     platform=debian
   elif command -v pacman >/dev/null 2>&1; then
     log "Installing Arch packages"
     as_root pacman -Syu --needed --noconfirm \
-      ca-certificates curl gettext fontconfig fzf git openssh pinentry ttf-jetbrains-mono-nerd unzip wl-clipboard zsh
+      ca-certificates curl gettext fontconfig fzf git icu openssh pinentry ttf-jetbrains-mono-nerd unzip wl-clipboard zsh
     platform=arch
   else
     die "unsupported distribution: expected apt-get or pacman"
@@ -122,6 +125,47 @@ clone_or_update() {
   fi
 }
 
+install_node() {
+  # MSYS2 gets Node.js from pacman; nvm does not support Windows.
+  [ "$platform" = msys2 ] && return 0
+
+  nvm_dir="$HOME/.nvm"
+  if [ ! -s "$nvm_dir/nvm.sh" ]; then
+    [ -e "$nvm_dir" ] && die "$nvm_dir exists but does not contain nvm"
+    nvm_tag=$(git ls-remote --tags --sort=-v:refname https://github.com/nvm-sh/nvm.git 'v*' |
+      awk '$2 !~ /\^\{\}$/ { sub("refs/tags/", "", $2); print $2; exit }')
+    [ -n "$nvm_tag" ] || die "could not look up the latest nvm release"
+    git -c advice.detachedHead=false clone --depth=1 --branch "$nvm_tag" \
+      https://github.com/nvm-sh/nvm.git "$nvm_dir"
+  fi
+
+  # nvm.sh is not safe under set -eu, so it runs in its own shell. Mason uses
+  # npm to install the TypeScript, JSON, Svelte and Elm language servers.
+  NVM_DIR="$nvm_dir" bash -c '. "$NVM_DIR/nvm.sh" && nvm install --lts && nvm alias default "lts/*"'
+}
+
+install_dotnet() {
+  if [ "$platform" = msys2 ]; then
+    command -v dotnet >/dev/null 2>&1 ||
+      printf 'Install the .NET SDK for F#/C# in Neovim with: winget install Microsoft.DotNet.SDK.10\n'
+    return
+  fi
+
+  if [ -x "$HOME/.dotnet/dotnet" ]; then
+    printf 'Already installed: .NET SDK\n'
+    return
+  fi
+
+  # A per-user SDK works the same on every distribution and needs no root.
+  # Mason uses it to install fsautocomplete, fantomas and csharpier.
+  script=$(mktemp)
+  trap 'rm -f "$script"' EXIT HUP INT TERM
+  curl -fsSL --retry 3 https://dot.net/v1/dotnet-install.sh -o "$script"
+  bash "$script" --channel LTS --install-dir "$HOME/.dotnet"
+  rm -f "$script"
+  trap - EXIT HUP INT TERM
+}
+
 install_windows_jetbrains_font() {
   # Per-user font install: no administrator rights needed, but Windows only
   # sees the files once they are registered under HKCU.
@@ -184,6 +228,10 @@ log "Installing shell framework and prompt"
 clone_or_update https://github.com/ohmyzsh/ohmyzsh.git "$HOME/.oh-my-zsh"
 clone_or_update https://github.com/romkatv/powerlevel10k.git "$HOME/powerlevel10k"
 install_jetbrains_font
+
+log "Installing Neovim language server runtimes"
+install_node
+install_dotnet
 
 log "Linking dotfiles"
 link_config "$dotfiles_dir/shells/bashrc" "$HOME/.bashrc"
