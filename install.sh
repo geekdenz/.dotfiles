@@ -43,6 +43,8 @@ install_packages() {
     pacman -Sy --needed --noconfirm \
       ca-certificates curl gettext git gnupg openssh pinentry unzip zsh \
       "${MINGW_PACKAGE_PREFIX:-mingw-w64-ucrt-x86_64}-fzf" \
+      "${MINGW_PACKAGE_PREFIX:-mingw-w64-ucrt-x86_64}-ripgrep" \
+      "${MINGW_PACKAGE_PREFIX:-mingw-w64-ucrt-x86_64}-fd" \
       "${MINGW_PACKAGE_PREFIX:-mingw-w64-ucrt-x86_64}-nodejs"
     platform=msys2
   elif command -v apt-get >/dev/null 2>&1; then
@@ -51,12 +53,12 @@ install_packages() {
     # The .NET SDK needs ICU, whose package name carries its version number.
     libicu=$(apt-cache search --names-only '^libicu[0-9]+$' | awk '{ print $1 }' | sort -V | tail -n 1)
     as_root env DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-      ca-certificates curl gettext fontconfig fzf git $libicu openssh-client pinentry-curses unzip wl-clipboard zsh
+      ca-certificates curl gettext fd-find fontconfig fzf git $libicu openssh-client pinentry-curses ripgrep unzip wl-clipboard zsh
     platform=debian
   elif command -v pacman >/dev/null 2>&1; then
     log "Installing Arch packages"
     as_root pacman -Syu --needed --noconfirm \
-      ca-certificates curl gettext fontconfig fzf git icu openssh pinentry ttf-jetbrains-mono-nerd unzip wl-clipboard zsh
+      ca-certificates curl fd gettext fontconfig fzf git icu openssh pinentry ripgrep ttf-jetbrains-mono-nerd unzip wl-clipboard zsh
     platform=arch
   else
     die "unsupported distribution: expected apt-get or pacman"
@@ -248,6 +250,11 @@ link_config "$dotfiles_dir/nvim" "${XDG_CONFIG_HOME:-$HOME/.config}/nvim"
 link_config "$dotfiles_dir/herdr/config.toml" "${XDG_CONFIG_HOME:-$HOME/.config}/herdr/config.toml"
 link_config "$dotfiles_dir/.wezterm.lua" "$HOME/.wezterm.lua"
 link_config "$dotfiles_dir/bin/ssh-askpass-tty" "$HOME/.local/bin/ssh-askpass-tty"
+
+# Debian renames fd to fdfind to avoid a clash with an unrelated package.
+if [ "$platform" = debian ]; then
+  link_config /usr/bin/fdfind "$HOME/.local/bin/fd"
+fi
 
 if [ "$platform" = msys2 ]; then
   # Native Windows builds of WezTerm and Neovim look in the Windows profile,
