@@ -32,4 +32,5 @@ if (($#)); then
 else
   run_case debian:bookworm-slim
   run_case archlinux:base
+  run_case alpine:latest
 fi

@@ -1,7 +1,7 @@
 #!/bin/sh
 
-# One-shot dotfiles bootstrap for Debian- and Arch-based Linux systems and
-# MSYS2 on Windows.
+# One-shot dotfiles bootstrap for Debian-, Arch- and Alpine-based Linux systems
+# and MSYS2 on Windows.
 # Safe to rerun: managed links are left alone and conflicting files are backed up.
 
 set -eu
@@ -29,8 +29,10 @@ as_root() {
     "$@"
   elif command -v sudo >/dev/null 2>&1; then
     sudo "$@"
+  elif command -v doas >/dev/null 2>&1; then
+    doas "$@"
   else
-    die "root privileges are required; install sudo or run as root"
+    die "root privileges are required; install sudo or doas, or run as root"
   fi
 }
 
@@ -47,6 +49,14 @@ install_packages() {
       "${MINGW_PACKAGE_PREFIX:-mingw-w64-ucrt-x86_64}-fd" \
       "${MINGW_PACKAGE_PREFIX:-mingw-w64-ucrt-x86_64}-nodejs"
     platform=msys2
+  elif command -v apk >/dev/null 2>&1; then
+    # bash runs the helper scripts and the .NET installer; icu-libs,
+    # libgcc and libstdc++ are the .NET SDK's runtime dependencies on musl.
+    log "Installing Alpine packages"
+    as_root apk add --no-cache \
+      bash ca-certificates curl fd fontconfig fzf gettext-envsubst git icu-libs libgcc libstdc++ \
+      nodejs npm openssh-client pinentry ripgrep unzip wl-clipboard zsh
+    platform=alpine
   elif command -v apt-get >/dev/null 2>&1; then
     log "Installing Debian packages"
     as_root env DEBIAN_FRONTEND=noninteractive apt-get update
@@ -61,7 +71,7 @@ install_packages() {
       ca-certificates curl fd gettext fontconfig fzf git icu openssh pinentry ripgrep ttf-jetbrains-mono-nerd unzip wl-clipboard zsh
     platform=arch
   else
-    die "unsupported distribution: expected apt-get or pacman"
+    die "unsupported distribution: expected apk, apt-get or pacman"
   fi
 }
 
@@ -128,8 +138,9 @@ clone_or_update() {
 }
 
 install_node() {
-  # MSYS2 gets Node.js from pacman; nvm does not support Windows.
-  [ "$platform" = msys2 ] && return 0
+  # MSYS2 and Alpine get Node.js from their package managers: nvm does not
+  # support Windows, and has no prebuilt Node.js binaries for musl.
+  case "$platform" in msys2 | alpine) return 0 ;; esac
 
   nvm_dir="$HOME/.nvm"
   if [ ! -s "$nvm_dir/nvm.sh" ]; then
@@ -202,7 +213,7 @@ install_jetbrains_font() {
     install_windows_jetbrains_font
     return
   fi
-  [ "$platform" = debian ] || return 0
+  case "$platform" in debian | alpine) ;; *) return 0 ;; esac
 
   font_dir="${XDG_DATA_HOME:-$HOME/.local/share}/fonts/JetBrainsMonoNerd"
   if find "$font_dir" -maxdepth 1 -type f -name '*.ttf' -print -quit 2>/dev/null | grep -q .; then

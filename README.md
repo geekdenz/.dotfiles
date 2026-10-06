@@ -2,7 +2,7 @@
 
 ## One-shot Linux installation
 
-The installer supports Debian/Ubuntu and Arch/Omarchy/CachyOS. It installs Zsh, Oh My
+The installer supports Debian/Ubuntu, Arch/Omarchy/CachyOS and Alpine. It installs Zsh, Oh My
 Zsh, Powerlevel10k, JetBrainsMono Nerd Font, clipboard dependencies, and links
 the maintained configuration into the current user's home directory.
 
@@ -15,8 +15,8 @@ exec zsh
 It is safe to rerun. Existing managed links are retained; conflicting files are
 moved to timestamped `before-dotfiles-*` backups before links are created.
 
-The installer detects `apt-get` and `pacman` automatically. On non-root systems
-it uses `sudo` for package installation and changing the default shell.
+The installer detects `apk`, `apt-get` and `pacman` automatically. On non-root systems
+it uses `sudo` (or `doas`) for package installation and changing the default shell.
 
 ## Windows (MSYS2) installation
 
