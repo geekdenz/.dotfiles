@@ -1,0 +1,38 @@
+#!/bin/sh
+
+# Install ~/.dotfiles into a running docker compose service in one shot.
+#
+# Usage (from the folder with the compose file):
+#   compose-dotfiles [service] [user]
+#
+#   service  compose service to install into (default: web)
+#   user     container user to install for (default: root; install.sh needs
+#            root, or sudo/doas, to install packages)
+#
+# The dotfiles are copied (without .git) to the user's ~/.dotfiles in the
+# container and install.sh runs there. Rerunning refreshes the copy; install.sh
+# is safe to rerun. Everything is lost when the container is recreated.
+
+set -eu
+
+service=${1:-web}
+user=${2:-root}
+dotfiles=${DOTFILES:-$HOME/.dotfiles}
+
+if [ ! -x "$dotfiles/install.sh" ]; then
+  printf '%s/install.sh not found\n' "$dotfiles" >&2
+  exit 1
+fi
+
+printf 'Copying %s into the %s service as %s\n' "$dotfiles" "$service" "$user"
+tar -C "$dotfiles" --exclude=.git -czf - . |
+  docker compose exec -T -u "$user" "$service" sh -c '
+    rm -rf "$HOME/.dotfiles" &&
+    mkdir -p "$HOME/.dotfiles" &&
+    tar -xzf - -C "$HOME/.dotfiles"
+  '
+
+printf 'Running install.sh in the container\n'
+docker compose exec -T -u "$user" "$service" sh -c '"$HOME/.dotfiles/install.sh"'
+
+printf '\nDone. Open a shell with: docker compose exec -u %s %s zsh\n' "$user" "$service"

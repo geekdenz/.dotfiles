@@ -19,3 +19,4 @@ gitignored/
 SQL Scripts/Migrations/MigrationsForIssuerCodeChanges.zip
 Web/FrogOne.Web.ApiHost/appsettings.uat.json
 mise.toml
+.claude/
