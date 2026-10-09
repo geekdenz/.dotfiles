@@ -137,6 +137,43 @@ alias dockerstopall='docker stop $(docker ps -a -q)'
 alias docker-compose='docker compose'
 alias dcom='docker compose'
 alias dc='docker compose'
+
+# Sets uat_webapp_id to the Azure App Service named in DOTFILES_UAT_WEBAPP (set in ~/.env.dotfiles). Needs a
+# current `az login`. Finds the app by name, so the resource group doesn't need to be known. Not called in a
+# subshell, so the env file it may load stays loaded for the caller.
+function _uat_webapp_id() {
+    [ -z "$DOTFILES_UAT_WEBAPP" ] && [ -r "$HOME/.env.dotfiles" ] && . "$HOME/.env.dotfiles"
+    local app="$DOTFILES_UAT_WEBAPP"
+    if [ -z "$app" ]; then
+        echo "Set DOTFILES_UAT_WEBAPP in ~/.env.dotfiles." >&2
+        return 1
+    fi
+    uat_webapp_id=$(az webapp list --query "[?name=='$app'].id | [0]" -o tsv) || return
+    if [ -z "$uat_webapp_id" ]; then
+        echo "$app not found in the current subscription (try 'az login' or 'az account set')." >&2
+        return 1
+    fi
+}
+
+# Restart the UAT App Service.
+function restart-uat() {
+    _uat_webapp_id || return
+    echo "Restarting $DOTFILES_UAT_WEBAPP..."
+    az webapp restart --ids "$uat_webapp_id" && echo "Restarted $DOTFILES_UAT_WEBAPP."
+}
+
+# Stream the UAT App Service's logs until Ctrl-C. Container output only appears while
+# App Service logs > Application logging (Filesystem) is on for the app.
+function logs-uat() {
+    _uat_webapp_id || return
+    az webapp log tail --ids "$uat_webapp_id"
+}
+
+# Open a shell in the UAT App Service's container (Linux apps only; exit to disconnect).
+function ssh-uat() {
+    _uat_webapp_id || return
+    az webapp ssh --ids "$uat_webapp_id"
+}
 #alias nvim=~/.local/bin/nvim-linux-x86_64.appimage
 #alias nvim=~/apps/nvim-linux-x86_64.appimage
 #alias vi=~/apps/nvim-linux-x86_64.appimage

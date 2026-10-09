@@ -114,7 +114,7 @@ unset __conda_setup
 # <<< conda initialize <<<
 
 [ -r "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
-for env_file in "$HOME/.env" "$HOME/.dotfiles/.env"; do
+for env_file in "$HOME/.env" "$HOME/.dotfiles/.env" "$HOME/.env.dotfiles"; do
     if [ -r "$env_file" ]; then
         set -a
         . "$env_file"
