@@ -17,6 +17,16 @@ for index, output in ipairs({ "DP-3", "DP-2", "DP-1" }) do
   })
 end
 
+-- The built-in panel would otherwise get the shared catch-all's automatic
+-- scale, which picks 1.5 for this 14" 1080p screen and makes 100% browser zoom
+-- look oversized.
+hl.monitor({
+  output = "eDP-1",
+  mode = "preferred",
+  position = "auto",
+  scale = monitor_scale,
+})
+
 -- Avoid cursor-plane flicker on this GPU by drawing the pointer as part of the
 -- compositor scene.
 hl.config({
