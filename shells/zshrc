@@ -299,8 +299,12 @@ export F="${FROGONE_WSL_PATH:-$FROGONE_PATH}"
 [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]] && \
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv zsh)"
 # Key bindings need a terminal. Without one, fzf 0.48+ also fails restoring the
-# zle option and prints "can't change option: zle".
-if [[ -o interactive && -t 0 ]] && (( $+commands[fzf] )); then
+# zle option and prints "can't change option: zle". Test zle and $TTY rather
+# than -t 0: Powerlevel10k's instant prompt points stdin at /dev/null while this
+# file loads, which silently skipped the bindings and left Ctrl-R on zsh's own
+# history search.
+if [[ -o interactive && -o zle && -n ${TTY:-} && $TTY != 'not a tty' ]] &&
+  (( $+commands[fzf] )); then
   if fzf --zsh >/dev/null 2>&1; then
     source <(fzf --zsh)
   else
