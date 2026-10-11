@@ -67,8 +67,17 @@ install_packages() {
     platform=debian
   elif command -v pacman >/dev/null 2>&1; then
     log "Installing Arch packages"
-    as_root pacman -Syu --needed --noconfirm \
-      ca-certificates curl fd gettext fontconfig fzf git icu openssh pinentry ripgrep ttf-jetbrains-mono-nerd unzip wl-clipboard zsh
+    # Omarchy ships ttf-jetbrains-mono-nerd-basic, which provides but conflicts
+    # with ttf-jetbrains-mono-nerd, so only request the font when nothing
+    # installed already provides it.
+    font=
+    pacman -T ttf-jetbrains-mono-nerd >/dev/null || font=ttf-jetbrains-mono-nerd
+    # Omarchy's pacman hook aborts direct system upgrades; it owns those via
+    # `omarchy update`, so only install against the current databases there.
+    sync_flags=-Syu
+    [ -d /usr/share/omarchy ] && sync_flags=-S
+    as_root pacman $sync_flags --needed --noconfirm \
+      ca-certificates curl fd gettext fontconfig fzf git icu openssh pinentry ripgrep $font unzip wl-clipboard zsh
     platform=arch
   else
     die "unsupported distribution: expected apk, apt-get or pacman"
