@@ -20,3 +20,6 @@ auto_switch = false
 panel_bg = "reset"
 surface_dim = "#343746"
 surface0 = "#44475a"
+# Inactive tab labels are drawn in overlay0 on surface0. Dracula's comment blue
+# (#6272a4) gives under 2:1 contrast there; this keeps them muted but legible.
+overlay0 = "#c0c5e0"
