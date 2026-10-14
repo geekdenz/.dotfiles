@@ -64,6 +64,9 @@
   # Force-push the current commit to the deploy branch in DOTFILES_UAT_BRANCH (set in ~/.env.dotfiles);
   # the local branch follows unless it is checked out.
   uat = "!f() { b=\"${DOTFILES_UAT_BRANCH:?set DOTFILES_UAT_BRANCH in ~/.env.dotfiles}\"; git push -f origin \"HEAD:$b\" && if [ \"$(git branch --show-current)\" != \"$b\" ]; then git branch -f \"$b\" HEAD; fi; }; f"
+  # Recreate staging from a freshly fetched origin/main, locally and on origin, without leaving
+  # the current branch (when on staging, uncommitted changes are kept or the switch refuses).
+  restage = "!f() { git fetch origin main && if [ \"$(git branch --show-current)\" = staging ]; then git switch -C staging --no-track origin/main; else git branch -f --no-track staging origin/main; fi && git push -f -u origin staging; }; f"
 [merge]
 	tool = intellij
 	#tool = vimdiff
