@@ -189,17 +189,35 @@ local directions = {
   down = "d",
 }
 
+-- left/right cross to the other monitor instead of swapping in-layout: a
+-- bare direction on window.swap/Hyprland's native movewindow never leaves
+-- the current monitor, so Super+Shift+Left previously did nothing when
+-- there was no same-monitor neighbor to swap with. up/down have no monitor
+-- to cross in a side-by-side layout, so they keep the in-layout swap.
+local monitor_direction = {
+  left = "l",
+  right = "r",
+}
+
 for key, direction in pairs(directions) do
   hl.bind(
     main_mod .. " + " .. key,
     hl.dsp.focus({ direction = direction }),
     { description = "Move focus " .. key }
   )
-  hl.bind(
-    main_mod .. " + SHIFT + " .. key,
-    hl.dsp.window.swap({ direction = direction }),
-    { description = "Swap window " .. key }
-  )
+  if monitor_direction[key] then
+    hl.bind(
+      main_mod .. " + SHIFT + " .. key,
+      hl.dsp.window.move({ monitor = monitor_direction[key], follow = true }),
+      { description = "Move window to " .. key .. " monitor" }
+    )
+  else
+    hl.bind(
+      main_mod .. " + SHIFT + " .. key,
+      hl.dsp.window.swap({ direction = direction }),
+      { description = "Swap window " .. key }
+    )
+  end
 end
 
 hl.bind(main_mod .. " + TAB", hl.dsp.focus({ workspace = "e+1" }), { description = "Next workspace" })
