@@ -47,15 +47,17 @@ install_packages() {
       "${MINGW_PACKAGE_PREFIX:-mingw-w64-ucrt-x86_64}-fzf" \
       "${MINGW_PACKAGE_PREFIX:-mingw-w64-ucrt-x86_64}-ripgrep" \
       "${MINGW_PACKAGE_PREFIX:-mingw-w64-ucrt-x86_64}-fd" \
+      "${MINGW_PACKAGE_PREFIX:-mingw-w64-ucrt-x86_64}-neovim" \
       "${MINGW_PACKAGE_PREFIX:-mingw-w64-ucrt-x86_64}-nodejs"
     platform=msys2
   elif command -v apk >/dev/null 2>&1; then
     # bash runs the helper scripts and the .NET installer; icu-libs,
     # libgcc and libstdc++ are the .NET SDK's runtime dependencies on musl.
+    # build-base and tree-sitter-cli let nvim-treesitter compile parsers.
     log "Installing Alpine packages"
     as_root apk add --no-cache \
-      bash ca-certificates curl fd fontconfig fzf gettext-envsubst git icu-libs libgcc libstdc++ \
-      nodejs npm openssh-client pinentry ripgrep unzip wl-clipboard zsh
+      bash build-base ca-certificates curl fd fontconfig fzf gettext-envsubst git icu-libs libgcc libstdc++ \
+      neovim nodejs npm openssh-client pinentry ripgrep tree-sitter-cli unzip wl-clipboard zsh
     platform=alpine
   elif command -v apt-get >/dev/null 2>&1; then
     log "Installing Debian packages"
@@ -63,12 +65,14 @@ install_packages() {
     # The .NET SDK needs ICU, whose package name carries its version number.
     libicu=$(apt-cache search --names-only '^libicu[0-9]+$' | awk '{ print $1 }' | sort -V | tail -n 1)
     as_root env DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-      ca-certificates curl gettext fd-find fontconfig fzf git $libicu openssh-client pinentry-curses ripgrep unzip wl-clipboard zsh
+      ca-certificates curl gcc gettext fd-find fontconfig fzf git $libicu libc6-dev make openssh-client \
+      pinentry-curses ripgrep unzip wl-clipboard zsh
     platform=debian
   elif command -v pacman >/dev/null 2>&1; then
     log "Installing Arch packages"
     as_root pacman -Syu --needed --noconfirm \
-      ca-certificates curl fd gettext fontconfig fzf git icu openssh pinentry ripgrep ttf-jetbrains-mono-nerd unzip wl-clipboard zsh
+      ca-certificates curl fd gcc gettext fontconfig fzf git icu make neovim openssh pinentry ripgrep \
+      tree-sitter-cli ttf-jetbrains-mono-nerd unzip wl-clipboard zsh
     platform=arch
   else
     die "unsupported distribution: expected apk, apt-get or pacman"
@@ -155,6 +159,44 @@ install_node() {
   # nvm.sh is not safe under set -eu, so it runs in its own shell. Mason uses
   # npm to install the TypeScript, JSON, Svelte and Elm language servers.
   NVM_DIR="$nvm_dir" bash -c '. "$NVM_DIR/nvm.sh" && nvm install --lts && nvm alias default "lts/*"'
+
+  # nvim-treesitter compiles parsers with the tree-sitter CLI. Arch packages
+  # it; Debian's package is too old, so it comes from npm there.
+  if ! command -v tree-sitter >/dev/null 2>&1; then
+    NVM_DIR="$nvm_dir" bash -c '. "$NVM_DIR/nvm.sh" && npm install -g tree-sitter-cli'
+  fi
+}
+
+install_neovim() {
+  # Every other platform installs Neovim as a package. Debian's is too old
+  # for LazyVim and nvim-treesitter, which need 0.12, so use the release build.
+  [ "$platform" = debian ] || return 0
+
+  # ~/.local/bin is only on PATH once zshrc runs, so look there explicitly.
+  nvim_bin=$(command -v nvim 2>/dev/null || true)
+  [ -n "$nvim_bin" ] || [ ! -x "$HOME/.local/bin/nvim" ] || nvim_bin="$HOME/.local/bin/nvim"
+  if [ -n "$nvim_bin" ]; then
+    nvim_minor=$("$nvim_bin" --version | sed -n '1s/^NVIM v0\.\([0-9]*\).*/\1/p')
+    if [ "${nvim_minor:-0}" -ge 12 ]; then
+      printf 'Already installed: Neovim\n'
+      return
+    fi
+  fi
+
+  case "$(uname -m)" in
+    x86_64) nvim_arch=x86_64 ;;
+    aarch64 | arm64) nvim_arch=arm64 ;;
+    *) die "no Neovim release build for $(uname -m)" ;;
+  esac
+
+  log "Installing Neovim"
+  nvim_dir="$HOME/.local/share/nvim-release"
+  rm -rf -- "$nvim_dir"
+  mkdir -p "$nvim_dir" "$HOME/.local/bin"
+  curl -fL --retry 3 \
+    "https://github.com/neovim/neovim/releases/latest/download/nvim-linux-$nvim_arch.tar.gz" |
+    tar -xz -C "$nvim_dir" --strip-components=1
+  ln -sf -- "$nvim_dir/bin/nvim" "$HOME/.local/bin/nvim"
 }
 
 install_dotnet() {
@@ -242,7 +284,8 @@ clone_or_update https://github.com/ohmyzsh/ohmyzsh.git "$HOME/.oh-my-zsh"
 clone_or_update https://github.com/romkatv/powerlevel10k.git "$HOME/powerlevel10k"
 install_jetbrains_font
 
-log "Installing Neovim language server runtimes"
+log "Installing Neovim and its language server runtimes"
+install_neovim
 install_node
 install_dotnet
 

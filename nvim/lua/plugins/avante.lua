@@ -5,6 +5,9 @@ return {
   -- prebuilt release instead, matching what the extra already does on Windows.
   build = vim.fn.has("win32") ~= 0 and "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false"
     or "bash ./build.sh",
+  -- The prebuilt libraries need glibc, so skip Avante on musl systems such as
+  -- Alpine containers; building them there needs Rust and also times out.
+  cond = vim.fn.glob("/lib/ld-musl-*") == "",
   -- Avante's command parser; LazyVim's extra does not declare it yet, and
   -- without luarocks lazy.nvim cannot pull it in from avante's rockspec.
   dependencies = {

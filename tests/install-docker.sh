@@ -16,6 +16,7 @@ run_case() {
       test "$(readlink -f "$HOME/.gnupg/gpg-agent.conf")" = "$HOME/.dotfiles/gnupg/gpg-agent.conf"
       command -v zsh
       command -v rg
+      PATH="$HOME/.local/bin:$PATH" nvim --version
       PATH="$HOME/.local/bin:$PATH" command -v fd
       zsh -n "$HOME/.zshrc"
       shell_output=$(TERM=xterm-256color zsh -i -c "printf interactive-zsh-ok" 2>&1)
