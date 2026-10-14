@@ -56,7 +56,7 @@ install_packages() {
     # build-base and tree-sitter-cli let nvim-treesitter compile parsers.
     log "Installing Alpine packages"
     as_root apk add --no-cache \
-      bash build-base ca-certificates curl fd fontconfig fzf gettext-envsubst git icu-libs libgcc libstdc++ \
+      bash build-base ca-certificates curl fd fontconfig fzf gettext-envsubst git icu-libs kdiff3 libgcc libstdc++ \
       neovim nodejs npm openssh-client pinentry ripgrep tree-sitter-cli unzip wl-clipboard zsh
     platform=alpine
   elif command -v apt-get >/dev/null 2>&1; then
@@ -65,13 +65,13 @@ install_packages() {
     # The .NET SDK needs ICU, whose package name carries its version number.
     libicu=$(apt-cache search --names-only '^libicu[0-9]+$' | awk '{ print $1 }' | sort -V | tail -n 1)
     as_root env DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-      ca-certificates curl gcc gettext fd-find fontconfig fzf git $libicu libc6-dev make openssh-client \
+      ca-certificates curl gcc gettext fd-find fontconfig fzf git kdiff3 $libicu libc6-dev make openssh-client \
       pinentry-curses ripgrep unzip wl-clipboard zsh
     platform=debian
   elif command -v pacman >/dev/null 2>&1; then
     log "Installing Arch packages"
     as_root pacman -Syu --needed --noconfirm \
-      ca-certificates curl fd gcc gettext fontconfig fzf git icu make neovim openssh pinentry ripgrep \
+      ca-certificates curl fd gcc gettext fontconfig fzf git icu kdiff3 make neovim openssh pinentry ripgrep \
       tree-sitter-cli ttf-jetbrains-mono-nerd unzip wl-clipboard zsh
     platform=arch
   else

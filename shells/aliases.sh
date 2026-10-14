@@ -138,41 +138,89 @@ alias docker-compose='docker compose'
 alias dcom='docker compose'
 alias dc='docker compose'
 
-# Sets uat_webapp_id to the Azure App Service named in DOTFILES_UAT_WEBAPP (set in ~/.env.dotfiles). Needs a
-# current `az login`. Finds the app by name, so the resource group doesn't need to be known. Not called in a
-# subshell, so the env file it may load stays loaded for the caller.
-function _uat_webapp_id() {
-    [ -z "$DOTFILES_UAT_WEBAPP" ] && [ -r "$HOME/.env.dotfiles" ] && . "$HOME/.env.dotfiles"
-    local app="$DOTFILES_UAT_WEBAPP"
-    if [ -z "$app" ]; then
-        echo "Set DOTFILES_UAT_WEBAPP in ~/.env.dotfiles." >&2
+# Sets webapp_name, webapp_id and webapp_group for the Azure App Service named in the given variable, e.g.
+# DOTFILES_UAT_WEBAPP (set in ~/.env.dotfiles). Needs a current `az login`. Finds the app by name, so the
+# resource group doesn't need to be known. Not called in a subshell, so the env file it may load stays
+# loaded for the caller.
+function _webapp_id() {
+    local var=$1
+    eval "webapp_name=\${$var}"
+    if [ -z "$webapp_name" ] && [ -r "$HOME/.env.dotfiles" ]; then
+        . "$HOME/.env.dotfiles"
+        eval "webapp_name=\${$var}"
+    fi
+    if [ -z "$webapp_name" ]; then
+        echo "Set $var in ~/.env.dotfiles." >&2
         return 1
     fi
-    uat_webapp_id=$(az webapp list --query "[?name=='$app'].id | [0]" -o tsv) || return
-    if [ -z "$uat_webapp_id" ]; then
-        echo "$app not found in the current subscription (try 'az login' or 'az account set')." >&2
+    webapp_id=$(az webapp list --query "[?name=='$webapp_name'].id | [0]" -o tsv) || return
+    if [ -z "$webapp_id" ]; then
+        echo "$webapp_name not found in the current subscription (try 'az login' or 'az account set')." >&2
         return 1
     fi
+    # The id is /subscriptions/<sub>/resourceGroups/<group>/providers/...; some commands need the group.
+    webapp_group=${webapp_id#*/resourceGroups/}
+    webapp_group=${webapp_group%%/*}
 }
 
-# Restart the UAT App Service.
-function restart-uat() {
-    _uat_webapp_id || return
-    echo "Restarting $DOTFILES_UAT_WEBAPP..."
-    az webapp restart --ids "$uat_webapp_id" && echo "Restarted $DOTFILES_UAT_WEBAPP."
+function _restart_webapp() {
+    _webapp_id "$1" || return
+    echo "Restarting $webapp_name..."
+    az webapp restart --ids "$webapp_id" && echo "Restarted $webapp_name."
 }
+
+# Restart the UAT or staging App Service.
+function restart-uat() { _restart_webapp DOTFILES_UAT_WEBAPP; }
+function restart-staging() { _restart_webapp DOTFILES_STAGING_WEBAPP; }
 
 # Stream the UAT App Service's logs until Ctrl-C. Container output only appears while
 # App Service logs > Application logging (Filesystem) is on for the app.
 function logs-uat() {
-    _uat_webapp_id || return
-    az webapp log tail --ids "$uat_webapp_id"
+    _webapp_id DOTFILES_UAT_WEBAPP || return
+    az webapp log tail --ids "$webapp_id"
 }
 
 # Open a shell in the UAT App Service's container (Linux apps only; exit to disconnect).
 function ssh-uat() {
-    _uat_webapp_id || return
-    az webapp ssh --ids "$uat_webapp_id"
+    _webapp_id DOTFILES_UAT_WEBAPP || return
+    az webapp ssh --ids "$webapp_id"
+}
+
+# Print an App Service's app settings (its environment variables) as sorted KEY=VALUE lines, e.g.
+# `webapp-env uat` or `webapp-env staging`. The app comes from DOTFILES_<ENV>_WEBAPP in ~/.env.dotfiles.
+function webapp-env() {
+    if [ -z "$1" ]; then
+        echo "Usage: webapp-env <environment>, e.g. webapp-env uat" >&2
+        return 2
+    fi
+    _webapp_id "DOTFILES_$(printf '%s' "$1" | tr '[:lower:]-' '[:upper:]_')_WEBAPP" || return
+    az webapp config appsettings list --name "$webapp_name" --resource-group "$webapp_group" --query "sort_by(@, &name)[].[name, value]" -o tsv |
+        awk -F '\t' '{ print $1 "=" $2 }'
+}
+
+# Compare two App Services' app settings side by side in kdiff3, e.g. `webapp-env-diff uat prod`.
+# The settings hold secrets, so they go in a private temp directory that is removed when kdiff3 closes.
+function webapp-env-diff() {
+    if [ $# -ne 2 ]; then
+        echo "Usage: webapp-env-diff <environment> <environment>, e.g. webapp-env-diff uat prod" >&2
+        return 2
+    fi
+    if ! command -v kdiff3 >/dev/null 2>&1; then
+        echo "kdiff3 is not installed (sudo apt-get install kdiff3)." >&2
+        return 1
+    fi
+    local dir env
+    dir=$(mktemp -d) || return
+    for env in "$1" "$2"; do
+        webapp-env "$env" > "$dir/$env.env"
+        if [ ! -s "$dir/$env.env" ]; then
+            echo "No settings found for $env." >&2
+            rm -rf "$dir"
+            return 1
+        fi
+    done
+    kdiff3 "$dir/$1.env" "$dir/$2.env" --L1 "$1" --L2 "$2"
+    rm -rf "$dir"
 }
 #alias nvim=~/.local/bin/nvim-linux-x86_64.appimage
 #alias nvim=~/apps/nvim-linux-x86_64.appimage
