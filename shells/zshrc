@@ -106,8 +106,8 @@ SAVEHIST=20000
 LANG=en_US.utf-8
 LANGUAGE=en
 CLICOLOR=1 #Colorizes output of ls and others.
-EDITOR=nvim
-VISUAL=$EDITOR
+export EDITOR=nvim
+export VISUAL=$EDITOR
 PAGER=less
 LESS='-R -g -w'
 
