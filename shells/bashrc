@@ -1,8 +1,10 @@
 # allows Ctrl+S to save on vim
-stty ixany
-stty ixoff -ixon
-stty stop undef
-stty start undef
+if [ -t 0 ]; then
+    stty ixany
+    stty ixoff -ixon
+    stty stop undef
+    stty start undef
+fi
 
 # Only "exit" or "logout" will log off the system.
 # set -o ignoreeof

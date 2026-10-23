@@ -63,7 +63,9 @@ alias csd='cap staging deploy'
 # alias -s gradle=vim
 # $ foo.rb
 # vim => foo.rb
-alias -g gp='| grep -i' #creates a global alias for grep
+if [ -n "${ZSH_VERSION:-}" ]; then
+    alias -g gp='| grep -i' #creates a global alias for grep
+fi
 # $ ps ax gp ruby
 # (all ruby process will be displayed)
 
