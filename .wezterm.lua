@@ -53,6 +53,9 @@ config.colors = {
 	cursor_border = "#7aa2f7",
 }
 
+config.check_for_updates = true
+config.check_for_updates_interval_seconds = 86400
+
 config.window_decorations = "RESIZE"
 -- config.enable_tab_bar = false
 config.hide_tab_bar_if_only_one_tab = true
