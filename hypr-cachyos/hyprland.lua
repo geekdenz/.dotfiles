@@ -40,6 +40,8 @@ local menu = "wofi --show drun"
 hl.on("hyprland.start", function()
   hl.exec_cmd("systemctl --user start ssh-agent.service")
   hl.exec_cmd("systemctl --user start wezterm-mux.service")
+  -- Locks the screen before any suspend and on idle; see hypridle.conf.
+  hl.exec_cmd("systemctl --user start hypridle.service")
   -- UWSM keeps launched applications in the graphical session's systemd
   -- scopes. The service start gives privileged apps an authentication agent.
   hl.exec_cmd("systemctl --user start hyprpolkitagent.service")
