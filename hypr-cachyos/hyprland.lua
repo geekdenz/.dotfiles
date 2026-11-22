@@ -119,6 +119,18 @@ hl.config({
   },
 })
 
+-- XWayland apps (Steam included -- it has no native-Wayland client) render
+-- at a smaller logical resolution and get upscaled to this monitor's 4K
+-- framebuffer with blocky nearest-neighbor filtering by default, which
+-- shows up as visible pixelation. force_zero_scaling makes them render
+-- directly at full native pixel resolution instead, trading a physically
+-- smaller (unscaled) UI for sharp, artifact-free text and icons.
+hl.config({
+  xwayland = {
+    force_zero_scaling = true,
+  },
+})
+
 ---------------
 ---- INPUT ----
 ---------------
